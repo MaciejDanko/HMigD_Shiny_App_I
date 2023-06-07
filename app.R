@@ -10,13 +10,11 @@ library(shiny)
 library(shinyWidgets)
 library(shinyjs)
 library(usethis)
-#library(colourpicker)
 library(shinyhelper)
 library(magicaxis)
 library(data.table)
 library(countrycode)
 library(openxlsx)
-#remotes::install_github("rstudio/bslib")
 library(bslib)
 library(tidyverse)
 library(circlize)
@@ -29,11 +27,6 @@ library(googledrive)
 
 library(rhandsontable)
 
-#library(viridis)
-#install.packages("extrafont")
-#library(extrafont)
-#font_import()
-#loadfonts(device="win")
 options(bitmapType="cairo")
 
 makebold<<-function(x) unname(sapply(x, function(k) HTML(unname(paste0('<b>',k,'</b>')))))
@@ -44,14 +37,6 @@ makeList<<-function(x){
   r
 }
 
-
-# model_mat<-matrix('f',length(Countries),length(Countries))
-# model_mat[2:20,3:2]<-'b'
-# model_mat[5,5]<-'a'
-# model_mat[1,2]<-'a'
-# model_mat[2,1]<-'a'
-# colnames(model_mat)<-rownames(model_mat)<-Countries
-#rownames(model_mat)<-tolower(rownames(model_mat))
 mix_models<-function(model_mat){
   res<- lapply(letters[1:6], function(j) {
     cn<-colnames(model_mat)
