@@ -56,7 +56,7 @@ about_list <- HTML(
   "<h3><b>HMigD I App:</b> The Human Migration Database I</h3>",
   "<h4>Country- and year-specific harmonized migration flows for European countries in 2002-2018</h3>",
   "<br>",
-  "<h4>Version 1.01, May 2023</h4>",
+  "<h4>Version 1.1.3, May 2023</h4>",
   "<br>",
   paste0("<h4>Author and maintainer: Maciej J. Dańko [",email_html,"] </h4>"),
   '<h4>Max Planck Institute for Demographic Research, Rostock, Germany </h4>',

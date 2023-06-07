@@ -3,7 +3,7 @@
 
 Shiny application
 
-Version 1.01, May 2023
+Version 1.1.3, May 2023
 
 Author and maintainer: Maciej J. Dańko [email1](mailto:danko@demogr.mpg) [email2](mailto:maciej.danko@gmail.com)
 
