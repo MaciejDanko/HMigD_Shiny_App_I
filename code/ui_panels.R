@@ -463,7 +463,7 @@ ui_covariates_gni_ratio <- function() tagList(
   SaveBlock1('GNI',5,'#F5DFD5'),     
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#F5DFD5; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
       
-      div(style="display:inline-block;vertical-align:top; width:550px;  margin-left:20px",
+      div(style="display:inline-block;vertical-align:top; width:750px;  margin-left:20px",
           br(),
           h3('GNI data sources'),
           tags$ul(
