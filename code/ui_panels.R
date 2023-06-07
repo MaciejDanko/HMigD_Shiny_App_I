@@ -351,6 +351,20 @@ ui_covariates_stocks <- function() tagList(
       plotOutput(outputId = "STOCKSPlot",height="auto", width='auto'),
   ),
   SaveBlock1('STOCKS',5,'#F5DFD5'),     
+  div(class="row", style='margin-left:0px; margin-top:5px; background-color:#F5DFD5; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
+      div(style="display:inline-block;vertical-align:top; margin-left:20px",
+          br(),
+          h3('Data sources'),
+          
+          tags$a(href = "https://www.un.org/en/development/desa/population/migration/data/estimates2/data/UN_MigrantStockByOriginAndDestination_2019.xlsx", "UN_MigrantStockByOriginAndDestination_2019.xlsx"),
+          " - United Nations Population Division - Migrant Stock By Origin And Destination 2019 Revision",
+          
+      ),
+      br(),
+      br(),
+  ),
+  br(),
+  br(),
 )
 
 ui_covariates_trade <- function() tagList(
@@ -447,8 +461,31 @@ ui_covariates_gni_ratio <- function() tagList(
       plotOutput(outputId = "GNIPlot",height="auto", width='auto'),
   ),
   SaveBlock1('GNI',5,'#F5DFD5'),     
+  div(class="row", style='margin-left:0px; margin-top:5px; background-color:#F5DFD5; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
+      
+      div(style="display:inline-block;vertical-align:top; width:550px;  margin-left:20px",
+          br(),
+          h3('GNI data sources'),
+          tags$ul(
+            tags$li(
+              tags$a(href = "http://api.worldbank.org/v2/en/indicator/NY.GNP.PCAP.CD?downloadformat=csv", "World Bank NY.GNP.PCAP.CD"),
+              " - World Bank, GNI per capita, Atlas method (current US$)"
+            ),
+            tags$li(
+              tags$a(href = "https://stats.oecd.org/sdmx-json/data/DP_LIVE/.GNI.../OECD?contentType=csv&detail=code&separator=comma&csv-lang=en", "OECD GNI"),
+              " - OECD: stats.oecd.org"
+            ),
+          ),
+          
+      ),
+      br(),
+      br(),
+  ),
+  br(),br(),
 )
 
+URL_OECD<-'https://stats.oecd.org/sdmx-json/data/DP_LIVE/.GNI.../OECD?contentType=csv&detail=code&separator=comma&csv-lang=en'
+URL_WORLD_BANK<-'http://api.worldbank.org/v2/en/indicator/NY.GNP.PCAP.CD?downloadformat=csv'
 
 ui_covariates_distance <- function() tagList(
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#e8e9d9; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
