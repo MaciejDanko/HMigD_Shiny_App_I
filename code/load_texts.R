@@ -73,4 +73,7 @@ about_list <- HTML(
   "<li><b>Circular flows plots:</b> The app provides circular flow plots for selected countries and years.</li>",
   "<li><b>Model mixing:</b> The app allows for combining the results obtained from different models.</li>",
   "</ul>",
+  "<br>",
+  "The copy of this project can be found on Github: <a href='https://github.com/MaciejDanko/HMigD_Shiny_App_I'> https://github.com/MaciejDanko/HMigD_Shiny_App_I </a>",
+  "<br>"
 )

@@ -1,7 +1,7 @@
 # HMigD I App: The Human Migration Database I
 ### Country- and year-specific harmonized migration flows for European countries in 2002-2018
 
-Shiny application
+Shiny application [https://maciej-jan-danko.shinyapps.io/HMigD_Shiny_App_I/](https://maciej-jan-danko.shinyapps.io/HMigD_Shiny_App_I/)
 
 Version 1.1.3, May 2023
 
