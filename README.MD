@@ -1,16 +1,17 @@
 # HMigD I App: The Human Migration Database I
+### Country- and year-specific harmonized migration flows for European countries in 2002-2018
 
-## Country- and year-specific harmonized migration flows for European countries in 2002-2018
+Shiny application
 
-Shiny App. Version 1.01, May 2023
+Version 1.01, May 2023
 
-Author and maintainer: Maciej J. Dańko [email](mailto:danko@demogr.mpg) [email](mailto:maciej.danko@gmail.com)
+Author and maintainer: Maciej J. Dańko [email1](mailto:danko@demogr.mpg) [email2](mailto:maciej.danko@gmail.com)
 
 Max Planck Institute for Demographic Research, Rostock, Germany
 
-Welcome to HMigD I App! This Shiny app summarizes the assumptions and results of the Bayesian models used to estimate migration flows. The models integrate administrative and Labor Force Survey (LFS) data while accounting for data quality issues and differences in migration definitions. The model is capable of providing reliable and harmonized estimates of bilateral migration flows for 31 countries within the 2002-2018 period.
+This Shiny app summarizes the assumptions and results of the Bayesian models used to estimate migration flows. The models integrate administrative and Labor Force Survey (LFS) data while accounting for data quality issues and differences in migration definitions. The model is capable of providing reliable and harmonized estimates of bilateral migration flows for 31 countries within the 2002-2018 period.
 
-## Overview of Features and Capabilities
+### Overview of Features and Capabilities
 
 - **Data sources and quality assessment:** The app provides an overview of the input database (administrative data and LFS), including the results of data quality assessment used in the model. The data quality issues include:
     1. Accuracy issues: Random errors in data collection affecting population and migration registers and survey data.
