@@ -60,8 +60,10 @@ mix_models<-function(model_mat){
       
       data<-data[which(data$id %in% Select$id),c('orig','dest','year',sort(c('pred_q05',
                                                                              'pred_q25', 'pred_q50', 'pred_q75',
-                                                                             'pred_q95', 'pred_alt_q05', 'pred_alt_q25', 'pred_alt_q50',
-                                                                             'pred_alt_q75', 'pred_alt_q95')))]
+                                                                             'pred_q95'#, 
+                                                                             #'pred_alt_q05', 'pred_alt_q25', 'pred_alt_q50',
+                                                                             #'pred_alt_q75', 'pred_alt_q95'
+                                                                             )))]
       data$model<-j
       data
     } else NULL
@@ -219,7 +221,7 @@ shinyServer <-  function(input, output, session) {
     tmp<-ModelMixingTable()
     for (i in 1:NCntr) tmp[i,i]<-''
     ModelMixingTable(tmp)
-    rhandsontable(ModelMixingTable(), colWidths=32, rowHeaderWidth=32, colHeaderWidth=32, contextMenu = FALSE) %>% #overflow = 'visible' remove if more countries
+    rhandsontable(ModelMixingTable(), colWidths=32, rowHeaderWidth=32, colHeaderWidth=32, contextMenu = FALSE, height=800) %>% #overflow = 'visible' remove if more countries
       
       hot_cols(renderer = "
         function(instance, td, row, col, prop, value, cellProperties) {
@@ -692,6 +694,7 @@ shinyUI <-  bootstrapPage(
   #           }")
   #   )
   # ),
+  tags$head(tags$style(HTML(".ht_master, .ht_clone_top, .ht_clone_left, .ht_clone_right, .ht_clone_bottom  {overflow: hidden !important;}"))),
   tags$head(tags$style(HTML(".irs-grid-text {font-size: 14px;}"))),
   tags$head(tags$style(HTML(".irs-min {display: none;}"))),
   tags$head(tags$style(HTML(".irs--shiny .irs-from, .irs--shiny .irs-to, .irs--shiny .irs-single {font-size: 12px;}"))),

@@ -604,21 +604,21 @@ ui_model_schemes <- function() tagList(
 
 ui_visualize_output <- function() tagList(
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#e8e9d9; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
-      div(style="display:inline-block;vertical-align:top; margin-left:20px;width:400px",
-          br(),
-          h3('Model options'),
-          #help with table
-          br(),
-          myPrettyCheckbox("visualize_alt", h4('Use alternative model predicting method'), value = FALSE, width = '1100px'),
-      ),
-      div(style="display:inline-block;vertical-align:top; margin-left:20px;width:700px",
+      # div(style="display:inline-block;vertical-align:top; margin-left:20px;width:400px",
+      #     br(),
+      #     h3('Model options'),
+      #     #help with table
+      #     br(),
+      #     myPrettyCheckbox("visualize_alt", h4('Use alternative model predicting method'), value = FALSE, width = '1100px'),
+      # ),
+      div(style="display:inline-block;vertical-align:top; margin-left:20px;width:1200px",
           
           br(),
           div(style="display:inline-block;vertical-align:top; width:100px;  margin-left:20px;",
               h3('Year'),
           ),
           
-          div(style="display:inline-block;vertical-align:top; width:680px;  margin-left:20px; margin-top:5px",
+          div(style="display:inline-block;vertical-align:top; width:1080px;  margin-left:20px; margin-top:5px",
               
               sliderInput(inputId = "visualize_output_year", label = NULL, 
                           min = min(Years), max = max(Years), value = Years[10], step=1, sep='',
@@ -736,7 +736,7 @@ ui_compare_models_single<-function() tagList(
       uiOutput('cm_m12')#
   ),
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#e8e9d9; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
-      div(style="id:MM1;display:inline-block;vertical-align:top; width:310px; margin-left:20px",
+      div(style="id:MM1;display:inline-block;vertical-align:top; width:310px; margin-left:180px",
           br(),    
           h3('Sending country'),
           selectInput("SendingCountry", label = NULL,
@@ -760,11 +760,11 @@ ui_compare_models_single<-function() tagList(
                       selected = which(Countries=='CY'),width='300px'),
       ),
       
-      div(style="display:inline-block;vertical-align:top; width:320px;  margin-left:20px",
-          br(),
-          h3(HTML('Options')),
-          myPrettyCheckbox("UseAltPred1", h4('Use alternative model predicting method'), value = FALSE, width = '300px'),
-      ),
+      # div(style="display:inline-block;vertical-align:top; width:320px;  margin-left:20px",
+      #     br(),
+      #     h3(HTML('Options')),
+      #     myPrettyCheckbox("UseAltPred1", h4('Use alternative model predicting method'), value = FALSE, width = '300px'),
+      # ),
       br()
   ),
   
@@ -889,8 +889,8 @@ ui_compare_models_aggregated<-function() tagList(
                          colour='#FF0000',type='inline',title='Credibility intervals for aggregated flows',buttonLabel = 'Close',
                          content=aCItxt),
                   style="margin-bottom:-10px"),
-              div(myPrettyCheckbox("UseAltPred2", h4('Use alternative model predicting method'), value = FALSE, width = '525px'),
-                  style="margin-bottom:-10px"),
+              # div(myPrettyCheckbox("UseAltPred2", h4('Use alternative model predicting method'), value = FALSE, width = '525px'),
+              #     style="margin-bottom:-10px"),
               
               div(class = 'row', style = 'display: inline-block; align-items: left; margin-bottom:5px; margin-left:0px; width:525px',
                   div(class = 'col', style = 'display: inline-block; text-align: left; width:370px',
@@ -999,7 +999,7 @@ ui_compare_models_circular <- function() tagList(
           br(),
           h3('Options'),
           div(myPrettyCheckbox("ShowScale", h4('Show scale on the plot'), value = FALSE, width = '240px'),style="margin-bottom:-15px"),
-          myPrettyCheckbox("UseAltPred3", h4('Use alternative model predicting method'), value = FALSE, width = '240px'),
+          #myPrettyCheckbox("UseAltPred3", h4('Use alternative model predicting method'), value = FALSE, width = '240px'),
           
       ),
       br(),
@@ -1050,21 +1050,38 @@ ui_output<-function() tagList(
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#eee0b9; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',   #style='margin:0px; padding:0px',
       br(),
       div(style='margin-left:20px',
+          div(style='margin-left:35px',
           h3('Final model selection and mixing'),
-          h5('Select models for specific flows by double-clicking on the corresponding cell. See "Model schemes" panel for reference.'),
-          
-          #br(),
-          div(style='margin-left:-5px; padding-bottom:5px;',
-              rHandsontableOutput("ModelTable")   
+          h5('Select models for specific flows by double-clicking on the corresponding cell. Refer to the "Model schemes" panel to see models description.'),
           ),
           #br(),
-          # tags$head(tags$script('Shiny.addCustomMessageHandler("resetFileInputHandler", function(x) {      
-          #               var id = "#" + x + "_progress";      # name of progress bar
-          #               var idBar = id + " .bar";  
-          #               $(id).css("visibility", "hidden");   # change visibility
-          #               $(idBar).css("width", "0%");         # reset bar to 0%
-          #             });')),
-          div(style='display:flex;  height: 34px; margin: 0; padding: 0; margin-top:10px; align-self: center; align-items: center;',#margin-top:-15px;
+          # div(style = "display: inline-flex;",#writing-mode: vertical-rl; text-orientation: upright;",
+          #     div(style='width:50px; transform: rotate(90deg);',
+          #         h3("Sending countries")
+          #     ),  
+          #     div(style='margin-left:-5px; padding-bottom:5px;',
+          #         rHandsontableOutput("ModelTable")   
+          #     ),
+          # ),
+          div(
+            style = "display: flex; align-items: center",
+            h3(style = "margin: 0 auto;", "Sending countries")
+          ),  
+          div(
+            style = "display: flex; align-items: center;",
+            div(
+              style = "width: 20px; transform: rotate(-90deg); position: relative; z-index: 1; white-space: nowrap;",
+              h3(style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
+                 
+                 "Receiving countries")
+            ),
+            div(
+              style = "margin-left: 10px; overflow: hidden; position: relative;",
+              rHandsontableOutput("ModelTable")
+            )
+          ),
+          div(style='display:flex;  height: 34px; margin: 0; padding: 0; margin-top:-53px; margin-left:35px; align-self: center; align-items: center;',#margin-top:-15px;
+              
               div(style="display:inline-block; margin-top:1px;  margin-left:25px; height:34.5px;",
                   tags$script(HTML(jscode_upload_msg('ModelTableLoad'))),
                   tags$script(HTML(jscode_upload_txt('ModelTableLoad'))),

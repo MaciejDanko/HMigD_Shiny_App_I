@@ -52,7 +52,7 @@ mypie<-function(xl,yb,xr,yt, cex=0.95, fractions=c(0.5,0.2,0.3), col=seq_along(f
   }
 }
 
-prepare_data <- function(Data_input, orig, dest, flow = "pred_alt", 
+prepare_data <- function(Data_input, orig, dest, flow = "pred", 
                          max.cex.lfs=3, max.cex.rec=5, max.cex.sen=5,
                          max.alfa.lfs=1,
                          pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22)) {
@@ -87,7 +87,7 @@ prepare_data <- function(Data_input, orig, dest, flow = "pred_alt",
 # orig<-c('DE','UK')
 # dest<-c('PL','CZ')
 
-prepare_aggregated_data <- function(Data_input, orig, dest, flow = "pred_alt", na.rm=FALSE) {
+prepare_aggregated_data <- function(Data_input, orig, dest, flow = "pred", na.rm=FALSE) {
   Data_input <- as.data.frame(Data_input)
   Data_input<- Data_input[(Data_input$orig%in%orig) & (Data_input$dest %in% dest),]
   Y<-sort(unique(Data_input$year))
@@ -115,7 +115,7 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
                            m1=1,
                            m2=2,
                            linetype=3,
-                           flow = "pred_alt",
+                           flow = "pred",
                            spaceX = 15,
                            col1 = 'orange2',
                            col2 = 'deepskyblue2',
@@ -336,7 +336,7 @@ plot_models <- function(cntr_sen='PL',
                         max.cex.rec=5, 
                         max.cex.sen=5,
                         max.alfa.lfs=1,
-                        flow = "pred_alt",
+                        flow = "pred",
                         spaceX = 16,
                         col1 = 'orange2',
                         col2 = 'deepskyblue2',
@@ -929,7 +929,8 @@ plot_circular<-function(data, year, orig, dest, alt=FALSE, link.lwd=1, border.al
   data <- data[data$orig %in% orig,] 
   data <- data[data$dest %in% dest,] 
   data <- data[data$year == year, ]
-  if (alt) pred <- "pred_alt_q50" else pred<-"pred_q50"
+  #if (alt) pred <- "pred_alt_q50" else 
+  pred<-"pred_q50"
   data <-data[,c('orig','dest', pred)]
   colnames(data)<-c('orig','dest','value')
   # data$origcol<-palette[as.numeric(data$orig)]
