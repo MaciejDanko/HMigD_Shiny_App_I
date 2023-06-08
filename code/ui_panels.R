@@ -1065,7 +1065,7 @@ ui_output<-function() tagList(
           # ),
           div(
             style = "display: flex; align-items: center",
-            h3(style = "margin: 0 auto;", "Sending countries")
+            h3(style = "margin: 0 auto;", "Receiving countries")
           ),  
           div(
             style = "display: flex; align-items: center;",
@@ -1073,7 +1073,7 @@ ui_output<-function() tagList(
               style = "width: 20px; transform: rotate(-90deg); position: relative; z-index: 1; white-space: nowrap;",
               h3(style = "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
                  
-                 "Receiving countries")
+                 "Sending countries")
             ),
             div(
               style = "margin-left: 10px; overflow: hidden; position: relative;",
