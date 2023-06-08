@@ -1,15 +1,15 @@
 
-MODELS <<- c('(a) random slope & intercept model without gravity covariates',
-             '(b) random slope & intercept model with freedom of movement of workers as a single gravity covariate',
-             '(c) random intercept model with all gravity covariates',
-             '(d) random intercept model with freedom of movement of workers as a single gravity covariate',
+MODELS <<- c('(a) random slope & intercept model without gravity covariates, LFS included',
+             '(b) random slope & intercept model with freedom of movement of workers as a single gravity covariate, LFS included',
+             '(c) random intercept model with all gravity covariates, LFS included',
+             '(d) random intercept model with freedom of movement of workers as a single gravity covariate, LFS included',
              '(e) random slope & intercept model without gravity covariates, LFS not included',
              '(f) random slope & intercept model with freedom of movement of workers as a single gravity covariate, LFS not included')
 
-MODELS2 <<- c('random slope & intercept\nwithout gravity covariates',
-              'random slope & intercept\nwith freedom of movement of workers',
-              'random intercept\nall gravity covariates',
-              'random intercept\nwith freedom of movement of workers',
+MODELS2 <<- c('random slope & intercept\nwithout gravity covariates\nLFS included',
+              'random slope & intercept\nwith freedom of movement of workers\nLFS included',
+              'random intercept\nall gravity covariates\nLFS included',
+              'random intercept\nwith freedom of movement of workers\nLFS included',
               'random slope & intercept\nwithout gravity covariates\nLFS not included',
               'random slope & intercept\nwith freedom of movement of workers\nLFS not included')
 
@@ -61,9 +61,15 @@ about_list <- HTML(
   "<br>",
   paste0("<h4>Author and maintainer: Maciej J. Dańko [",email_html,"] </h4>"),
   '<h4>Max Planck Institute for Demographic Research, Rostock, Germany </h4>',
+  
+  '<hr style="border-top: 3px solid"',
+  
+  "<p>Welcome to HMigD I App!</p>", 
   "<br>",
-  "Welcome to HMigD I App! This Shiny app summarizes the assumptions and results of the Bayesian models used to estimate migration flows. The models integrate administrative and Labor Force Survey (LFS) data while accounting for data quality issues and differences in migration definitions. The model is capable of providing reliable and harmonized estimates of bilateral migration flows for 31 countries within the 2002-2018 period. Here's a short overview of the features and capabilities of the app:",
-  "<br><ul>",
+  '<p>To quickly navigate to the results section, click on the <span style="color:green;"><b>Model estimates &amp; comparison</b></span> panel. For direct access to data download, click on the <span style="color:green;"><b>model mixing and download</b></span> panel.</p>',
+  "<br>",
+  "This Shiny app summarizes the assumptions and results of the Bayesian models used to estimate migration flows. The models integrate administrative and Labor Force Survey (LFS) data while accounting for data quality issues and differences in migration definitions. The model is capable of providing reliable and harmonized estimates of bilateral migration flows for 31 countries within the 2002-2018 period. Here's a short overview of the features and capabilities of the app:",
+  "<br>","<br><ul>",
   "<li><b>Data sources and quality assessment:</b> The app provides an overview of the input database (administrative data and LFS), including the results of data quality assessment used in the model. The data quality issues include: (1) Accuracy issues: Random errors in data collection can affect population and migration registers, as well as survey data. (2) Undercounting: Non-systematic bias in migration estimates due to registration failures and non-response in surveys. (3) Inconsistencies in coverage: Systematic biases resulting from rules in the data collection process that exclude certain population segments. (4) Inconsistent migration definitions: Varying international duration of stay criteria.</li>",
   "<li><b>Covariates:</b> The app provides an overview of the different gravity covariates used in some models.</li>",
   "<li><b>Model schemes:</b> The app provides an overview of the different models used in the app.</li>",
@@ -74,8 +80,11 @@ about_list <- HTML(
   "<li><b>Model mixing:</b> The app allows for combining the results obtained from different models.</li>",
   "</ul>",
   "<br>",
-  "The copy of this project can be found on Github: <a href='https://github.com/MaciejDanko/HMigD_Shiny_App_I'> https://github.com/MaciejDanko/HMigD_Shiny_App_I </a>",
+  "<p>The copy of this project can be found on Github: <a href='https://github.com/MaciejDanko/HMigD_Shiny_App_I'> https://github.com/MaciejDanko/HMigD_Shiny_App_I </a></p>",
   "<br>",
-  'The app also serves as supplementary material for the paper titled "Modeling international migration flows by integrating multiple data sources" [in preparation].',
+  '<p>The app also serves as supplementary material for the paper titled "<i>Modeling international migration flows by integrating multiple data sources</i>" [in preparation].</p>',
+  "<br>",
+  "<h4><b>Acknowledgements:</b> I would like to thank Emilio Zagheni and Arkadiusz Wiśniowski for their valuable comments on earlier versions of this app.</h4>",
+  "<br>",
   "<br>"
 )

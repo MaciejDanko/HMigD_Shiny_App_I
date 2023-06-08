@@ -6,11 +6,11 @@ Shiny application [https://maciej-jan-danko.shinyapps.io/HMigD_Shiny_App_I/](htt
 First release (unofficial) March 2023
 Current version 1.1.4, Jun 2023
 
-Author and maintainer: Maciej J. Dańko [email1](mailto:danko@demogr.mpg) [email2](mailto:maciej.danko@gmail.com)
+Author and maintainer: Maciej J. Dańko [[email1](mailto:danko@demogr.mpg)] [[email2](mailto:maciej.danko@gmail.com)]
 
 Max Planck Institute for Demographic Research, Rostock, Germany
 
-This Shiny app summarizes the assumptions and results of the Bayesian models used to estimate migration flows. The models integrate administrative and Labor Force Survey (LFS) data while accounting for data quality issues and differences in migration definitions. The model is capable of providing reliable and harmonized estimates of bilateral migration flows for 31 countries within the 2002-2018 period.
+This HMigD I App summarizes the assumptions and results of the Bayesian models used to estimate migration flows. The models integrate administrative and Labor Force Survey (LFS) data while accounting for data quality issues and differences in migration definitions. The model is capable of providing reliable and harmonized estimates of bilateral migration flows for 31 countries within the 2002-2018 period.
 
 ### Overview of Features and Capabilities
 
@@ -34,4 +34,7 @@ This Shiny app summarizes the assumptions and results of the Bayesian models use
 
 - **Model mixing:** The app allows for combining the results obtained from different models.
 
-The app also serves as supplementary material for the paper titled "Modeling international migration flows by integrating multiple data sources" [in preparation].
+The app also serves as supplementary material for the paper titled *"Modeling international migration flows by integrating multiple data sources"* [in preparation].
+
+### Acknowledgements:
+I would like to thank Emilio Zagheni and Arkadiusz Wiśniowski for their valuable comments on earlier versions of this app.

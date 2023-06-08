@@ -626,7 +626,7 @@ shinyServer <-  function(input, output, session) {
 }  
 
 
-PanelNames<-(c('About','Input flows','Input transitions (LFS)','Gravity covariates','Model schemes','Model overview & comparison','Models mixing & download'))
+PanelNames<-(c('About','Input flows','Input transitions (LFS)','Gravity covariates','Model schemes','Model estimates & comparison','Models mixing & download'))
 # Spistresci <- data.frame(
 #   main = c("Accuracy", "Accuracy","Accuracy","Undercounting","Undercounting","Undercounting", "Duration of stay", "Migration flows","Migration flows","Migration transitions"),
 #   sub1 =   c("Administrative data", "Administrative data", "LFS Survey data","Administrative data", "Administrative data", "LFS Survey data", "Administrative data", "Administrative data", "Administrative data", "LFS Survey data"),
