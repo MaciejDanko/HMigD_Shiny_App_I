@@ -4,7 +4,7 @@
 Shiny application [https://maciej-jan-danko.shinyapps.io/HMigD_Shiny_App_I/](https://maciej-jan-danko.shinyapps.io/HMigD_Shiny_App_I/)
 
 First release (unofficial) March 2023
-Version 1.1.4, Jun 2023
+Current version 1.1.4, Jun 2023
 
 Author and maintainer: Maciej J. Dańko [email1](mailto:danko@demogr.mpg) [email2](mailto:maciej.danko@gmail.com)
 
