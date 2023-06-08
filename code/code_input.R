@@ -128,24 +128,24 @@ SaveBlockSRC <- function (IDName, direction, topmargin = -5, bg = '#F5DFD5'){
           tags$ul(
             tags$li(
               tags$a(href = "https://ec.europa.eu/eurostat/en/web/products-datasets/-/MIGR_IMM5PRV", "EUROSTAT"),
-              " - Eurostat migration database"
+              " - Eurostat migration database."
             ),
             tags$li(
               tags$a(href = "https://www.un.org/development/desa/pd/data/international-migration-flows", "UN"),
-              " - United Nation, International Migration Flows to and from Selected Countries: The 2015 Revision (Currently only total flows are available)"
+              " - United Nation, International Migration Flows to and from Selected Countries: The 2015 Revision."
             ),
             tags$li(
               tags$a(href = "https://www-genesis.destatis.de/genesis/online?sequenz=statistikTabellen&selectionname=12711&language=en#abreadcrumb", "DE_NSO"),
-              " - DESTATIS, Statistisches Bundesamt, GENESIS V4.4.2 - 2022"
+              " - DESTATIS, Statistisches Bundesamt, GENESIS V4.4.2 - 2022."
             ),
             tags$li(
               tags$a(href = "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/datasets/ipscountryofbirthbycountryoflastornextresidence", "UK_NSO"),
-              " - UK, Office for National Statistics, International Passenger Survey"
+              " - UK, Office for National Statistics, International Passenger Survey."
             ),
             tags$li(
               #tags$a(href = "https://eprints.soton.ac.uk/51993/", "MIMOSA"),
               tags$a(href = "https://www.imem.cpc.ac.uk/", "IMEM"),
-              " - Data used in IMEM and MIMOSA projects (Not avaialbale online)"
+              " - Data used in IMEM and MIMOSA projects (Not avaialbale online)."
             )
           ),
       ),
@@ -179,24 +179,23 @@ SaveBlockSRC <- function (IDName, direction, topmargin = -5, bg = '#F5DFD5'){
             tags$ul(
               tags$li(
                 tags$a(href = "https://ec.europa.eu/eurostat/en/web/products-datasets/-/MIGR_EMI3NXT", "EUROSTAT"),
-                " - Eurostat migration database"
+                " - Eurostat migration database."
               ),
               tags$li(
                 tags$a(href = "https://www.un.org/development/desa/pd/data/international-migration-flows", "UN"),
-                " - United Nation, International Migration Flows to and from Selected Countries: The 2015 Revision (Currently only total flows are available)"
+                " - United Nation, International Migration Flows to and from Selected Countries: The 2015 Revision."
               ),
               tags$li(
                 tags$a(href = "https://www-genesis.destatis.de/genesis/online?sequenz=statistikTabellen&selectionname=12711&language=en#abreadcrumb", "DE_NSO"),
-                " - DESTATIS, Statistisches Bundesamt, GENESIS V4.4.2 - 2022"
+                " - DESTATIS, Statistisches Bundesamt, GENESIS V4.4.2 - 2022."
               ),
               tags$li(
                 tags$a(href = "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/datasets/ipscountryofbirthbycountryoflastornextresidence", "UK_NSO"),
-                " - UK, Office for National Statistics, International Passenger Survey"
+                " - UK, Office for National Statistics, International Passenger Survey."
               ),
               tags$li(
                 #tags$a(href = "https://eprints.soton.ac.uk/51993/", "MIMOSA"),
-                tags$a(href = "https://www.imem.cpc.ac.uk/", "IMEM"),
-                " - Data used in IMEM and MIMOSA projects (Not avaialbale online)"
+                tags$a(href = "https://www.imem.cpc.ac.uk/", "IMEM"), " - Data used in IMEM and MIMOSA projects (Not avaialbale online)."
               )
             ),
         ),
@@ -250,6 +249,34 @@ SaveBlock1 <- function (IDName, topmargin = -5, bg = '#F5DFD5'){
       #),
   )
 }
+
+SaveBlock1B <- function (IDName, topmargin = -5, bg = '#F5DFD5',width_btn=c(200,200,200), width_div=c(350,350,350),mar_left=c(100,20,20), mar_top=rep(0,3)){
+  print(paste0("Save",IDName,"Data"))
+  #div(class="row", style=paste0('margin-left:0px; margin-top:',topmargin,'px; ; background-color:',bg,'; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f'),   #style='margin:0px; padding:0px',
+  tagList(
+      div(style=paste0("display:inline-block;vertical-align:top; width:",width_div[1],"px;  margin-left:",mar_left[1],"px; margin-top:",mar_top[1],"px"),
+          br(),
+          h3('Save data'),
+          downloadButton(paste0("Save",IDName,"Data"), "Save as xlsx"),
+          tags$head(tags$style(paste0("#Save",IDName,"Data {width:",width_btn[1],"px}"), media="screen", type="text/css")),
+      ),
+      div(style=paste0("display:inline-block;vertical-align:top; width:",width_div[2],"px;  margin-left:",mar_left[2],"px; margin-top:",mar_top[2],"px"),
+          br(),
+          h3('Image format'),
+          selectInput(paste0("Save",IDName,"Format"), NULL,
+                      choices = list("pdf" = 'pdf', "png" = 'png',"tiff" = 'tiff'), selected = 1, width=paste0(width_btn[2],'px'))
+      ),
+      div(style=paste0("display:inline-block;vertical-align:top; width:",width_div[3],"px;  margin-left:",mar_left[3],"px; margin-top:",mar_top[3],"px" ),
+          br(),
+          h3('Save plot'),
+          downloadButton(paste0("Save",IDName,"Plot"), "Save image"),
+          tags$head(tags$style(paste0("#Save",IDName,"Plot {width:",width_btn[3],"px}"), media="screen", type="text/css")),
+          #column(3,h5(HTML('&#160;')),downloadButton("Esavedata2", "Save results as xlsx"))
+      ),
+      #),
+  )
+}
+
 
 SaveBlock2 <- function (IDName, topmargin = 5, 
                         bg = '#F5DFD5',

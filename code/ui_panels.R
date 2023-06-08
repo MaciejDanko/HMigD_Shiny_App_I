@@ -288,9 +288,9 @@ ui_covariates_freedom <- function() tagList(
       plotOutput(outputId = "FREEDOMPlot",height="auto", width='auto'),
   ),
   
-  SaveBlock1('FREEDOM',5,'#F5DFD5'),   #'#F5DFD5' #FFEABA
+  #SaveBlock1('FREEDOM',5,'#F5DFD5'),   #'#F5DFD5' #FFEABA
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#F5DFD5; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
-      div(style="display:inline-block;vertical-align:top; margin-left:20px",
+      div(style="display:inline-block;vertical-align:top; margin-left:20px;width:650px;font-size:16px",
           br(),
           h3('Data sources'),
           
@@ -298,8 +298,9 @@ ui_covariates_freedom <- function() tagList(
           " - Wikipedia.",
           
       ),
-      br(),
-      br(),
+      div(style="display:inline-block;vertical-align:top; width:420px;  margin-left:100px",
+          SaveBlock1B('FREEDOM',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
+      ),
   ),
   br(),
   br(),
@@ -319,9 +320,9 @@ ui_covariates_population<-function() tagList(
       
       plotOutput(outputId = "POPULATIONPlot",height="auto", width='auto'),
   ),
-  SaveBlock1('POPULATION',5,'#F5DFD5'),     
+  #SaveBlock1('POPULATION',5,'#F5DFD5'),     
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#F5DFD5; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
-      div(style="display:inline-block;vertical-align:top; margin-left:20px",
+      div(style="display:inline-block;vertical-align:top; margin-left:20px;width:650px;font-size:16px",
           br(),
           h3('Data sources'),
           
@@ -329,8 +330,9 @@ ui_covariates_population<-function() tagList(
           " - EUROSTAT: Population on 1 January by age and sex.",
           
       ),
-      br(),
-      br(),
+      div(style="display:inline-block;vertical-align:top; width:420px;  margin-left:100px",
+          SaveBlock1B('POPULATION',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
+      ),
   ),
   br(),
   br(),
@@ -350,9 +352,9 @@ ui_covariates_stocks <- function() tagList(
       
       plotOutput(outputId = "STOCKSPlot",height="auto", width='auto'),
   ),
-  SaveBlock1('STOCKS',5,'#F5DFD5'),     
+  #SaveBlock1('STOCKS',5,'#F5DFD5'),     
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#F5DFD5; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
-      div(style="display:inline-block;vertical-align:top; margin-left:20px",
+      div(style="display:inline-block;vertical-align:top; margin-left:20px;width:650px;font-size:16px",
           br(),
           h3('Data sources'),
           
@@ -360,8 +362,9 @@ ui_covariates_stocks <- function() tagList(
           " - United Nations Population Division - Migrant Stock By Origin And Destination 2019 Revision",
           
       ),
-      br(),
-      br(),
+      div(style="display:inline-block;vertical-align:top; width:420px;  margin-left:100px",
+          SaveBlock1B('STOCKS',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
+      ),
   ),
   br(),
   br(),
@@ -399,10 +402,10 @@ ui_covariates_trade <- function() tagList(
       
       plotOutput(outputId = "TRADEPlot",height="auto", width='auto'),
   ),
-  SaveBlock1('TRADE',5,'#F5DFD5'),     
+  #SaveBlock1('TRADE',5,'#F5DFD5'),     
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#F5DFD5; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
       
-   div(style="display:inline-block;vertical-align:top; width:550px;  margin-left:20px",
+   div(style="display:inline-block;vertical-align:top; width:650px;  margin-left:20px;font-size:16px",
       br(),
       h3('Bilateral trade data sources'),
       tags$ul(
@@ -421,8 +424,9 @@ ui_covariates_trade <- function() tagList(
       ),
       
   ),
-  br(),
-  br(),
+  div(style="display:inline-block;vertical-align:top; width:420px;  margin-left:100px",
+      SaveBlock1B('TRADE',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
+  ),
   ),
   br(),br(),
 )
@@ -460,16 +464,16 @@ ui_covariates_gni_ratio <- function() tagList(
       
       plotOutput(outputId = "GNIPlot",height="auto", width='auto'),
   ),
-  SaveBlock1('GNI',5,'#F5DFD5'),     
+  #SaveBlock1('GNI',5,'#F5DFD5'),     
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#F5DFD5; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
       
-      div(style="display:inline-block;vertical-align:top; width:750px;  margin-left:20px",
+      div(style="display:inline-block;vertical-align:top; width:700px;  margin-left:20px;font-size:16px",
           br(),
           h3('GNI data sources'),
           tags$ul(
             tags$li(
               tags$a(href = "http://api.worldbank.org/v2/en/indicator/NY.GNP.PCAP.CD?downloadformat=csv", "World Bank NY.GNP.PCAP.CD"),
-              " - World Bank, GNI per capita, Atlas method (current US$)"
+              " - World Bank, GNI per capita,","Atlas method (current US$)",
             ),
             tags$li(
               tags$a(href = "https://stats.oecd.org/sdmx-json/data/DP_LIVE/.GNI.../OECD?contentType=csv&detail=code&separator=comma&csv-lang=en", "OECD GNI"),
@@ -478,14 +482,14 @@ ui_covariates_gni_ratio <- function() tagList(
           ),
           
       ),
-      br(),
-      br(),
+      div(style="display:inline-block;vertical-align:top; width:420px;  margin-left:50px",
+         SaveBlock1B('GNI',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
+      ),
+      #br(),
+      #br(),
   ),
   br(),br(),
 )
-
-URL_OECD<-'https://stats.oecd.org/sdmx-json/data/DP_LIVE/.GNI.../OECD?contentType=csv&detail=code&separator=comma&csv-lang=en'
-URL_WORLD_BANK<-'http://api.worldbank.org/v2/en/indicator/NY.GNP.PCAP.CD?downloadformat=csv'
 
 ui_covariates_distance <- function() tagList(
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#e8e9d9; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
@@ -501,9 +505,9 @@ ui_covariates_distance <- function() tagList(
       
       plotOutput(outputId = "DISTANCEPlot",height="auto", width='auto'),
   ),
-  SaveBlock1('DISTANCE',5,'#F5DFD5'),    
+  #SaveBlock1('DISTANCE',5,'#F5DFD5'),    
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#F5DFD5; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
-      div(style="display:inline-block;vertical-align:top; margin-left:20px",
+      div(style="display:inline-block;vertical-align:top; margin-left:20px; width:650px;font-size:16px;",
           br(),
           h3('Data sources'),
           
@@ -511,8 +515,9 @@ ui_covariates_distance <- function() tagList(
           " - CEPII: Research and Expertise on the World Economy",
           
       ),
-      br(),
-      br(),
+      div(style="display:inline-block;vertical-align:top; width:420px;  margin-left:100px",
+          SaveBlock1B('DISTANCE',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
+      ),
   ),
   br(),
   br(),
@@ -532,9 +537,9 @@ ui_covariates_language <- function() tagList(
       
       plotOutput(outputId = "LANGUAGEPlot",height="auto", width='auto'),
   ),
-  SaveBlock1('LANGUAGE',5,'#F5DFD5'),   
+  #SaveBlock1('LANGUAGE',5,'#F5DFD5'),   
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#F5DFD5; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
-      div(style="display:inline-block;vertical-align:top; margin-left:20px",
+      div(style="display:inline-block;vertical-align:top; margin-left:20px;width:650px;font-size:16px;",
           br(),
           h3('Data sources'),
           
@@ -542,8 +547,9 @@ ui_covariates_language <- function() tagList(
           " - CEPII: Research and Expertise on the World Economy",
           
       ),
-      br(),
-      br(),
+      div(style="display:inline-block;vertical-align:top; width:420px;  margin-left:100px",
+          SaveBlock1B('LANGUAGE',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
+      ),
   ),
   br(),
   br(),
