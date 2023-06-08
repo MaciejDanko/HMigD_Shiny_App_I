@@ -178,24 +178,6 @@ shinyServer <-  function(input, output, session) {
     showModal(CleanModelTable_1(session),session)
   })
   
-  observeEvent(input$MODEL_PANEL,{ # repair the shiny bug
-    updateSelectInput(session, "MODEL1", label = NULL,
-                      choices = makeList(MODELS),
-                      selected = input$MODEL1)
-    updateSelectInput(session, "MODEL2", label = NULL,
-                      choices = makeList(MODELS),
-                      selected = input$MODEL2)
-    updateSelectInput(session, "MODEL3", label = NULL,
-                      choices = makeList(MODELS),
-                      selected = input$MODEL3)
-    updateSelectInput(session, "MODEL1b", label = NULL,
-                      choices = makeList(MODELS),
-                      selected = input$MODEL1b)
-    updateSelectInput(session, "MODEL2b", label = NULL,
-                      choices = makeList(MODELS),
-                      selected = input$MODEL2b)
-  })
-  
   observeEvent(input$ModelTableSolidSubmit,{
     req(input$ModelTableSolidInput)
     showModal(CleanModelTable_2(session, letters[as.integer(input$ModelTableSolidInput)]),session)
@@ -258,6 +240,66 @@ shinyServer <-  function(input, output, session) {
   
   server_download_tables(input, output, session)
   
+  observeEvent(c(input$ReceivingCountry,input$SendingCountry),{
+    selectedl<-ModelMixedResultsDefault$model[(ModelMixedResultsDefault$dest==Countries[as.numeric(input$ReceivingCountry)]) & 
+                                                (ModelMixedResultsDefault$orig==Countries[as.numeric(input$SendingCountry)])][1]
+    selected<-which(letters==selectedl)
+    output$cm_m12<-renderUI({
+      tagList(
+        br(),
+        div(style = "display: inline-flex; align-items: center; width: 1200px; margin-left: 20px;",
+            div(style = "width: 390px;",
+                h3("Default recommended model #1")
+            ),
+            tags$head(tags$style(HTML("#MODEL1.form-control {padding-left: 6px;}"))),
+            div(style = "width: 810px;",
+                selectInput("MODEL1", 
+                            label = NULL,           
+                            choices = makeList(MODELS),
+                            selectize = FALSE,
+                            selected = selected,
+                            width = '780px'
+                )
+            )
+        ),
+        div(style = "display: inline-flex; align-items: center; width: 1200px; margin-left: 20px;",
+            div(style = "width: 390px;",
+                h3("Optional model #2 for comparisons")
+            ),
+            tags$head(tags$style(HTML("#MODEL2.form-control {padding-left: 6px;}"))),
+            div(style = "width: 810px;",
+                selectInput(
+                  "MODEL2", label = NULL,
+                  choices = makeList(MODELS),
+                  selectize = FALSE,
+                  selected = selected,
+                  width = '780px'
+                )
+            )
+        ),
+      )
+    })
+  })
+  
+  # observeEvent(c(input$MODEL_PANEL,input$MM1,input$MM2,input$MM3,input$MM4, input$reverse),{ # repair the shiny bug
+  #   updateSelectInput(session, "MODEL3", label = NULL,
+  #                     choices = makeList(MODELS),
+  #                     selected = input$MODEL3)
+  #   # updateSelectInput(session, "MODEL1b", label = NULL,
+  #   #                   choices = makeList(MODELS),
+  #   #                   selected = input$MODEL1b)
+  #   # updateSelectInput(session, "MODEL2b", label = NULL,
+  #   #                   choices = makeList(MODELS),
+  #   #                   selected = input$MODEL2b)
+  #   # # req(input$MODEL1, input$MODEL2)
+  #   # updateSelectInput(session, "MODEL1", label = NULL,
+  #   #                   choices = makeList(MODELS),
+  #   #                   selected = input$MODEL1)
+  #   # updateSelectInput(session, "MODEL2", label = NULL,
+  #   #                   choices = makeList(MODELS),
+  #   #                   selected = input$MODEL2)
+  # })
+  # 
   observeEvent(input$MODEL4, {
     shinyjs::disable("DownloadCode")
     if (input$MODEL4==1) {
@@ -696,8 +738,8 @@ shinyUI <-  bootstrapPage(
                          tabPanel(title = PanelNames[1],
                                   br(),
                                   tags$div(class='row',
-                                    style='font-size:16px;width:1050px; margin-left:75px;',
-                                    about_list
+                                           style='font-size:16px;width:1050px; margin-left:75px;',
+                                           about_list
                                   )
                          ),         
                          
@@ -819,7 +861,7 @@ shinyUI <-  bootstrapPage(
                                                                     
                                                    ),
                                                    
-                                                  
+                                                   
                                                    
                                                    
                                   ),
@@ -857,7 +899,7 @@ shinyUI <-  bootstrapPage(
                                                                     SaveBlock1('DURATION_META',5,'#F5DFD5'),
                                                                     
                                                    ),
-                                                
+                                                   
                                   ),
                          ),
                          
@@ -915,7 +957,7 @@ shinyUI <-  bootstrapPage(
                                             height=43,
                                             top.padding=20
                                   ),
-              
+                                  
                                   conditionalPanel(condition = "input.GRAVITY_PANELS == 1",
                                                    
                                                    ui_covariates_freedom(),                                                                  
@@ -1011,7 +1053,7 @@ shinyUI <-  bootstrapPage(
                                   ),
                                   
                                   
-                                
+                                  
                          ),
                          
              )

@@ -317,11 +317,11 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
   }
   sy=-5
   lines(c(usr[2]+facx*(x0*0.5),usr[2]+facx*(x0*0.5+1)), rep(usr[4] - y0*(32+sy),2), lwd=2, col=col1, xpd=TRUE)
-  if (m1!=m2) lines(c(usr[2]+facx*(x0*0.5),usr[2]+facx*(x0*0.5+1)), rep(usr[4] - y0*(35+sy+(m1>4)*1.5),2), lwd=2, col=col2, xpd=TRUE)
+  if (m1!=m2) lines(c(usr[2]+facx*(x0*0.5),usr[2]+facx*(x0*0.5+1)), rep(usr[4] - y0*(36.5+sy+(m1>4)*1.5),2), lwd=2, col=col2, xpd=TRUE)
   
   if (m1==m2) text(usr[2]+facx*(x0*0.5), usr[4] - y0*(30.5+sy), 'Model', xpd=TRUE, adj=0) else text(usr[2]+facx*(x0*0.5), usr[4] - y0*(30.5+sy), 'Models', xpd=TRUE, adj=0)
   text(usr[2]+facx*(1.5+x0*0.5) ,usr[4] - y0*(32+sy-0.5), paste('#1',MODELS2[m1]), cex=0.8, adj=c(0,1), xpd=TRUE)
-  if (m1!=m2) text(usr[2]+facx*(1.5+x0*0.5) ,usr[4] - y0*(35+sy+(m1>4)*1.5-0.5), paste('#2',MODELS2[m2]), cex=0.8, adj=c(0,1), xpd=TRUE)
+  if (m1!=m2) text(usr[2]+facx*(1.5+x0*0.5) ,usr[4] - y0*(36.5+sy+(m1>4)*1.5-0.5), paste('#2',MODELS2[m2]), cex=0.8, adj=c(0,1), xpd=TRUE)
 }
 
 
@@ -571,14 +571,14 @@ plot_models <- function(cntr_sen='PL',
   }
   
   lines(c(usr[2]+(x0*0.5*facx),usr[2]+(x0*0.5+1)*facx), rep(usr[4] - y0*(32+sy),2), lwd=2, col=col1, xpd=TRUE)
-  if (m1!=m2) lines(c(usr[2]+(x0*0.5*facx),usr[2]+(x0*0.5+1)*facx), rep(usr[4] - y0*(35+sy+(m1>4)*1.5),2), lwd=2, col=col2, xpd=TRUE)
+  if (m1!=m2) lines(c(usr[2]+(x0*0.5*facx),usr[2]+(x0*0.5+1)*facx), rep(usr[4] - y0*(36.5+sy+(m1>4)*1.5),2), lwd=2, col=col2, xpd=TRUE)
   
   if (m1==m2) text(usr[2]+(x0*0.5*facx), usr[4] - y0*(30.5+sy), 'Model', xpd=TRUE, adj=0) else text(usr[2]+(x0*0.5*facx), usr[4] - y0*(30.5+sy), 'Models', xpd=TRUE, adj=0)
   print(MODELS2)
   print(m1)
   print(MODELS2[m1])
   text(usr[2]+(1.5+x0*0.5)*facx ,usr[4] - y0*(32+sy-0.5), paste('#1',MODELS2[m1]), cex=0.8, adj=c(0,1), xpd=TRUE)
-  if (m1!=m2) text(usr[2]+(1.5+x0*0.5) ,usr[4] - y0*(35+sy+(m1>4)*1.5-0.5), paste('#2',MODELS2[m2]), cex=0.8, adj=c(0,1), xpd=TRUE)
+  if (m1!=m2) text(usr[2]+(1.5+x0*0.5) ,usr[4] - y0*(36.5+sy+(m1>4)*1.5-0.5), paste('#2',MODELS2[m2]), cex=0.8, adj=c(0,1), xpd=TRUE)
   
 }
 

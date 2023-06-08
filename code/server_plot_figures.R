@@ -92,8 +92,9 @@ server_plot_figures<-function(input, output, server, ModelMixedResults_){
   output$Model1Plot <- renderPlot({
     par(mar=c(5.1, 4.1, 3.0, 16.0))
     #par(family = 'serif')
-    print('test1')
-    print(ls(), envir = .GlobalEnv)
+    #print('test1')
+    #print(ls(), envir = .GlobalEnv)
+    req(input$SendingCountry, input$ReceivingCountry, input$MODEL1, input$MODEL2)
     if (input$SendingCountry!=input$ReceivingCountry)
       plot_single_flow_(input)
   }, height = 700, width = 1200, res=115)
