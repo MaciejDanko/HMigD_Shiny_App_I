@@ -56,12 +56,12 @@ about_list <- HTML(
   "<h3><b>HMigD I App:</b> The Human Migration Database I</h3>",
   "<h4>Country- and year-specific harmonized migration flows for European countries in 2002-2018</h3>",
   "<br>",
-  "<h4>Version 1.1.3, May 2023</h4>",
+  "<h4>First release (unofficial) March 2023</h4>",
+  "<h4>Version 1.1.3, Jun 2023</h4>",
   "<br>",
   paste0("<h4>Author and maintainer: Maciej J. Dańko [",email_html,"] </h4>"),
   '<h4>Max Planck Institute for Demographic Research, Rostock, Germany </h4>',
   "<br>",
-    
   "Welcome to HMigD I App! This Shiny app summarizes the assumptions and results of the Bayesian models used to estimate migration flows. The models integrate administrative and Labor Force Survey (LFS) data while accounting for data quality issues and differences in migration definitions. The model is capable of providing reliable and harmonized estimates of bilateral migration flows for 31 countries within the 2002-2018 period. Here's a short overview of the features and capabilities of the app:",
   "<br><ul>",
   "<li><b>Data sources and quality assessment:</b> The app provides an overview of the input database (administrative data and LFS), including the results of data quality assessment used in the model. The data quality issues include: (1) Accuracy issues: Random errors in data collection can affect population and migration registers, as well as survey data. (2) Undercounting: Non-systematic bias in migration estimates due to registration failures and non-response in surveys. (3) Inconsistencies in coverage: Systematic biases resulting from rules in the data collection process that exclude certain population segments. (4) Inconsistent migration definitions: Varying international duration of stay criteria.</li>",
@@ -75,5 +75,7 @@ about_list <- HTML(
   "</ul>",
   "<br>",
   "The copy of this project can be found on Github: <a href='https://github.com/MaciejDanko/HMigD_Shiny_App_I'> https://github.com/MaciejDanko/HMigD_Shiny_App_I </a>",
+  "<br>",
+  'The app also serves as supplementary material for the paper titled "Modeling international migration flows by integrating multiple data sources" [in preparation].',
   "<br>"
 )

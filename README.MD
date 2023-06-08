@@ -3,7 +3,8 @@
 
 Shiny application [https://maciej-jan-danko.shinyapps.io/HMigD_Shiny_App_I/](https://maciej-jan-danko.shinyapps.io/HMigD_Shiny_App_I/)
 
-Version 1.1.3, May 2023
+First release (unofficial) March 2023
+Version 1.1.4, Jun 2023
 
 Author and maintainer: Maciej J. Dańko [email1](mailto:danko@demogr.mpg) [email2](mailto:maciej.danko@gmail.com)
 
@@ -32,3 +33,5 @@ This Shiny app summarizes the assumptions and results of the Bayesian models use
 - **Circular flows plots:** The app provides circular flow plots for selected countries and years.
 
 - **Model mixing:** The app allows for combining the results obtained from different models.
+
+The app also serves as supplementary material for the paper titled "Modeling international migration flows by integrating multiple data sources" [in preparation].
