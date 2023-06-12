@@ -57,7 +57,7 @@ about_list <- HTML(
   "<h4>Country- and year-specific harmonized migration flows for European countries in 2002-2018</h3>",
   "<br>",
   "<h4>First release (unofficial) March 2023</h4>",
-  "<h4>Current version 1.1.6, Jun 2023</h4>",
+  "<h4>Current version 1.1.7, Jun 2023</h4>",
   "<br>",
   paste0("<h4>Author and maintainer: Maciej J. Dańko [",email_html,"] </h4>"),
   '<h4>Max Planck Institute for Demographic Research, Rostock, Germany </h4>',
