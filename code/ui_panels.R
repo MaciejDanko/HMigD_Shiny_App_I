@@ -755,12 +755,12 @@ ui_compare_models_single<-function() tagList(
       uiOutput('cm_m12')#
   ),
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#e8e9d9; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
-      div(style="id:MM1;display:inline-block;vertical-align:top; width:310px; margin-left:180px",
+      div(style="id:MM1;display:inline-block;vertical-align:top; width:210px; margin-left:20px",
           br(),    
           h3('Sending country'),
           selectInput("SendingCountry", label = NULL,
                       choices = makeList(CountriesFull),
-                      selected = which(Countries=='GR'),width='300px'),
+                      selected = which(Countries=='GR'),width='200px'),
       ),
       div(style="id:MM2;display:inline-block;vertical-align:top; width:180px; margin-left:10px",
           br(),    
@@ -771,19 +771,29 @@ ui_compare_models_single<-function() tagList(
           actionButton("Reverse", HTML("<center>&#8592 Swap countries &#8594</center>"), width='160px'),
       ),
       
-      div(style="id:MM3;display:inline-block;vertical-align:top; width:310px;  margin-left:0px",
+      div(style="id:MM3;display:inline-block;vertical-align:top; width:210px;  margin-left:0px",
           br(),     
           h3('Receiving country'),
           selectInput("ReceivingCountry", label = NULL, # move to server, uodate sending and input
                       choices = makeList(CountriesFull),
-                      selected = which(Countries=='CY'),width='300px'),
+                      selected = which(Countries=='CY'),width='200px'),
       ),
       
-      # div(style="display:inline-block;vertical-align:top; width:320px;  margin-left:20px",
+      div(style="display:inline-block;vertical-align:top; width:250px;  margin-left:120px",
+          br(),
+          h3(HTML('Graphic options')),
+          myPrettyCheckbox("FixedYMaxCompareModels", h4('Fix max value on Y-axis'), value = FALSE, width = '240px'),
+      ),
+      # div(style="display:inline-block;vertical-align:top; width:100px;  margin-left:20px",
       #     br(),
-      #     h3(HTML('Options')),
-      #     myPrettyCheckbox("UseAltPred1", h4('Use alternative model predicting method'), value = FALSE, width = '300px'),
+      #     h3(HTML('Y-min value')),
+      #     numericInput('YMinCompareModels', min=0,value=11,labe)
       # ),
+      div(style="display:inline-block; width:155px;  margin-left:20px; margin-top:25px",
+          #br(),
+          #h3(HTML('')),
+        numericInput('YMaxCompareModels', min=0,value=get_ymax_raw('GR','CY',2,2),label='Y-max value')
+      ),
       br()
   ),
   

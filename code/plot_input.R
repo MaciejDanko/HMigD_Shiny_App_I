@@ -23,6 +23,11 @@ plot_aggregated_<<-function(input){
 }
 
 plot_single_flow_<<-function(input){
+  req(input$SendingCountry)
+  req(input$ReceivingCountry)
+  req(input$MODEL1)
+  req(input$MODEL2)
+  req(input$STYLE1)
   plot_models(cntr_sen=Countries[as.numeric(input$SendingCountry)],
               cntr_rec=Countries[as.numeric(input$ReceivingCountry)],
               m1=input$MODEL1,
@@ -39,8 +44,21 @@ plot_single_flow_<<-function(input){
               MODELS2 = MODELS2,
               col1 = 'orange2',
               col2 = 'purple4',
-              pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22)) 
+              pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22),
+              setYmax = as.logical(input$FixedYMaxCompareModels),
+              Ymax =as.numeric(input$YMaxCompareModels)) 
 }
+
+get_ymax<<-function(input){
+  req(input$SendingCountry)
+  req(input$ReceivingCountry)
+  req(input$MODEL1)
+  req(input$MODEL2)
+  get_ymax_raw(cntr_sen=Countries[as.numeric(input$SendingCountry)],
+               cntr_rec=Countries[as.numeric(input$ReceivingCountry)],
+               m1=input$MODEL1,
+               m2=input$MODEL2)}
+
 
 plot_circular_flows_<-function(input){
   data<-switch(paste(input$MODEL3), 

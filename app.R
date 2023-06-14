@@ -128,6 +128,32 @@ ModelMixedResultsDefault<<-mix_models(initial_values)
 
 shinyServer <-  function(input, output, session) {
   
+  #YMaxReactive <- reactiveVal(get_ymax(input))
+  
+  # onSessionStart(function() {
+  #   initialYMax <- get_ymax(input)  # Replace with your logic to get the initial value
+  #   updateNumericInput(session, inputId = "YMaxCompareModels", value = initialYMax)
+  # })
+  
+  observeEvent(input$FixedYMaxCompareModels, {
+    req(input$SendingCountry)
+    req(input$ReceivingCountry)
+    req(input$MODEL1)
+    req(input$MODEL2)
+    if (input$FixedYMaxCompareModels) {
+      shinyjs::enable('YMaxCompareModels')
+      shinyjs::html("YMaxCompareModels-label",'<span style="color: black;">Y-max value</span>')
+      #if (length(input$YMaxCompareModels)==0) updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
+      #YMaxReactive(input$YMaxCompareModels)
+      #if (length(YMaxReactive())==0) YMaxReactive(get_ymax(input))
+    } else {
+      shinyjs::disable('YMaxCompareModels')
+      shinyjs::html("YMaxCompareModels-label",'<span style="color: gray;">Y-max value</span>')
+      #YMaxReactive(get_ymax(input))
+      updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
+    }
+  })
+  
   output$aboutContent <- renderText({about_list})
   
   ModelMixingTable<<-reactiveVal(initial_values)

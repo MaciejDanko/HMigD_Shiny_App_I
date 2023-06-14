@@ -325,6 +325,46 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
 }
 
 
+get_ymax_raw <- function(cntr_sen='PL',
+                        cntr_rec='DE',
+                        m1=1,
+                        m2=2,
+                        flow = "pred"
+){
+  print(cntr_sen)
+  print(cntr_rec)
+  print(m1)
+  print(m2)
+  print(flow)
+  MO1<-switch(paste(m1), 
+              '1' = Data_input_80a, 
+              '2' = Data_input_80b,
+              '3' = Data_input_80c,
+              '4' = Data_input_80d,
+              '5' = Data_input_80e,
+              '6' = Data_input_80f)
+  MO2<-switch(paste(m2), 
+              '1' = Data_input_80a, 
+              '2' = Data_input_80b,
+              '3' = Data_input_80c,
+              '4' = Data_input_80d,
+              '5' = Data_input_80e,
+              '6' = Data_input_80f)
+  
+  linetype=3;  max.cex.lfs=3 ;  max.cex.rec=5 ;  max.cex.sen=5;  max.alfa.lfs=1
+  M1<-prepare_data(MO1, cntr_sen, cntr_rec, flow=flow,
+                   max.cex.lfs=max.cex.lfs, max.cex.rec=max.cex.rec, max.cex.sen=max.cex.sen,
+                   max.alfa.lfs=0.5,
+                   pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22))
+  M2<-prepare_data(MO2, cntr_sen, cntr_rec, flow=flow,
+                   max.cex.lfs=max.cex.lfs, max.cex.rec=max.cex.rec, max.cex.sen=max.cex.sen,
+                   max.alfa.lfs=0.5,
+                   pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22))
+  YLIM<-range(M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
+  as.numeric(YLIM[2])/1000
+}
+
+
 plot_models <- function(cntr_sen='PL',
                         cntr_rec='DE',
                         m1=1,
@@ -343,14 +383,17 @@ plot_models <- function(cntr_sen='PL',
                         alpha.75 = 0.3,
                         alpha.95 = 0.1,
                         MODELS2 = NULL,
-                        pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22)
+                        pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22),
+                        setYmax = FALSE,
+                        Ymax = 1000
                         
 ){
   m1=as.numeric(m1)
   m2=as.numeric(m2)
   if (m1==m2) col1<-col2<-'black'
-  print('test2')
-  print(ls())
+  print(setYmax)
+  print(Ymax)
+  #print(ls())
   MO1<-switch(paste(m1), 
               '1' = Data_input_80a, 
               '2' = Data_input_80b,
@@ -377,6 +420,7 @@ plot_models <- function(cntr_sen='PL',
                    max.alfa.lfs=0.5,
                    pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22))
   YLIM<-range(M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
+  if (setYmax) YLIM[2] <- Ymax*1000
   XLIM<-range(M1$year,M2$year)
   if (linetype==2) XLIM[2]<-XLIM[2]+1
   Z<-par('mar')
