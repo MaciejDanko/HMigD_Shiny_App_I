@@ -5,7 +5,7 @@ Shiny application [https://maciej-jan-danko.shinyapps.io/HMigD_Shiny_App_I/](htt
 
 First release (unofficial) March 2023; Current version 1.1.8, Jun 2023
 
-Author and maintainer: Maciej J. Dańko [[email1](mailto:danko@demogr.mpg)] [[email2](mailto:maciej.danko@gmail.com)]
+Author and maintainer: Maciej J. Dańko [[email1](mailto:danko@demogr.mpg.de)] [[email2](mailto:maciej.danko@gmail.com)]
 
 Max Planck Institute for Demographic Research, Rostock, Germany
 
