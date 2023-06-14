@@ -152,9 +152,10 @@ shinyServer <-  function(input, output, session) {
       shinyjs::disable('YMaxCompareModels')
       shinyjs::html("YMaxCompareModels-label",'<span style="color: gray;">Y-max value</span>')
       #YMaxReactive(get_ymax(input))
-      updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
+      
       Ymaxenabled(FALSE)
     }
+    updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
   })
   
   output$aboutContent <- renderText({about_list})
@@ -313,6 +314,9 @@ shinyServer <-  function(input, output, session) {
     if (!Ymaxenabled()) updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
   })
   
+  observeEvent(c(input$MODEL1,input$MODEL2), {
+    if (!Ymaxenabled()) updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
+  })
   # observeEvent(c(input$MODEL_PANEL,input$MM1,input$MM2,input$MM3,input$MM4, input$reverse),{ # repair the shiny bug
   #   updateSelectInput(session, "MODEL3", label = NULL,
   #                     choices = makeList(MODELS),
