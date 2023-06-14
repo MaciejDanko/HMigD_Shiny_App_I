@@ -127,7 +127,8 @@ initial_values[c('CY','CZ','ES','FR','IE','MT','PL','SK','UK'), 'HU'] <- "b"
 ModelMixedResultsDefault<<-mix_models(initial_values)
 
 shinyServer <-  function(input, output, session) {
-  
+
+  Ymaxenabled <-reactiveVal(FALSE)  
   #YMaxReactive <- reactiveVal(get_ymax(input))
   
   # onSessionStart(function() {
@@ -143,6 +144,7 @@ shinyServer <-  function(input, output, session) {
     if (input$FixedYMaxCompareModels) {
       shinyjs::enable('YMaxCompareModels')
       shinyjs::html("YMaxCompareModels-label",'<span style="color: black;">Y-max value</span>')
+      Ymaxenabled(TRUE)
       #if (length(input$YMaxCompareModels)==0) updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
       #YMaxReactive(input$YMaxCompareModels)
       #if (length(YMaxReactive())==0) YMaxReactive(get_ymax(input))
@@ -151,6 +153,7 @@ shinyServer <-  function(input, output, session) {
       shinyjs::html("YMaxCompareModels-label",'<span style="color: gray;">Y-max value</span>')
       #YMaxReactive(get_ymax(input))
       updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
+      Ymaxenabled(FALSE)
     }
   })
   
@@ -307,6 +310,7 @@ shinyServer <-  function(input, output, session) {
         ),
       )
     })
+    if (!Ymaxenabled()) updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
   })
   
   # observeEvent(c(input$MODEL_PANEL,input$MM1,input$MM2,input$MM3,input$MM4, input$reverse),{ # repair the shiny bug

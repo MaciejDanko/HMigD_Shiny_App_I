@@ -10,12 +10,24 @@ sortdur<-function(k){
   c(k[!k%in%c('12','60')],'12','60')
 }
 
-Data_input_80a<<-get_data('./data/DataAndFit2_85a.RDA')
-Data_input_80b<<-get_data('./data/DataAndFit2_85b.RDA')
-Data_input_80c<<-get_data('./data/DataAndFit2_85c.RDA')
-Data_input_80d<<-get_data('./data/DataAndFit2_85d.RDA')
-Data_input_80e<<-get_data('./data/DataAndFit2_85e.RDA')
-Data_input_80f<<-get_data('./data/DataAndFit2_85f.RDA')
+load_old <- FALSE
+if (load_old){ #not available on GitHub
+  Data_input_80a<<-get_data('./data/old/DataAndFit_80a.RDA')
+  Data_input_80b<<-get_data('./data/old/DataAndFit_80b.RDA')
+  Data_input_80c<<-get_data('./data/old/DataAndFit_80c.RDA')
+  Data_input_80d<<-get_data('./data/old/DataAndFit_80d.RDA')
+  Data_input_80e<<-get_data('./data/old/DataAndFit_80e.RDA')
+  Data_input_80f<<-get_data('./data/old/DataAndFit_80f.RDA')
+  
+} else {
+  Data_input_80a<<-get_data('./data/DataAndFit2_85a.RDA')
+  Data_input_80b<<-get_data('./data/DataAndFit2_85b.RDA')
+  Data_input_80c<<-get_data('./data/DataAndFit2_85c.RDA')
+  Data_input_80d<<-get_data('./data/DataAndFit2_85d.RDA')
+  Data_input_80e<<-get_data('./data/DataAndFit2_85e.RDA')
+  Data_input_80f<<-get_data('./data/DataAndFit2_85f.RDA')
+}
+
 decode_and_load_rda('./data/input_data_VI_2023.RDA')
 decode_and_load_rda('./data/LFS_Undercounting.RDA')
 toSHINY_LFS_UNDERCOUNTING_OLD <- toSHINY_LFS_UNDERCOUNTING
