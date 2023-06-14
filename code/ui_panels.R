@@ -181,7 +181,7 @@ ui_transition_coverage <- function() tagList(
           br(), 
       ),
       div(style="display:inline-block;vertical-align:top;  margin-left:50px; margin-top:0px; width:980px",
-          h4(HTML('The classification of the coverage is based on the type of households included. <strong>"Low"</strong> coverage includes only private households, while <strong>"high"</strong> coverage includes both private households and collective accommodations.')),
+          h3(HTML('The classification of the coverage is based on the type of households included. <strong>"Low"</strong> coverage includes only private households, while <strong>"high"</strong> coverage includes both private households and collective accommodations.')),
       ),    
       
       div(style="display:inline-block;vertical-align:top;  width:1170px; margin-left:20px;background-color:#FFFFFF",
@@ -209,8 +209,12 @@ ui_transition_undercounting <- function() tagList(
           br(), 
       ),
       div(style="display:inline-block;vertical-align:top;  margin-left:50px; margin-top:0px; width:980px",
-          h4(HTML('Undercounting is classified based on the estimated mean proportion of individuals with missing migration data relative to the total population in each country (see figure below). Countries are categorized into high and low classes using the median value as the threshold.')),
-      ),
+          h3(HTML(paste0('<i><b>Combined measure</b></i> of undercounting in LFS data is calculated as <i>1 &#9472 (1 &#9472 <b>Fraction of non-responding</b>) x (1 &#9472 <b>Fraction of missing</b>)</i>.',
+                         ' Here, <i><b>Fraction of non-responding</i></b> indicates the non-response fraction of the studied population, and <i><b>Fraction of missing</i></b> ',
+                         'indicates the fraction of the population group with missing migration data in the total estimated population. The values of ',
+                         '<i><b>Fraction of non-responding</i></b> and <i><b>Fraction of missing</i></b> are displayed in the plots below.',
+                         'The classification uses the first quartile of <i><b>Combined measure</b></i> as a threshold.'))),
+      ),#tertile
       div(style="display:inline-block;vertical-align:top;  width:1170px; margin-left:20px;background-color:#FFFFFF",
           br(),br(),
           DTOutput("UndercountingTransitionsTable"),
@@ -219,14 +223,28 @@ ui_transition_undercounting <- function() tagList(
       
       br(),br()
   ),
+  
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#FFFFFF; width:1215px; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',
-      div(style="display:inline-block;vertical-align:top; horizontal-align:center; width:1100px; margin-left:20px; margin-top:10px",
-          
-          helper(h3('Undercouning of LFS data measured as a fraction of the population group with missing migration data in the total estimated population. Red rectangles show missing data or no migration data reported.'), 
+      div(style="display:inline-block;vertical-align:top; horizontal-align:center; width:1180px; margin-left:20px; margin-top:10px",
+          h3(HTML("Year-specific (non-averaged) <i><b>Combined measure</b></i> of undercounting in LFS data. The presence of red rectangles indicates missing data or situations where no migration data has been reported.")), 
+      ),
+      plotOutput(outputId = "TRANSITIONSUNDERCOUNTPlot",height="auto", width='99%'),
+  ),
+  div(class="row", style='margin-left:0px; margin-top:5px; background-color:#FFFFFF; width:1215px; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',
+      div(style="display:inline-block;vertical-align:top; horizontal-align:center; width:1180px; margin-left:20px; margin-top:10px",
+
+          helper(h3(HTML("Year-specific fraction of the population group with missing migration data in the total estimated population (non-averaged <i><b>Fraction of missing</i></b>). Red rectangles indicate missing data or cases where no migration data has been reported.")),
                  colour='red', content = 'lfs_undercounting',type='markdown',title='', style='font-size:20px;',size='m',
                  buttonLabel = 'Close'),
       ),
-      plotOutput(outputId = "TRANSITIONSUNDERCOUNTPlot",height="auto", width='99%'),
+      plotOutput(outputId = "TRANSITIONSMISSPlot",height="auto", width='99%'),
+  ),
+  div(class="row", style='margin-left:0px; margin-top:5px; background-color:#FFFFFF; width:1215px; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',
+      div(style="display:inline-block;vertical-align:top; horizontal-align:center; width:1100px; margin-left:20px; margin-top:10px",
+
+          h3(HTML("Year-specific fraction of the non-responding population (non-averaged <i><b>Fraction of non-responding</i></b>). Red rectangles indicate missing data or cases where no migration data has been reported.")),
+      ),    
+      plotOutput(outputId = "TRANSITIONSNRSPlot",height="auto", width='99%'),
   ),
 )
 
@@ -245,7 +263,7 @@ ui_transition_accuracy <- function() tagList(
           br(), 
       ),
       div(style="display:inline-block;vertical-align:top;  margin-left:50px; margin-top:0px; width:980px",
-          h4(HTML('Accuracy is classified based on the estimated mean coefficient of variation (CV) for estimating the number of immigrants in each country (see figure below). Countries are categorized into high and low classes using the median value as the threshold.')),
+          h3(HTML('The <b><i>Non-adjusted accuracy </i></b> of LFS data is estimated as the year-averaged coefficient of variation (CV) calculated among the number of immigrants at the destination in a particular year. Countries are categorized into high and low classes using the median value as the threshold. The <b><i>Undercounting-adjusted accuracy </i></b> takes into account undercounting, ensuring that accuracy is set to low when undercounting is high.')),
       ),
       div(style="display:inline-block;vertical-align:top;  width:1170px; margin-left:20px;background-color:#FFFFFF",
           br(),br(),
@@ -256,10 +274,10 @@ ui_transition_accuracy <- function() tagList(
       br(),br()
   ),
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#FFFFFF; width:1215px; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',
-      div(style="display:inline-block;vertical-align:top; horizontal-align:center; width:1100px; margin-left:20px; margin-top:10px",
+      div(style="display:inline-block;vertical-align:top; horizontal-align:center; width:1180px; margin-left:20px; margin-top:10px",
           
           #helper(
-          h3("The accuracy of LFS data is measured using the coefficient of variation (CV) for estimating the number of immigrants from the survey at the destination. The red rectangles indicate missing data, cases with no migration data reported, or situations where the CV could not be calculated."), 
+          h3(HTML("The <b><i>Non-adjusted accuracy </i></b> of LFS data is estimated as the coefficient of variation (CV) calculated among the number of immigrants at the destination in a particular year. The red rectangles indicate missing data, cases with no migration data reported, or situations where the CV could not be calculated.")), 
           #     colour='red', content = 'lfs_accuracy',type='markdown',title='', style='font-size:20px;',size='m',
           #     buttonLabel = 'Close'),
       ),
@@ -293,6 +311,7 @@ ui_flow_duration_emi <- function() tagList(
   ),
   SaveBlock1('DURATION_EMI',5,'#F5DFD5'),
 )
+
 
 ui_covariates_freedom <- function() tagList(
   div(class="row", style='margin-left:0px;border-style: solid; border-color:#9985A2; border-width:1px; margin-top:5px; width=1260px; background-color: #FFFFFF',

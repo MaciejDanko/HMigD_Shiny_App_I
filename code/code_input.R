@@ -18,7 +18,7 @@ SaveBlock0 <- function (IDName, topmargin = -5, bg = '#F5DFD5'){
           tags$head(tags$style(paste0("#Save",IDName,"Plot {width:200px}"), media="screen", type="text/css")),
           #column(3,h5(HTML('&#160;')),downloadButton("Esavedata2", "Save results as xlsx"))
       ),
-      #),
+      
   )
 }
 

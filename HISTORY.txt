@@ -1,6 +1,7 @@
-History of major changes in the app:
+History of major changes in the app: 
 
 1.1.0 : initial functional version of the app (March 2023).
 1.1.1 - 1.1.5 : adding elements of the input database (March - June 2023)
 1.1.6 : adding recommended models and better input widgets (June 2023)
 1.1.7 : base accuracy for Germany is reduced to medium (decentralized migrant registration system, problem of seasonal workers) (June 2023)
+1.1.8 : new methods of calculation accuracy and undercounting for LFS data

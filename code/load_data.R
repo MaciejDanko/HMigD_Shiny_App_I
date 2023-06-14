@@ -18,7 +18,13 @@ Data_input_80e<<-get_data('./data/DataAndFit2_85e.RDA')
 Data_input_80f<<-get_data('./data/DataAndFit2_85f.RDA')
 decode_and_load_rda('./data/input_data_VI_2023.RDA')
 decode_and_load_rda('./data/LFS_Undercounting.RDA')
+toSHINY_LFS_UNDERCOUNTING_OLD <- toSHINY_LFS_UNDERCOUNTING
+decode_and_load_rda('./data/LFS_Undercounting_2.RDA')
+
 decode_and_load_rda('./data/LFS_Accuracy.RDA')
+
+LFS_ACCU_ADJ<-rsm.data$a_imm.s
+LFS_ACCU_ADJ[rsm.data$LUI.s==0]<-2
 
 rsm.data$A_E.r['AT',paste((2002:2018))]<-2
 rsm.data$A_I.r['AT',paste((2002:2018))]<-2
@@ -117,17 +123,27 @@ DTCoverage$Coverage[rsm.data$ic.exc.r]<-'High'
 DTCoverageTr<-data.frame('Country name'= substr(CountriesFull,1,nchar(CountriesFull)-4), Iso2=Countries, Coverage='Low', check.names = FALSE, check.rows = FALSE)
 DTCoverageTr$Coverage[rsm.data$ic.exc.s]<-'High'
 
-DTUndercountingTr<-data.frame('Country name'= substr(CountriesFull,1,nchar(CountriesFull)-4), Iso2=Countries, Undercounting='Low', 
-                              Fraction = format(round(rowMeans(toSHINY_LFS_UNDERCOUNTING$z4,na.rm=T)[Countries],5),nsmall = 5, scientific = FALSE), check.names = FALSE, check.rows = FALSE)
+DTUndercountingTr<-data.frame('Country name'= substr(CountriesFull,1,nchar(CountriesFull)-4), 
+                              Iso2=Countries, 
+                              'Fraction of non-response' = format(round(rowMeans(toSHINY_LFS_UNDERCOUNTING$nrs_02_18,na.rm=T)[Countries],5),nsmall = 5, scientific = FALSE),
+                              'Fraction of missing' = format(round(rowMeans(toSHINY_LFS_UNDERCOUNTING$frac_miss_02_18,na.rm=T)[Countries],5),nsmall = 5, scientific = FALSE), 
+                              'Combined measure' = format(round(rowMeans(toSHINY_LFS_UNDERCOUNTING$combined_02_18,na.rm=T)[Countries],5),nsmall = 5, scientific = FALSE), 
+                              Undercounting='Low', 
+                              check.names = FALSE, check.rows = FALSE)
 DTUndercountingTr$Undercounting[rsm.data$LUI.s==0]<-'High'
 DTUndercountingTr$Undercounting[Countries=='IE']<-''
-DTUndercountingTr$Fraction[Countries=='IE']<-''
+DTUndercountingTr$`Fraction of non-response`[Countries=='IE']<-
+DTUndercountingTr$`Fraction of missing`[Countries=='IE']<-
+  DTUndercountingTr$`Combined measure`[Countries=='IE']<-''
 
-DTAccuracyTr<-data.frame('Country name'= substr(CountriesFull,1,nchar(CountriesFull)-4), Iso2=Countries, Accuracy='Low', 
+DTAccuracyTr<-data.frame('Country name'= substr(CountriesFull,1,nchar(CountriesFull)-4), Iso2=Countries, 
                          CV = format(round(rowMeans(toSHINY_LFS_ACCU$cv.2,na.rm=T)[Countries],5),nsmall = 5, scientific = FALSE),
+                         'Non-adjusted accuracy'='Low',
+                         'Undercounting-adjusted accuracy'='Low',
                          check.names = FALSE, check.rows = FALSE)
-DTAccuracyTr$Accuracy[rsm.data$a_imm.s==1]<-'High'
-DTAccuracyTr$Accuracy[Countries=='IE']<-''
+DTAccuracyTr$`Non-adjusted accuracy`[rsm.data$a_imm.s==1]<-'High'
+DTAccuracyTr$`Undercounting-adjusted accuracy`[LFS_ACCU_ADJ==1]<-'High'
+DTAccuracyTr$`Undercounting-adjusted accuracy`[Countries=='IE']<-DTAccuracyTr$`Non-adjusted accuracy`[Countries=='IE']<-''
 DTAccuracyTr$CV[Countries=='IE']<-''
 
 closeAllConnections()
