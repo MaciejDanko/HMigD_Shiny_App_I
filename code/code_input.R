@@ -23,7 +23,7 @@ SaveBlock0 <- function (IDName, topmargin = -5, bg = '#F5DFD5'){
 }
 
 SaveBlockTRANSITIONSCOUNT <- function (IDName,  topmargin = -5, bg = '#F5DFD5'){
-  print(paste0("Save",IDName,"Data"))
+  #print(paste0("Save",IDName,"Data"))
     tagList(
       div(class="row", style=paste0('margin-left:0px; margin-top:',topmargin,'px; ; background-color:',bg,'; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f'),   #style='margin:0px; padding:0px',
           
@@ -47,9 +47,9 @@ SaveBlockTRANSITIONSCOUNT <- function (IDName,  topmargin = -5, bg = '#F5DFD5'){
               
               
           ),br(),br()),
-      br(),
-      br(),
-      br(),
+      #br(),
+      #br(),
+      #br(),
     ) 
 }
 
@@ -78,9 +78,9 @@ SaveBlockFLOWSIMMCOUNT <- function (IDName,  topmargin = -5, bg = '#F5DFD5'){
             
             
         ),br(),br()),
-    br(),
-    br(),
-    br(),
+    #br(),
+    #br(),
+    #br(),
   ) 
 }
 
@@ -109,9 +109,9 @@ SaveBlockFLOWSEMICOUNT <- function (IDName,  topmargin = -5, bg = '#F5DFD5'){
             
             
         ),br(),br()),
-    br(),
-    br(),
-    br(),
+    # br(),
+    # br(),
+    # br(),
   ) 
 }
 
@@ -165,9 +165,9 @@ SaveBlockSRC <- function (IDName, direction, topmargin = -5, bg = '#F5DFD5'){
           # tags$head(tags$style(paste0("#Save",IDName,"Data {width:200px}"), media="screen", type="text/css")),
           
       ),br(),br()),
-      br(),
-      br(),
-      br(),
+      # br(),
+      # br(),
+      # br(),
   ) 
   } else if (direction == "E"){
     tagList(
@@ -213,9 +213,9 @@ SaveBlockSRC <- function (IDName, direction, topmargin = -5, bg = '#F5DFD5'){
             # tags$head(tags$style(paste0("#Save",IDName,"DataRaw {width:200px}"), media="screen", type="text/css")),
             
         ),br(),br()),
-        br(),
-        br(),
-        br(),
+        # br(),
+        # br(),
+        # br(),
     ) 
     
   }
@@ -497,10 +497,6 @@ ModelsOutputFrame <- function(DTid="MixedModelTable",BTNid='SelectedModelTableDo
   )
   )
 }
-
-
-
-
 
 mySurveyFrame <-function(ID='DB'){
   tagList(

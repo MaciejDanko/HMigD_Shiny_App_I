@@ -157,10 +157,8 @@ ui_flow_coverage <- function() tagList(
           DTOutput("CoverageTable"),
       ), 
       br(),
-      
       br(),br()
-  )
-  
+  ),
 )
 
 ui_transition_coverage <- function() tagList(
@@ -191,7 +189,7 @@ ui_transition_coverage <- function() tagList(
       br(),
       
       br(),br()
-  )
+  ), 
 )
 
 ui_transition_undercounting <- function() tagList(
@@ -333,8 +331,8 @@ ui_covariates_freedom <- function() tagList(
           SaveBlock1B('FREEDOM',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
       ),
   ),
-  br(),
-  br(),
+  #br(),
+  #br(),
 )
 
 ui_covariates_population<-function() tagList(
@@ -365,8 +363,8 @@ ui_covariates_population<-function() tagList(
           SaveBlock1B('POPULATION',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
       ),
   ),
-  br(),
-  br(),
+  #br(),
+  #br(),
 )
 
 ui_covariates_stocks <- function() tagList(
@@ -397,8 +395,8 @@ ui_covariates_stocks <- function() tagList(
           SaveBlock1B('STOCKS',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
       ),
   ),
-  br(),
-  br(),
+  #br(),
+  #br(),
 )
 
 ui_covariates_trade <- function() tagList(
@@ -459,7 +457,7 @@ ui_covariates_trade <- function() tagList(
           SaveBlock1B('TRADE',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
       ),
   ),
-  br(),br(),
+  #br(),br(),
 )
 
 
@@ -519,7 +517,7 @@ ui_covariates_gni_ratio <- function() tagList(
       #br(),
       #br(),
   ),
-  br(),br(),
+  #br(),br(),
 )
 
 ui_covariates_distance <- function() tagList(
@@ -550,8 +548,8 @@ ui_covariates_distance <- function() tagList(
           SaveBlock1B('DISTANCE',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
       ),
   ),
-  br(),
-  br(),
+  #br(),
+  #br(),
 )  
 
 ui_covariates_language <- function() tagList(
@@ -582,8 +580,8 @@ ui_covariates_language <- function() tagList(
           SaveBlock1B('LANGUAGE',5,'#F5DFD5',width_btn=c(200,200,200), width_div=c(200,200,200),mar_left=c(215,0,10),mar_top=c(0,-10,-10)),
       ),
   ),
-  br(),
-  br(),
+  #br(),
+  #br(),
 )  
 
 ui_model_schemes <- function() tagList(
@@ -807,7 +805,7 @@ ui_compare_models_single<-function() tagList(
               #choices2=c('Basic','Alternative')
   ),
   mySurveyFrame(),
-  br(),br(),br(),br(),br(),
+  #br(),br(),br(),br(),br(),
   
 )
 
@@ -971,7 +969,7 @@ ui_compare_models_aggregated<-function() tagList(
               choices1=c('Linear interpolation','Stair steps plot','Spline interpolation')#, 
               #choices2=c('Basic','Alternative')
   ),
-  br(),br(),br(),br(),br(),br(),
+  #br(),br(),br(),br(),br(),br(),
 )
 
 ui_compare_models_circular <- function() tagList(
@@ -1062,7 +1060,7 @@ ui_compare_models_circular <- function() tagList(
              #choices2=c('Basic','Alternative')
   ),
   
-  br(),br(),br(),br(),br(),br(),br(),br(),br(),br(),
+  #br(),br(),br(),br(),br(),br(),br(),br(),br(),br(),
 )
 
 

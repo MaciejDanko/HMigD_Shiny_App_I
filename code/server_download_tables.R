@@ -45,7 +45,7 @@ SaveNamedList<-function(file.name, mylist){
 }
 
 
-server_download_tables<-function(input, output,session){
+server_download_tables<-function(input, output){
   output$ModelTableDownload <- downloadHandler(
     filename = function() {
       paste("HMigD_model_mixing_table_", format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), ".xlsx", sep = "")
@@ -222,18 +222,6 @@ server_download_tables<-function(input, output,session){
     },
     content = function(file) {
       write.xlsx(DTAccuracyTr, file, rowNames =FALSE, colNames =TRUE)
-    }
-  )
-  
-  output$SelectedModelTableDownload <- downloadHandler(
-    filename = function() {
-      paste("HMigD_raw_results_table_", format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), ".xlsx", sep = "")
-    },
-    content = function(file) {
-      #value<-googlesheets4::read_sheet(ss = sheet_id,  sheet = "Comments")
-      # Save the entire database connection object as an RDS file
-      tmp <- data.frame(ModelMixedResults(), ' '='', check.names=FALSE, fix.empty.names =FALSE, stringsAsFactors = FALSE, check.rows = FALSE)
-      write.xlsx(tmp, file, rowNames =FALSE, colNames =TRUE, tabColour ='#607080', colWidths=list(7))
     }
   )
   

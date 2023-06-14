@@ -94,11 +94,8 @@ source('./code/server_save_figures.R')
 source('./code/server_button_pass_check.R')
 source('./code/ui_panels.R')
 
-OLD_send<<-CountriesFull[Countries%in% c('CZ', 'EE', 'LT', 'LV', 'PL', 'SI', 'SK','HU')]
-OLD_rec<<-CountriesFull[Countries%in% c('UK')]
-justchanged <- TRUE
-firstrunSen<-TRUE
-firstrunRec<-TRUE
+OLD_send_ini<<-CountriesFull[Countries%in% c('CZ', 'EE', 'LT', 'LV', 'PL', 'SI', 'SK','HU')]
+OLD_rec_ini<<-CountriesFull[Countries%in% c('UK')]
 
 figures_path <- "./figures"
 addResourcePath(prefix = "figurespath", directoryPath = figures_path)
@@ -126,9 +123,48 @@ initial_values[c('CY','CZ','ES','FR','IE','MT','PL','SK','UK'), 'HU'] <- "b"
 
 ModelMixedResultsDefault<<-mix_models(initial_values)
 
-shinyServer <-  function(input, output, session) {
+users <<- reactiveValues(count = 0)
 
+shinyServer <-  function(input, output, session) {
+  
+  OLD_send <- reactiveVal(OLD_send_ini)
+  OLD_rec <- reactiveVal(OLD_rec_ini)
+  justchanged <- reactiveVal(TRUE)
+  firstrunSen <- reactiveVal(TRUE)
+  firstrunRec <- reactiveVal(TRUE)
+  
   Ymaxenabled <-reactiveVal(FALSE)  
+  
+  ThresholdYear <- reactiveVal(2000)
+  observeEvent(input$bprev, {
+    print('dec')
+    if (as.numeric(ThresholdYear())>2000) ThresholdYear(as.numeric(ThresholdYear()) - 1)
+  })
+  observeEvent(input$bnext ,{
+    print('inc')
+    if (as.numeric(ThresholdYear())<2020) ThresholdYear(as.numeric(ThresholdYear()) + 1)
+  })
+  output$ThrY <- renderUI({
+    h4(ThresholdYear())
+  })
+  
+  onSessionStart <- isolate({
+    users$count <- users$count + 1
+  })
+  
+  onSessionEnded(function() {
+    isolate({
+      users$count <- users$count - 1
+    })
+  })
+  
+  output$userstext = renderUI({
+    if (users$count==1) {
+      h4(paste0("There is only one user connected to this app"))
+    } else {
+      h4(paste0("There are ", users$count, " users connected to this app"))
+    }
+  })
   #YMaxReactive <- reactiveVal(get_ymax(input))
   
   # onSessionStart(function() {
@@ -160,10 +196,26 @@ shinyServer <-  function(input, output, session) {
   
   output$aboutContent <- renderText({about_list})
   
-  ModelMixingTable<<-reactiveVal(initial_values)
-  ModelMixedResults<<-reactiveVal(mix_models(initial_values))
+  ModelMixingTable<-reactiveVal(initial_values)
+  ModelMixedResults<-reactiveVal(mix_models(initial_values))
   
-  server_show_tables(input, output, session)
+  server_show_tables(input, output)
+  output$MixedModelTable <- renderDT({if (length(colnames(ModelMixedResults()))) {
+    shiny::req(ModelMixedResults())
+    dbdata<-ModelMixedResults()[, c('orig','dest','year','model','pred_q50')]#,'pred_alt_q50')]
+    colnames(dbdata)<-c('Origin','Destination','Year','Model','Median')#,'Median (alternative)')
+    datatable(
+      dbdata,
+      rownames = FALSE,
+      options = list(
+        searching = TRUE,
+        columnDefs = list(list(className = 'dt-center', targets = 0:4)),
+        pageLength = 50,
+        info = FALSE
+      )
+    )
+  }}, server = FALSE)
+  
   
   observeEvent(input$ModelTableLoad, {
     req(input$ModelTableLoad$datapath)
@@ -270,7 +322,18 @@ shinyServer <-  function(input, output, session) {
     
   })
   
-  server_download_tables(input, output, session)
+  server_download_tables(input, output)
+  output$SelectedModelTableDownload <- downloadHandler(
+    filename = function() {
+      paste("HMigD_raw_user_results_table_", format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      #value<-googlesheets4::read_sheet(ss = sheet_id,  sheet = "Comments")
+      # Save the entire database connection object as an RDS file
+      tmp <- data.frame(ModelMixedResults(), ' '='', check.names=FALSE, fix.empty.names =FALSE, stringsAsFactors = FALSE, check.rows = FALSE)
+      write.xlsx(tmp, file, rowNames =FALSE, colNames =TRUE, tabColour ='#607080', colWidths=list(7))
+    }
+  )
   
   observeEvent(c(input$ReceivingCountry,input$SendingCountry),{
     selectedl<-ModelMixedResultsDefault$model[(ModelMixedResultsDefault$dest==Countries[as.numeric(input$ReceivingCountry)]) & 
@@ -486,9 +549,9 @@ shinyServer <-  function(input, output, session) {
   })
   
   
-  cDBname <<- reactiveVal('black')
-  cDBemail <<- reactiveVal('black')
-  cDBcomment <<- reactiveVal('black')
+  cDBname <- reactiveVal('black')
+  cDBemail <- reactiveVal('black')
+  cDBcomment <- reactiveVal('black')
   
   output$hDBname <- renderUI({
     h4('Please provide your name',style=paste0('color:',cDBname()))
@@ -609,18 +672,6 @@ shinyServer <-  function(input, output, session) {
     }
   )
   
-  TrYear <<- reactiveVal(2000)
-  
-  observeEvent(input$bprev, {
-    if (as.numeric(TrYear())>2000) TrYear(as.numeric(TrYear()) - 1)
-  })
-  observeEvent(input$bnext ,{
-    if (as.numeric(TrYear())<2020) TrYear(as.numeric(TrYear()) + 1)
-  })
-  
-  output$ThrY <- renderUI({
-    h4(TrYear())
-  })
   
   # trick to avoid bug in the updateSelectInput code
   observeEvent(input$MODEL2b,{
@@ -654,28 +705,28 @@ shinyServer <-  function(input, output, session) {
   
   
   observeEvent(input$SendCntrs,{
-    if (!firstrunSen) {
-      if ((!justchanged)&&(!identical(OLD_send,input$SendCntrs)))
+    if (!firstrunSen()) {
+      if ((!justchanged())&&(!identical(OLD_send(),input$SendCntrs)))
         updateSelectInput(session = session, inputId = 'Examples1', selected = 1)
-      justchanged<<-FALSE
+      justchanged(FALSE)
       
-      OLD_send<<-input$SendCntrs
-      OLD_rec<<-input$RecCntrs
+      OLD_send(input$SendCntrs)
+      OLD_rec(input$RecCntrs)
     }
-    firstrunSen<<-FALSE  
+    firstrunSen(FALSE)  
   })
   
   observeEvent(input$RecCntrs,{
-    if (!firstrunRec) {
-      if ((!justchanged)&&(!identical(OLD_rec,input$RecCntrs)))
+    if (!firstrunRec()) {
+      if ((!justchanged())&&(!identical(OLD_rec(),input$RecCntrs)))
         updateSelectInput(session = session, inputId = 'Examples1', selected = 1)
       
-      justchanged<<-FALSE
+      justchanged(FALSE)
       
-      OLD_send<<-input$SendCntrs
-      OLD_rec<<-input$RecCntrs
+      OLD_send(input$SendCntrs)
+      OLD_rec(input$RecCntrs)
     }
-    firstrunRec<<-FALSE
+    firstrunRec(FALSE)
   })
   
   observeEvent(input$Reverse,{
@@ -686,21 +737,57 @@ shinyServer <-  function(input, output, session) {
     
   })
   
-  
   observeEvent(input$Examples1,{
-    
-    runexample1(session,input)
+    ww<-runexample1(session,input)
+    print('***')
+    print(ww)
+    ThresholdYear(ww)
     if (input$Examples1 >1) {
-      justchanged<<-TRUE
-      OLD_send<<-input$SendCntrs
-      OLD_rec<<-input$RecCntrs
-    } else justchanged<<-FALSE
+      justchanged(TRUE)
+      OLD_send(input$SendCntrs)
+      OLD_rec(input$RecCntrs)
+    } else justchanged(FALSE)
+    print(ThresholdYear())
+    print('***')
   })
   
-  server_plot_figures(input, output, server, ModelMixedResults())
+  server_plot_figures(input, output)
   
-  server_save_figures(input, output, server)
+  output$OutputFlowsPlot <- renderPlot({
+    ModelMixedResultsArray<-xtabs(pred_q50 ~ orig + dest + year, data = ModelMixedResults())
+    plot_output_flows_(input, ModelMixedResultsArray)
+  }, height = 900, width = 1200, res=115)
   
+  output$Model2Plot <- renderPlot({
+    par(mar=c(5.1, 4.1, 3.0, 16.0))
+    plot_aggregated_(input, TrYearV=ThresholdYear())
+  }, height = 700, width = 1200, res=115)
+  
+  server_save_figures(input, output)
+  
+  output$SaveModel2Plot<- downloadHandler(
+    filename = function() {
+      paste('ModelComparison.', input$SaveModel2Format, sep='') },
+    content = function(file) {
+      if (input$SendingCountry!=input$ReceivingCountry) {
+        RES2<-800
+        ffo <- input$SaveModel2Format
+        if(ffo=='pdf') {
+          pdf(file,12,7)
+        } else if(ffo=='png'){
+          png(file,width=12*RES2,height=7*RES2,res=RES2)
+        } else if(ffo=='tiff'){
+          tiff(file,width=12*RES2,height=7*RES2,res=RES2,compression = 'rle')
+        }
+        
+        par(mar=c(5.1, 4.1, 3.0, 16.0))
+        # print('test1')
+        # THRE<-input$ThrY - 1000*(1-as.numeric(input$UseThreshold))
+        plot_aggregated_(input, ThresholdYear())
+        dev.off()
+      }
+    }
+  )
 }  
 
 
@@ -777,7 +864,8 @@ shinyUI <-  bootstrapPage(
                                   tags$div(class='row',
                                            style='font-size:16px;width:1050px; margin-left:75px;',
                                            about_list
-                                  )
+                                  ),
+                                  
                          ),         
                          
                          tabPanel(title = PanelNames[2],style='width:1200px;margin-left:5px',
@@ -972,7 +1060,7 @@ shinyUI <-  bootstrapPage(
                                   conditionalPanel(condition = "input.TransitionsPanels == 4",
                                                    ui_transition_coverage(),
                                   ),
-                                  br(),
+                                  #br(),
                                   
                                   
                          ),
@@ -1093,9 +1181,18 @@ shinyUI <-  bootstrapPage(
                                   
                          ),
                          
-             )
-      )
-  )
+             ),
+             div(class="row", style='margin-left:5px; font-size:16px; width:1215px; margin-top:5px; background-color:#000088; border-style: solid; border-color:#000000; border-width:2px; color:#EEEEFF',
+                 
+                 div( style='margin-left:20px; margin-top:10px; display: flex; align-items: center; align-vertical: center', uiOutput("userstext")),
+                 
+                 
+             ),
+             br(),br(),br(),br(),br(),br(),br(),br(),br(),br(),br(),br()
+      ),
+      
+  ),
+  
 )
 
 shinyApp(ui=shinyUI, server = shinyServer)

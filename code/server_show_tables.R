@@ -1,23 +1,5 @@
-server_show_tables<-function(input, output, session){
+server_show_tables<-function(input, output){
   
-output$MixedModelTable <- renderDT({if (length(colnames(ModelMixedResults()))) {
-  shiny::req(ModelMixedResults())
-  #print(colnames(ModelMixedResults()))
-  #print(colnames(ModelMixedResults()) %in% c('orig','dest','year','model','pred_q50','pred_alt_q50'))
-  dbdata<-ModelMixedResults()[, c('orig','dest','year','model','pred_q50')]#,'pred_alt_q50')]
-  colnames(dbdata)<-c('Origin','Destination','Year','Model','Median')#,'Median (alternative)')
-  datatable(
-    dbdata,
-    rownames = FALSE,
-    options = list(
-      searching = TRUE,
-      columnDefs = list(list(className = 'dt-center', targets = 0:4)),
-      pageLength = 50,
-      info = FALSE
-    )
-  )
-}}, server = FALSE)
-
 output$MixedModelDefaultTable <- renderDT({
   
   dbdata<-ModelMixedResultsDefault[, c('orig','dest','year','model','pred_q50')]#,'pred_alt_q50')]

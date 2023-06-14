@@ -302,30 +302,6 @@ server_save_figures <- function(input, output, server){
     }
   )
   
-  output$SaveModel2Plot<- downloadHandler(
-    filename = function() {
-      paste('ModelComparison.', input$SaveModel2Format, sep='') },
-    content = function(file) {
-      if (input$SendingCountry!=input$ReceivingCountry) {
-        RES2<-800
-        ffo <- input$SaveModel2Format
-        if(ffo=='pdf') {
-          pdf(file,12,7)
-        } else if(ffo=='png'){
-          png(file,width=12*RES2,height=7*RES2,res=RES2)
-        } else if(ffo=='tiff'){
-          tiff(file,width=12*RES2,height=7*RES2,res=RES2,compression = 'rle')
-        }
-        
-        par(mar=c(5.1, 4.1, 3.0, 16.0))
-        print('test1')
-        THRE<-input$ThrY - 1000*(1-as.numeric(input$UseThreshold))
-        plot_aggregated_(input)
-        dev.off()
-      }
-    }
-  )
-  
   output$SaveModel3Plot<- downloadHandler(
     filename = function() {
       paste('ModelCircleFlowsPlot_',input$YearSel,'.', input$SaveModel2Format, sep='') },

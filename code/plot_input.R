@@ -1,11 +1,11 @@
-plot_aggregated_<<-function(input){
+plot_aggregated_<<-function(input, TrYearV){
   print('%%%%%%%%%%%%')
-  print(as.numeric(TrYear()))
+  print(as.numeric(TrYearV))
   print(as.numeric(input$UseThreshold))
   print('%%%%%%%%%%%%')
   plot_aggregated(cntr_sen_list=Countries[CountriesFull%in%input$SendCntrs],
                   cntr_rec_list=Countries[CountriesFull%in%input$RecCntrs],
-                  Threshold=as.numeric(TrYear()) - 1000*(1-as.numeric(input$UseThreshold)),
+                  Threshold=as.numeric(TrYearV) - 1000*(1-as.numeric(input$UseThreshold)),
                   m1=input$MODEL1b,
                   m2=input$MODEL2b,
                   linetype=as.numeric(input$STYLE2),
