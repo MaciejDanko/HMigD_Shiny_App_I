@@ -781,18 +781,12 @@ ui_compare_models_single<-function() tagList(
       
       div(style="display:inline-block;vertical-align:top; width:250px;  margin-left:120px",
           br(),
-          h3(HTML('Graphic options')),
-          myPrettyCheckbox("FixedYMaxCompareModels", h4('Fix max value on Y-axis'), value = FALSE, width = '240px'),
+          h3(HTML('Graphical options')),
+          myPrettyCheckbox("FixedYMaxCompareModels", h4('Fix maximum value on the Y-axis'), value = FALSE, width = '240px'),
       ),
-      # div(style="display:inline-block;vertical-align:top; width:100px;  margin-left:20px",
-      #     br(),
-      #     h3(HTML('Y-min value')),
-      #     numericInput('YMinCompareModels', min=0,value=11,labe)
-      # ),
+ 
       div(style="display:inline-block; width:155px;  margin-left:20px; margin-top:25px",
-          #br(),
-          #h3(HTML('')),
-        numericInput('YMaxCompareModels', min=0,value=get_ymax_raw('GR','CY',2,2),label='Y-max value')
+        numericInput('YMaxCompareModels', min=0,value=get_ymax_raw('GR','CY',2,2),label='Max Y-axis value')
       ),
       br()
   ),
