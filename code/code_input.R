@@ -412,8 +412,8 @@ mysubmenu<-function(ID="Ipanels",
                  #'px; margin-bottom: ',bottom.margin,'px; 
   )
   style2 <- paste0('#',ID,' .btn-group{ padding-left: ',space,'px; width:',width_panel,'px; color: ',passive.co,'}')    
-  style3 <- paste0("#",ID," .btn-danger {background-color: ",passive.bg,"; border-color: ",passive.bo,"; height:",height,"px; color: ",passive.co,"; font-size: ",fontsize,"px;}")
-  style4 <- paste0("#",ID," .btn-danger.active {background-color: ",active.bg,"; border-color: ",active.bo,"; color: ",active.co,"; height: ",height,"px; font-size: ",fontsize,"px;}")
+  style3 <- paste0("#",ID," .btn-danger {background-color: ",passive.bg,"; border-color: ",passive.bo,"; height:",height,"px; color: ",passive.co,"; font-size: ",fontsize,"px; font-family: 'Roboto Condensed', sans-serif;}")
+  style4 <- paste0("#",ID," .btn-danger.active {background-color: ",active.bg,"; border-color: ",active.bo,"; color: ",active.co,"; height: ",height,"px; font-size: ",fontsize,"px; font-family: 'Roboto Condensed', sans-serif;}")
   
   print(style1)
   print(style2)
