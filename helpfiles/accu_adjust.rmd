@@ -1,0 +1,7 @@
+---
+output: html_document
+---
+
+```{r include_html, results='asis', echo = FALSE}
+htmltools::includeHTML("accu_adjust.md")
+```

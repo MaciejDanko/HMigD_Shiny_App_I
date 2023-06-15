@@ -179,14 +179,14 @@ shinyServer <-  function(input, output, session) {
     req(input$MODEL2)
     if (input$FixedYMaxCompareModels) {
       shinyjs::enable('YMaxCompareModels')
-      shinyjs::html("YMaxCompareModels-label",'<span style="color: black;">Y-max value</span>')
+      shinyjs::html("YMaxCompareModels-label",'<span style="color: black;">Max Y-axis value</span>')
       Ymaxenabled(TRUE)
       #if (length(input$YMaxCompareModels)==0) updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
       #YMaxReactive(input$YMaxCompareModels)
       #if (length(YMaxReactive())==0) YMaxReactive(get_ymax(input))
     } else {
       shinyjs::disable('YMaxCompareModels')
-      shinyjs::html("YMaxCompareModels-label",'<span style="color: gray;">Y-max value</span>')
+      shinyjs::html("YMaxCompareModels-label",'<span style="color: gray;">Max Y-axis value</span>')
       #YMaxReactive(get_ymax(input))
       
       Ymaxenabled(FALSE)

@@ -76,7 +76,10 @@ ui_flow_accuracy_imm <- function() tagList(
           br(),
           h3('Display options'),
           #help with table
-          myPrettyCheckbox("acu_i_adjusted", h4('Correct the accuracy classification of specific migration flows, taking into account the undercounting of that flows'), value = TRUE, width = '1100px'),
+          helper(myPrettyCheckbox("acu_i_adjusted", h4('Adjust the baseline accuracy classification of specific migration flows, taking into account the undercounting of that flows'), value = TRUE, width = '1000px'),
+                 colour='red', content = 'accu_adjust',type='markdown',title='', style='font-size:20px;',size='m',
+                 buttonLabel = 'Close', style="display:flex"),
+          
       ),
   ),    
   
@@ -91,9 +94,15 @@ ui_flow_accuracy_emi <- function() tagList(
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#e8e9d9; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
       div(style="display:inline-block;vertical-align:top; margin-left:20px",
           br(),
-          h3('Display options'),
-          #help with table
-          myPrettyCheckbox("acu_e_adjusted", h4('Correct the accuracy classification of specific migration flows, taking into account the undercounting of that flows'), value = TRUE, width = '1100px'),
+          
+          
+            h3('Display options'),
+            
+          
+      helper(myPrettyCheckbox("acu_e_adjusted", h4('Adjust the baseline accuracy classification of specific migration flows, taking into account the undercounting of that flows'), value = TRUE, width = '1000px'),
+             colour='red', content = 'accu_adjust',type='markdown',title='', style='font-size:20px;',size='m', style="display:flex",
+             buttonLabel = 'Close'),
+          
       ),
   ),    
   #myPrettyCheckbox("acu_e_adjusted", h4('Correct for undercounting'), value = TRUE, width = '300px'),
