@@ -136,12 +136,15 @@ shinyServer <-  function(input, output, session) {
   Ymaxenabled <-reactiveVal(FALSE)  
   
   ThresholdYear <- reactiveVal(2000)
+  
   observeEvent(input$bprev, {
     print('dec')
+    req(ThresholdYear())
     if (as.numeric(ThresholdYear())>2000) ThresholdYear(as.numeric(ThresholdYear()) - 1)
   })
   observeEvent(input$bnext ,{
     print('inc')
+    req(ThresholdYear())
     if (as.numeric(ThresholdYear())<2020) ThresholdYear(as.numeric(ThresholdYear()) + 1)
   })
   output$ThrY <- renderUI({

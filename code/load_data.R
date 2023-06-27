@@ -5,6 +5,12 @@ get_data<-function(nam){
   Data_input
 }
 
+get_data_raw<-function(nam){
+  decode_and_load_rda(nam)
+  raw_int_flows
+}
+
+
 sortdur<-function(k){
   k<-sort(k)
   c(k[!k%in%c('12','60')],'12','60')
@@ -35,6 +41,13 @@ if (load_old == 1){ #not available on GitHub
   Data_input_80e<<-get_data('./data/DataAndFit2_86e.RDA')
   Data_input_80f<<-get_data('./data/DataAndFit2_86f.RDA')
 }
+
+raw_int_flows_a<<-get_data_raw('./data/raw_int_flows_86a.enc')
+raw_int_flows_b<<-get_data_raw('./data/raw_int_flows_86b.enc')
+raw_int_flows_c<<-get_data_raw('./data/raw_int_flows_86c.enc')
+raw_int_flows_d<<-get_data_raw('./data/raw_int_flows_86d.enc')
+raw_int_flows_e<<-get_data_raw('./data/raw_int_flows_86e.enc')
+raw_int_flows_f<<-get_data_raw('./data/raw_int_flows_86f.enc')
 
 decode_and_load_rda('./data/input_data_VI_2023.RDA')
 decode_and_load_rda('./data/LFS_Undercounting.RDA')

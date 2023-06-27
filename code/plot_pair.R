@@ -87,7 +87,7 @@ prepare_data <- function(Data_input, orig, dest, flow = "pred",
 # orig<-c('DE','UK')
 # dest<-c('PL','CZ')
 
-prepare_aggregated_data <- function(Data_input, orig, dest, flow = "pred", na.rm=FALSE) {
+prepare_aggregated_data_old <- function(Data_input, orig, dest, flow = "pred", na.rm=FALSE) {
   Data_input <- as.data.frame(Data_input)
   Data_input<- Data_input[(Data_input$orig%in%orig) & (Data_input$dest %in% dest),]
   Y<-sort(unique(Data_input$year))
@@ -106,6 +106,26 @@ prepare_aggregated_data <- function(Data_input, orig, dest, flow = "pred", na.rm
              Flow75=sapply(Y, function(k) sum(Flow75[which(Data_input$year==k)],na.rm=na.rm)),
              Flow95=sapply(Y, function(k) sum(Flow95[which(Data_input$year==k)],na.rm=na.rm)),
              stringsAsFactors = FALSE)
+}
+
+minus1fun<-function(x) {x<-x-1; x[x<0]<-0; x}
+prepare_aggregated_data <- function(Data_input, Data_input2, orig, dest, flow = "pred", na.rm=FALSE) {
+  
+  Data_input<-Data_input[,Countries%in%orig,Countries%in%dest,,drop=FALSE]
+  Data_input<-apply(Data_input,c(1,4),sum, na.rm=TRUE)
+  Data_input2 <- as.data.frame(Data_input2)
+  Data_input2<- Data_input2[(Data_input2$orig%in%orig) & (Data_input2$dest %in% dest),]
+  Y<-sort(unique(Data_input2$year))
+  data.frame( year=Y,
+              r_sen=sapply(Y, function(k) sum(Data_input2$r_sen[which(Data_input2$year==k)],na.rm=na.rm)), 
+              r_rec=sapply(Y, function(k) sum(Data_input2$r_rec[which(Data_input2$year==k)],na.rm=na.rm)), 
+              r_lfs=sapply(Y, function(k) sum(Data_input2$s_rec[which(Data_input2$year==k)],na.rm=na.rm)),
+              Flow05=sapply(1:ncol(Data_input),function(k) minus1fun(quantile(Data_input[,k], 0.05))),
+              Flow25=sapply(1:ncol(Data_input),function(k) minus1fun(quantile(Data_input[,k], 0.25))),
+              Flow50=sapply(1:ncol(Data_input),function(k) quantile(Data_input[,k], 0.50)),
+              Flow75=sapply(1:ncol(Data_input),function(k) quantile(Data_input[,k], 0.75)+1),
+              Flow95=sapply(1:ncol(Data_input),function(k) quantile(Data_input[,k], 0.95)+1),
+              stringsAsFactors = FALSE)
 }
 
 
@@ -131,23 +151,38 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
   if (m1==m2) col1<-col2<-'black'
   print('test2')
   print(ls())
-  MO1<-switch(paste(m1), 
-              '1' = Data_input_80a, 
+  MO1D<-switch(paste(m1),
+              '1' = Data_input_80a,
               '2' = Data_input_80b,
               '3' = Data_input_80c,
               '4' = Data_input_80d,
               '5' = Data_input_80e,
               '6' = Data_input_80f)
-  MO2<-switch(paste(m2), 
-              '1' = Data_input_80a, 
+  MO2D<-switch(paste(m2),
+              '1' = Data_input_80a,
               '2' = Data_input_80b,
               '3' = Data_input_80c,
               '4' = Data_input_80d,
               '5' = Data_input_80e,
               '6' = Data_input_80f)
+
+  MO1F<-switch(paste(m1), 
+              '1' = raw_int_flows_a, 
+              '2' = raw_int_flows_b,
+              '3' = raw_int_flows_c,
+              '4' = raw_int_flows_d,
+              '5' = raw_int_flows_e,
+              '6' = raw_int_flows_f)
+  MO2F<-switch(paste(m2), 
+              '1' = raw_int_flows_a, 
+              '2' = raw_int_flows_b,
+              '3' = raw_int_flows_c,
+              '4' = raw_int_flows_d,
+              '5' = raw_int_flows_e,
+              '6' = raw_int_flows_f)
   
-  M1<-prepare_aggregated_data(MO1, cntr_sen_list,cntr_rec_list, flow=flow, na.rm=na.rm)
-  M2<-prepare_aggregated_data(MO2, cntr_sen_list,cntr_rec_list, flow=flow, na.rm=na.rm)
+  M1<-prepare_aggregated_data(MO1F, MO1D, cntr_sen_list,cntr_rec_list, flow=flow, na.rm=na.rm)
+  M2<-prepare_aggregated_data(MO2F, MO2D,cntr_sen_list,cntr_rec_list, flow=flow, na.rm=na.rm)
   if (na.rm){
     M1$r_sen[M1$r_sen==0]<-NA
     M2$r_sen[M2$r_sen==0]<-NA

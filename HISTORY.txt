@@ -1,13 +1,18 @@
-History of major changes in the app: 
+History of major changes in the app:
 
-1.1.0 [March 2023] : Initial functional version of the app.
-1.1.1 - 1.1.5 [March - June 2023] : Adding elements of the input database. 
-1.1.6 [June 2023] : Adding recommended models and better input widgets
-1.1.7 [June 2023] : Base accuracy for Germany is reduced to medium 
-                    (decentralized migration registration system, 
-                    problem of seasonal workers, etc.) 
-1.1.8 [June 2023] : New methods of calculation accuracy and undercounting for LFS data, 
-                    Max Y-axis value for model comparisions,
-                    accuracy adjust help table, 
-                    minor corrections to functionality and reactive components.
-
+1.1.0 [March 2023]: 
+      Initial functional version of the app.
+1.1.1 - 1.1.5 [March - June 2023]: 
+      Added elements/panels for the input database.
+1.1.6 [June 2023]: 
+      Introduced recommended models and enhanced input widgets.
+1.1.7 [June 2023]: 
+      Adjusted base accuracy for Germany to medium due to issues with the 
+      decentralized migration registration system and challenges related to 
+      seasonal workers.
+1.1.8 [June 2023]: 
+      Implemented new methods for calculating accuracy and undercounting of 
+      LFS data. Introduced a maximum Y-axis value for model comparisons 
+      (single flows). Added an "accuracy adjusted"" help table, improved 
+      credibility intervals for aggregated flows, and made minor corrections 
+      to functionality and reactive components.
