@@ -150,6 +150,9 @@ shinyServer <-  function(input, output, session) {
   
   onSessionStart <- isolate({
     users$count <- users$count + 1
+    shinyjs::disable('YMaxCompareModels')
+    shinyjs::html("YMaxCompareModels-label",'<span style="color: gray;">Max Y-axis value</span>')
+    Ymaxenabled(FALSE)
   })
   
   onSessionEnded(function() {
