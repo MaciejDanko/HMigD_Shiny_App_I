@@ -1107,26 +1107,22 @@ ui_output<-function() tagList(
             ),
             div(
               style = "margin-left: 10px; overflow: hidden; position: relative;",
-              shinycssloaders::withSpinner(rHandsontableOutput("ModelTable"))
+              rHandsontableOutput("ModelTable")
             )
           ),
-          div(style='display:flex;  height: 34px; margin: 0; padding: 0; margin-top:-53px; margin-left:35px; align-self: center; align-items: center;',#margin-top:-15px;
+          #margin-top:-53px;
+          div(style='display:flex;  height: 34px; margin: 0; padding: 0;  margin-left:35px; align-self: center; align-items: center;',#margin-top:-15px;
               
               div(style="display:inline-block; margin-top:1px;  margin-left:25px; height:34.5px;",
                   tags$script(HTML(jscode_upload_msg('ModelTableLoad'))),
                   tags$script(HTML(jscode_upload_txt('ModelTableLoad'))),
-                  #tags$script(HTML(jsCode_upload_hide)),
-                  #tags$head(tags$style('#ModelTableLoad .form-control {display:none; visibility:hidden !important')),
-                  #tags$head(tags$style('#ModelTableLoad .form-group.input-group.form-control {display:none; visibility:hidden !important')),
-                  #tags$head(tags$style('#ModelTableLoad .input-group {display:none; visibility:hidden !important')),
-                  #tags$head(tags$style(HTML("#tab-2594-6 > div:nth-child(3) > div > div > div:nth-child(4) > div:nth-child(1) > div > div.input-group > input { display: none;}"))),
-                  
                   fileInput('ModelTableLoad',label=NULL,buttonLabel =HTML(paste0(shiny::icon("upload"),
                                                                                  " Import models table")),
                             accept = '.xlsx',placeholder = 'No file selected'),
               ),
-              #tags$head(tags$style(HTML("#ModelTableLoad .custom-file-input::before {width: 200px;}"))),
-              downloadButton('ModelTableDownload','Export model table',style='height:34.5px;  margin-left:5px'),
+              tags$head(tags$style(HTML("#ModelTableLoad .custom-file-input::before {width: 200px;}"))),
+              #div(style="display:inline-block;",
+              downloadButton('ModelTableDownload','Export models table',style='height:34.5px; margin-left:5px'),
               tags$head(
                 tags$style("#ModelTableSolidInput .form-group.shiny-input-container {  margin: 0; }"),
                 tags$style("#ModelTableSolidInput .form-group.select-input-container { flex-grow: 1;}"),
@@ -1134,18 +1130,15 @@ ui_output<-function() tagList(
                 tags$style('#ModelTableSolidInput .selectize-input { height: 34px !important; }'),
               ),
               actionButton('ModelTableRestore','Restore models table',style='height:34.5px;  margin-left:5px', icon=shiny::icon('refresh')),
-              actionButton('ModelTableSolidSubmit','Fill table with single model',icon=shiny::icon('adjust'),style='height:34.5px; margin-left:85px'),
+              actionButton('ModelTableSolidSubmit','Fill table with single model',icon=shiny::icon('adjust'),style='height:34.5px; margin-left:80px'),
+              #),
               div(style="display:inline-block; margin-top:1px;  margin-left:5px",
-                  #tags$head(tags$style(HTML('#ModelTableSolidInput .selectize-input{padding: 5px 12px; border-radius:20px;}'))),
-                  #tags$head(tags$style(HTML('#ModelTableSolidInput .selectize-dropdown.form-control{padding: 5px 12px; border-radius:20px;}'))),
                   selectInput('ModelTableSolidInput','',choices= makeList(letters[1:6]), #h4(HTML('&#160;'))
                               selected = 6, width='50px'),
               ),
-              #),
-              
               
           ),
-          br(),br(),#br(),br(),
+          br(),br(),
       ),
       
   ),

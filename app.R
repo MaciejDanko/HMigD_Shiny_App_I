@@ -232,18 +232,8 @@ shinyServer <-  function(input, output, session) {
       session$sendCustomMessage("upload_msg", "")
       session$sendCustomMessage("upload_txt", "")
       session$sendCustomMessage('hideProgressBar') 
-      # output$progressStyle <- renderUI({
-      #   tags$style("#ModelTableLoad_progress { background-color: red; }")
-      # })
-      # observe({
-      #   tags$head(tags$style("#ModelTableLoad_progress { visibility:hidden; }"))
-      # })
-      #updateProgressBar(session, "ModelTableLoad_progress",value = '')
-      # <div id="ModelTableLoad_progress" class="progress shiny-file-input-progress" style="visibility: visible;">
-      #   <div class="progress-bar" style="width: 100%;"></div>
-      #   </div>
+      
     } else {
-      #df <- read.xlsx("/home/maciej/Downloads/HMigD_model_mixing_table_2023-03-29-19-56-11.xlsx", sheet=1, colNames = TRUE, rowNames = FALSE, skipEmptyCols = FALSE, skipEmptyRows = FALSE)
       rownames(df)<-df[,1]
       dim(df)
       df <- df[,-1]
@@ -312,7 +302,7 @@ shinyServer <-  function(input, output, session) {
     tmp<-ModelMixingTable()
     for (i in 1:NCntr) tmp[i,i]<-''
     ModelMixingTable(tmp)
-    rhandsontable(ModelMixingTable(), colWidths=32, rowHeaderWidth=32, colHeaderWidth=32, contextMenu = FALSE, height=800) %>% #overflow = 'visible' remove if more countries
+    rhandsontable(ModelMixingTable(), colWidths=32, rowHeaderWidth=32, colHeaderWidth=32, contextMenu = FALSE, height=747) %>% #overflow = 'visible' remove if more countries
       
       hot_cols(renderer = "
         function(instance, td, row, col, prop, value, cellProperties) {
@@ -332,6 +322,19 @@ shinyServer <-  function(input, output, session) {
   })
   
   server_download_tables(input, output)
+  
+  output$ModelTableDownload <- downloadHandler(
+    filename = function() {
+      paste("HMigD_model_mixing_table_", format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), ".xlsx", sep = "")
+    },
+    content = function(file) {
+      #value<-googlesheets4::read_sheet(ss = sheet_id,  sheet = "Comments")
+      # Save the entire database connection object as an RDS file
+      tmp <- data.frame(ModelMixingTable(), ' '='', check.names=FALSE, fix.empty.names =FALSE, stringsAsFactors = FALSE, check.rows = FALSE)
+      write.xlsx(tmp, file, rowNames =TRUE, colNames =TRUE, tabColour ='#607080', colWidths=list(3.9))
+    }
+  )
+  
   output$SelectedModelTableDownload <- downloadHandler(
     filename = function() {
       paste("HMigD_raw_user_results_table_", format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), ".xlsx", sep = "")
