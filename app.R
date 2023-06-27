@@ -11,6 +11,7 @@ library(shinyWidgets)
 library(shinyjs)
 library(usethis)
 library(shinyhelper)
+library(shinycssloaders)
 library(magicaxis)
 library(data.table)
 library(countrycode)
@@ -306,6 +307,8 @@ shinyServer <-  function(input, output, session) {
   })
   
   output$ModelTable <- renderRHandsontable({
+    
+    
     tmp<-ModelMixingTable()
     for (i in 1:NCntr) tmp[i,i]<-''
     ModelMixingTable(tmp)
@@ -747,8 +750,8 @@ shinyServer <-  function(input, output, session) {
     ww<-runexample1(session,input)
     print('***')
     print(ww)
-    ThresholdYear(ww)
     if (input$Examples1 >1) {
+      ThresholdYear(ww)
       justchanged(TRUE)
       OLD_send(input$SendCntrs)
       OLD_rec(input$RecCntrs)
@@ -806,6 +809,7 @@ PanelNames<-(c('About','Input flows','Input transitions (LFS)','Gravity covariat
 # )
 
 shinyUI <-  bootstrapPage(
+  
   useShinyjs(),
   tags$meta(charset = "UTF-8"), #24.03.2023
   setModalsStyle(), #24.03.2023

@@ -802,7 +802,7 @@ ui_compare_models_single<-function() tagList(
   
   div(class="row", style='id:MM4; margin-left:0px;border-style: solid; border-color:#9985A2; border-width:1px; margin-top:5px; background-color: #FFFFFF',
       #div(class="col-lg-8",
-      plotOutput(outputId = "Model1Plot",height="auto", width='auto'),
+      shinycssloaders::withSpinner(plotOutput(outputId = "Model1Plot",height="auto", width='auto')),
       
       #)
   ),
@@ -967,7 +967,7 @@ ui_compare_models_aggregated<-function() tagList(
   
   div(class="row", style='margin-left:0px;border-style: solid; border-color:#9985A2; border-width:1px; margin-top:5px; width=1260px; background-color: #FFFFFF',
       #div(class="col-lg-8",
-      plotOutput(outputId = "Model2Plot",height="auto", width='99%'),
+      shinycssloaders::withSpinner(plotOutput(outputId = "Model2Plot",height="auto", width='99%')),
       
       #)
   ),
@@ -1039,7 +1039,7 @@ ui_compare_models_circular <- function() tagList(
   div(class="row", style='margin-left:0px;border-style: solid; border-color:#9985A2; border-width:1px;  margin-top:5px;  background-color: #FFFFFF',
       #div(class="col-lg-8",
       div(style="display:inline-block;vertical-align:top; width:800px; margin-left:0px",
-          plotOutput(outputId = "Model3Plot",height="auto", width='99%'),
+          shinycssloaders::withSpinner(plotOutput(outputId = "Model3Plot",height="auto", width='99%')),
           
       ),
       div(style="display:inline-block;vertical-align:bottom; width:200px; margin-left:0px;",
@@ -1107,7 +1107,7 @@ ui_output<-function() tagList(
             ),
             div(
               style = "margin-left: 10px; overflow: hidden; position: relative;",
-              rHandsontableOutput("ModelTable")
+              shinycssloaders::withSpinner(rHandsontableOutput("ModelTable"))
             )
           ),
           div(style='display:flex;  height: 34px; margin: 0; padding: 0; margin-top:-53px; margin-left:35px; align-self: center; align-items: center;',#margin-top:-15px;

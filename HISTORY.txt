@@ -16,3 +16,5 @@ History of major changes in the app:
       (single flows). Added an "accuracy adjusted"" help table, improved 
       credibility intervals for aggregated flows, and made minor corrections 
       to functionality and reactive components.
+1.1.9 [June 2023]: 
+      Added spiners and improved "threshold year" mechanics.

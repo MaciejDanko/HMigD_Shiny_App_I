@@ -10,29 +10,26 @@ get_data_raw<-function(nam){
   raw_int_flows
 }
 
-
 sortdur<-function(k){
   k<-sort(k)
   c(k[!k%in%c('12','60')],'12','60')
 }
 
 load_old <- 0
-if (load_old == 1){ #not available on GitHub
+if (load_old == 1){ 
   Data_input_80a<<-get_data('./data/old/DataAndFit_80a.RDA')
   Data_input_80b<<-get_data('./data/old/DataAndFit_80b.RDA')
   Data_input_80c<<-get_data('./data/old/DataAndFit_80c.RDA')
   Data_input_80d<<-get_data('./data/old/DataAndFit_80d.RDA')
   Data_input_80e<<-get_data('./data/old/DataAndFit_80e.RDA')
   Data_input_80f<<-get_data('./data/old/DataAndFit_80f.RDA')
-  
-} else if (load_old == 2){ #not available on GitHub
-    Data_input_80a<<-get_data('./data/old/DataAndFit_85a.RDA')
-    Data_input_80b<<-get_data('./data/old/DataAndFit_85b.RDA')
-    Data_input_80c<<-get_data('./data/old/DataAndFit_85c.RDA')
-    Data_input_80d<<-get_data('./data/old/DataAndFit_85d.RDA')
-    Data_input_80e<<-get_data('./data/old/DataAndFit_85e.RDA')
-    Data_input_80f<<-get_data('./data/old/DataAndFit_85f.RDA')
-    
+} else if (load_old == 2){ 
+  Data_input_80a<<-get_data('./data/old/DataAndFit_85a.RDA')
+  Data_input_80b<<-get_data('./data/old/DataAndFit_85b.RDA')
+  Data_input_80c<<-get_data('./data/old/DataAndFit_85c.RDA')
+  Data_input_80d<<-get_data('./data/old/DataAndFit_85d.RDA')
+  Data_input_80e<<-get_data('./data/old/DataAndFit_85e.RDA')
+  Data_input_80f<<-get_data('./data/old/DataAndFit_85f.RDA')
 } else {
   Data_input_80a<<-get_data('./data/DataAndFit2_86a.RDA')
   Data_input_80b<<-get_data('./data/DataAndFit2_86b.RDA')

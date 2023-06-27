@@ -489,7 +489,7 @@ ModelsOutputFrame <- function(DTid="MixedModelTable",BTNid='SelectedModelTableDo
       
       div(style="display:inline-block;vertical-align:top;  width:1170px; margin-left:20px;background-color:#FFFFFF",
           br(),br(),
-          DTOutput(DTid),
+          shinycssloaders::withSpinner(DTOutput(DTid)),
       ), 
       br(),
       
@@ -548,7 +548,7 @@ mySurveyFrame <-function(ID='DB'){
                          ),
                          div(style="display:inline-block;vertical-align:top; width:1170px; margin-left:20px;background-color:#FFFFFF",
                              
-                             DTOutput("surveyTable"),
+                             shinycssloaders::withSpinner(DTOutput("surveyTable")),
                          ), 
                          br(),
                          div(style="display:inline-block;vertical-align:top; width:1170px; margin-left:20px; margin-top:20px",
