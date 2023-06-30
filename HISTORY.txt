@@ -21,7 +21,7 @@ History of major changes in the app:
 1.2.0 [June - July 2023]:
       Added buttons to aggregated flows plots and legend on/off checkbox.
       Added resuts saving options to model panels
-      Optimized computations
+      Optimized computations and improved layout
       
 
       
