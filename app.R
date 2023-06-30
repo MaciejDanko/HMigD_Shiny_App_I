@@ -1,3 +1,8 @@
+# To be done
+# reverse buttons for coutries
+# animation button for cirucular plot
+# watermark HMigD on flow plots, right bottom corner
+
 rm(list=ls())
 set.seed(123)
 defaultW <- getOption("warn") # 0
