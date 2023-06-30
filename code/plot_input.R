@@ -80,8 +80,8 @@ get_single_ <<- function(inputs){
     }
     res$info<-data.frame(tmp)
     colnames(res$info)<-rep('  ', length(colnames(res$info)))
-    print('****>****')
-    print(res$info)
+    #print('****>****')
+    #print(res$info)
     return(res)
   #} else NULL
 }
@@ -302,7 +302,7 @@ plot_trade_<<-function(input){
   } else {
     rr<<-seq(min(unlist(rsm.data$grav_trade),na.rm = TRUE), max(unlist(rsm.data$grav_trade), na.rm=T), length.out=ncat+1)/1000
     my2dplotClassify(rsm.data$grav_trade[,,paste(input$trade_year)]/1000, digits=2, rr=rr, ncat=ncat, use.na=FALSE)
-    print(table(rsm.data$grav_trade[,,paste(input$trade_year)]/1000 <rr[2]))
+    #print(table(rsm.data$grav_trade[,,paste(input$trade_year)]/1000 <rr[2]))
     mtext(paste('Bilateral trade in billions of dolars in',input$trade_year),3,0.1,cex=1.2)
   }
   mtext(expression(bold('Sending country')),2,2.5,cex=1.2)

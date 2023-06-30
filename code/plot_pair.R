@@ -188,8 +188,8 @@ get_aggregated <- function( cntr_sen_list=c('RO','BG'),
   m1=as.numeric(m1)
   m2=as.numeric(m2)
   if (m1==m2) col1<-col2<-'black'
-  print('test2')
-  print(ls())
+  #print('test2')
+  #print(ls())
   MO1D<-switch(paste(m1),
                '1' = Data_input_80a,
                '2' = Data_input_80b,
@@ -249,8 +249,8 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
   m1=as.numeric(m1)
   m2=as.numeric(m2)
   if (m1==m2) col1<-col2<-'black'
-  print('test2')
-  print(ls())
+  #print('test2')
+  #print(ls())
   MO1D<-switch(paste(m1),
                '1' = Data_input_80a,
                '2' = Data_input_80b,
@@ -474,11 +474,11 @@ get_ymax_raw <- function(cntr_sen='PL',
                          m2=2,
                          flow = "pred"
 ){
-  print(cntr_sen)
-  print(cntr_rec)
-  print(m1)
-  print(m2)
-  print(flow)
+  #print(cntr_sen)
+  #print(cntr_rec)
+  #print(m1)
+  #print(m2)
+  #print(flow)
   MO1<-switch(paste(m1), 
               '1' = Data_input_80a, 
               '2' = Data_input_80b,
@@ -537,7 +537,7 @@ get_single_flows <- function(
   M2<-prepare_data_save(MO2, cntr_sen, cntr_rec, flow=flow)
   M1$model<-letters[as.integer(m1)]
   M2$model<-letters[as.integer(m2)]
-  print(paste('>>>D>>>',m1,m2))
+  #print(paste('>>>D>>>',m1,m2))
   list(M1=M1,M2=M2)
 }
 
@@ -568,9 +568,9 @@ plot_models <- function(cntr_sen='PL',
   m1=as.numeric(m1)
   m2=as.numeric(m2)
   if (m1==m2) col1<-col2<-'black'
-  print(setYmax)
-  print(Ymax)
-  #print(ls())
+  #print(setYmax)
+  #print(Ymax)
+  ##print(ls())
   MO1<-switch(paste(m1), 
               '1' = Data_input_80a, 
               '2' = Data_input_80b,
@@ -804,9 +804,9 @@ plot_models <- function(cntr_sen='PL',
     if (m1!=m2) lines(c(usr[2]+(x0*0.5*facx),usr[2]+(x0*0.5+1)*facx), rep(usr[4] - y0*(36.5+sy+(m1>4)*1.5),2), lwd=2, col=col2, xpd=TRUE)
     
     if (m1==m2) text(usr[2]+(x0*0.5*facx), usr[4] - y0*(30.5+sy), 'Model', xpd=TRUE, adj=0) else text(usr[2]+(x0*0.5*facx), usr[4] - y0*(30.5+sy), 'Models', xpd=TRUE, adj=0)
-    print(MODELS2)
-    print(m1)
-    print(MODELS2[m1])
+    #print(MODELS2)
+    #print(m1)
+    #print(MODELS2[m1])
     text(usr[2]+(1.5+x0*0.5)*facx ,usr[4] - y0*(32+sy-0.5), paste('#1',MODELS2[m1]), cex=0.8, adj=c(0,1), xpd=TRUE)
     if (m1!=m2) text(usr[2]+(1.5+x0*0.5) ,usr[4] - y0*(36.5+sy+(m1>4)*1.5-0.5), paste('#2',MODELS2[m2]), cex=0.8, adj=c(0,1), xpd=TRUE)
   }
@@ -849,7 +849,7 @@ my2dplot<-function(mat, LEVELS, txtLEVELS = paste(LEVELS), namat=NULL, cexx=1, c
                    nodata='Missing data', naalpha=0.2, diagwhite=FALSE, legoffs=0){
   if (length(LEVELS)!=groups) stop('Nb of levels and groups differ.')
   if (min(mat, na.rm = TRUE)>=1 && max(mat, na.rm = TRUE)<=length(LEVELS) && all(unlist(mat)%in%c(NA,seq_along(LEVELS)))) {
-    print('numeric')
+    #print('numeric')
   } else {
     ThreshCol = seq(min(mat-1,na.rm = TRUE),max(mat+1,na.rm = TRUE), length.out=groups+1)
     mat<-cut_matrix(mat,breaks=ThreshCol,labels=FALSE,include.lowest = TRUE)
@@ -1064,16 +1064,16 @@ plot_Accuracy<-function(direction='E',adjusted=FALSE, showNA=TRUE, cexx=1, cexy=
 my2dplotClassify<-function(mat, ncat=20, digits=2, rr=seq(min(unlist(mat),na.rm = TRUE), max(unlist(mat), na.rm=T), length.out=ncat+1), labels=NULL, include_zero=TRUE, nodata='', include.lowest = TRUE, use.na=TRUE,...){
   
   dn<-dimnames(mat)
-  print(dn)
+  #print(dn)
   di<-dim(mat)
-  print(di)
+  #print(di)
   mat <- unlist(mat)
   mat <- round(mat,digits)
   if (include_zero) if (rr[1]>0) rr[1]<-0
   tmat<-cut(mat,rr, labels=labels, include.lowest = include.lowest)  
-  print(table(tmat))
+  #print(table(tmat))
   ntmat<-as.numeric(tmat)
-  print(table(ntmat))
+  #print(table(ntmat))
   dim(ntmat)<-di
   dimnames(ntmat)<-dn
   if (use.na) namat<-is.na(ntmat) else namat<-NULL

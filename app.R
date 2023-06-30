@@ -142,12 +142,12 @@ shinyServer <-  function(input, output, session) {
   SingleSave <- reactiveVal(NULL)
   
   observeEvent(input$bprev, {
-    print('dec')
+    #print('dec')
     req(ThresholdYear())
     if (as.numeric(ThresholdYear())>2000) ThresholdYear(as.numeric(ThresholdYear()) - 1)
   })
   observeEvent(input$bnext ,{
-    print('inc')
+    #print('inc')
     req(ThresholdYear())
     if (as.numeric(ThresholdYear())<2020) ThresholdYear(as.numeric(ThresholdYear()) + 1)
   })
@@ -242,7 +242,7 @@ shinyServer <-  function(input, output, session) {
       df <- df[,-1]
       df <- df[1:length(Countries),1:length(Countries)]
       
-      print('success')
+      #print('success')
       df<-df[,order(colnames(df))]
       df<-df[order(rownames(df)),]
       if ((any(!unlist(df)%in%c(letters[1:6],""))) ||
@@ -641,15 +641,15 @@ shinyServer <-  function(input, output, session) {
         tmp<-as.data.frame(DBsheets())
         tmp$id<-paste(tmp$hash,tmp$ip,tmp$time,tmp$name)
         selected_rows <- unlist(tmp[input$surveyTable_rows_selected, "id"])
-        cat('Rows to remove:\n')
-        print(selected_rows)
+        #cat('Rows to remove:\n')
+        #print(selected_rows)
         values <- as.data.frame(googlesheets4::read_sheet(ss = sheet_id,  sheet = "Comments"))
         values$id<-paste(values$hash,values$ip,values$time,values$name)
         
         row_num<- sort(which(values$id %in% selected_rows) + 1, decreasing = TRUE)
-        print(row_num)
+        #print(row_num)
         for (k in row_num){
-          print(k)
+          #print(k)
           googlesheets4::range_delete(ss = sheet_id, sheet = "Comments", range=paste(k))
         }
       })
@@ -658,7 +658,7 @@ shinyServer <-  function(input, output, session) {
       
     }, error = function(e) {
       showNotification("An error occurred while removing selected rows.", type = "error")
-      print(e)
+      #print(e)
     })
     
     # reset the eraser password value
@@ -899,16 +899,16 @@ shinyServer <-  function(input, output, session) {
   
   observeEvent(input$Examples1,{
     ww<-runexample1(session,input)
-    print('***')
-    print(ww)
+    #print('***')
+    #print(ww)
     if (input$Examples1 >1) {
       ThresholdYear(ww)
       justchanged(TRUE)
       OLD_send(input$SendCntrs)
       OLD_rec(input$RecCntrs)
     } else justchanged(FALSE)
-    print(ThresholdYear())
-    print('***')
+    #print(ThresholdYear())
+    #print('***')
   })
   
   server_plot_figures(input, output)

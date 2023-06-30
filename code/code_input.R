@@ -1,5 +1,5 @@
 SaveBlock0 <- function (IDName, topmargin = -5, bg = '#F5DFD5'){
-  print(paste0("Save",IDName,"Data"))
+  #print(paste0("Save",IDName,"Data"))
   div(class="row", style=paste0('margin-left:0px; margin-top:',topmargin,'px; ; background-color:',bg,'; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f'),   #style='margin:0px; padding:0px',
       div(style="display:inline-block;vertical-align:top; width:760px;  margin-left:0px",
           br()
@@ -54,7 +54,7 @@ SaveBlockTRANSITIONSCOUNT <- function (IDName,  topmargin = -5, bg = '#F5DFD5'){
 }
 
 SaveBlockFLOWSIMMCOUNT <- function (IDName,  topmargin = -5, bg = '#F5DFD5'){
-  print(paste0("Save",IDName,"Data"))
+  #print(paste0("Save",IDName,"Data"))
   tagList(
     div(class="row", style=paste0('margin-left:0px; margin-top:',topmargin,'px; ; background-color:',bg,'; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f'),   #style='margin:0px; padding:0px',
         
@@ -85,7 +85,7 @@ SaveBlockFLOWSIMMCOUNT <- function (IDName,  topmargin = -5, bg = '#F5DFD5'){
 }
 
 SaveBlockFLOWSEMICOUNT <- function (IDName,  topmargin = -5, bg = '#F5DFD5'){
-  print(paste0("Save",IDName,"Data"))
+  #print(paste0("Save",IDName,"Data"))
   tagList(
     div(class="row", style=paste0('margin-left:0px; margin-top:',topmargin,'px; ; background-color:',bg,'; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f'),   #style='margin:0px; padding:0px',
         
@@ -117,7 +117,7 @@ SaveBlockFLOWSEMICOUNT <- function (IDName,  topmargin = -5, bg = '#F5DFD5'){
 
 
 SaveBlockSRC <- function (IDName, direction, topmargin = -5, bg = '#F5DFD5'){
-  print(paste0("Save",IDName,"Data"))
+  #print(paste0("Save",IDName,"Data"))
   if (direction == "I"){
     tagList(
     div(class="row", style=paste0('margin-left:0px; margin-top:',topmargin,'px; ; background-color:',bg,'; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f'),   #style='margin:0px; padding:0px',
@@ -223,7 +223,7 @@ SaveBlockSRC <- function (IDName, direction, topmargin = -5, bg = '#F5DFD5'){
 
 
 SaveBlock1 <- function (IDName, topmargin = -5, bg = '#F5DFD5'){
-  print(paste0("Save",IDName,"Data"))
+  #print(paste0("Save",IDName,"Data"))
   div(class="row", style=paste0('margin-left:0px; margin-top:',topmargin,'px; ; background-color:',bg,'; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f'),   #style='margin:0px; padding:0px',
       
       div(style="display:inline-block;vertical-align:top; width:350px;  margin-left:100px",
@@ -251,7 +251,7 @@ SaveBlock1 <- function (IDName, topmargin = -5, bg = '#F5DFD5'){
 }
 
 SaveBlock1B <- function (IDName, topmargin = -5, bg = '#F5DFD5',width_btn=c(200,200,200), width_div=c(350,350,350),mar_left=c(100,20,20), mar_top=rep(0,3)){
-  print(paste0("Save",IDName,"Data"))
+  #print(paste0("Save",IDName,"Data"))
   #div(class="row", style=paste0('margin-left:0px; margin-top:',topmargin,'px; ; background-color:',bg,'; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f'),   #style='margin:0px; padding:0px',
   tagList(
       div(style=paste0("display:inline-block;vertical-align:top; width:",width_div[1],"px;  margin-left:",mar_left[1],"px; margin-top:",mar_top[1],"px"),
@@ -418,8 +418,8 @@ mysubmenu<-function(ID="Ipanels",
                     #bottom.margin=0
                     
 ){
-  print(choiceNames)
-  print(width_panel)
+  #print(choiceNames)
+  #print(width_panel)
   style1<-paste0('margin-left: ',left.margin,'px;',' padding-top: ',top.padding,'px; height: ',height+top.padding,'px; width: ',width,'px; padding-bottom:0px;'
                  #'px; margin-bottom: ',bottom.margin,'px; 
   )
@@ -427,10 +427,10 @@ mysubmenu<-function(ID="Ipanels",
   style3 <- paste0("#",ID," .btn-danger {background-color: ",passive.bg,"; border-color: ",passive.bo,"; height:",height,"px; color: ",passive.co,"; font-size: ",fontsize,"px; font-family: 'Roboto Condensed', sans-serif;}")
   style4 <- paste0("#",ID," .btn-danger.active {background-color: ",active.bg,"; border-color: ",active.bo,"; color: ",active.co,"; height: ",height,"px; font-size: ",fontsize,"px; font-family: 'Roboto Condensed', sans-serif;}")
   
-  print(style1)
-  print(style2)
-  print(style3)
-  print(style4)
+  #print(style1)
+  #print(style2)
+  #print(style3)
+  #print(style4)
   
   tagList(div(class="row", style=style1,
               radioGroupButtons(
