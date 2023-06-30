@@ -7,11 +7,11 @@ MODELS <<- c('(a) random slope & intercept model without gravity covariates, LFS
              '(f) random slope & intercept model with freedom of movement of workers as a single gravity covariate, LFS not included')
 
 MODELS2 <<- c('random slope & intercept\nwithout gravity covariates\nLFS included',
-              'random slope & intercept\nwith freedom of movement of workers\nLFS included',
+              'random slope & intercept\nwith freedom of movement of\n workers, LFS included',
               'random intercept\nall gravity covariates\nLFS included',
-              'random intercept\nwith freedom of movement of workers\nLFS included',
+              'random intercept\nwith freedom of movement of \n workers, LFS included',
               'random slope & intercept\nwithout gravity covariates\nLFS not included',
-              'random slope & intercept\nwith freedom of movement of workers\nLFS not included')
+              'random slope & intercept\nwith freedom of movement of\nworkers, LFS not included')
 
 FREEDOMCASES <<- c('(1a) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by IE in 2004',
                    '(1b) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by SE in 2004',
@@ -57,7 +57,7 @@ about_list <- HTML(
   "<h4>Country- and year-specific harmonized migration flows for European countries in 2002-2018</h3>",
   "<br>",
   #"<h4>First release (unofficial) March 2023</h4>",
-  "<h4>Version 1.1.9, Jun 2023</h4>",
+  "<h4>Version 1.2.0, Jun 2023</h4>",
   "<br>",
   paste0("<h4>Author and maintainer: Maciej J. Dańko [",email_html,"] </h4>"),
   '<h4>Max Planck Institute for Demographic Research, Rostock, Germany </h4>',

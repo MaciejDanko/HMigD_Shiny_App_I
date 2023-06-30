@@ -86,7 +86,7 @@ source('./code/load_data.R')
 source('./code/plot_pair.R')
 source('./code/plot_input.R')
 source('./code/code_input.R')
-source('./code/google_drive.R')
+try(source('./code/google_drive.R'))
 source('./code/run_example1.R')
 source('./code/server_show_tables.R')
 source('./code/server_download_tables.R')
@@ -137,6 +137,9 @@ shinyServer <-  function(input, output, session) {
   Ymaxenabled <-reactiveVal(FALSE)  
   
   ThresholdYear <- reactiveVal(2000)
+  
+  AggrSave <- reactiveVal(NULL)
+  SingleSave <- reactiveVal(NULL)
   
   observeEvent(input$bprev, {
     print('dec')
@@ -280,7 +283,6 @@ shinyServer <-  function(input, output, session) {
     
   })
   
-  
   observeEvent(input$CleanModelTableYes1,{
     
     ModelMixingTable(initial_values)
@@ -321,6 +323,73 @@ shinyServer <-  function(input, output, session) {
     
   })
   
+  observeEvent(input$selectallsen,{
+    updateAwesomeCheckbox(session,"SendCntrs",value=CountriesFull)
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectallrec,{
+    updateAwesomeCheckbox(session,"RecCntrs",value=CountriesFull)
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectnonesen,{
+    updateAwesomeCheckbox(session,"SendCntrs",value=CountriesFull[0])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectnonerec,{
+    updateAwesomeCheckbox(session,"RecCntrs",value=CountriesFull[0])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectnordicsen,{
+    updateAwesomeCheckbox(session,"SendCntrs",value=CountriesFull[Countries%in%c('SE','NO','IS','DK','FI')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectnordicrec,{
+    updateAwesomeCheckbox(session,"RecCntrs",value=CountriesFull[Countries%in%c('SE','NO','IS','DK','FI')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectNsen,{
+    updateAwesomeCheckbox(session,"SendCntrs",value=CountriesFull[Countries%in%c('SE','NO','IS','DK','FI','IE','UK','LT','EE','LV')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectNrec,{
+    updateAwesomeCheckbox(session,"RecCntrs",value=CountriesFull[Countries%in%c('SE','NO','IS','DK','FI','IE','UK','LT','EE','LV')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectSsen,{
+    updateAwesomeCheckbox(session,"SendCntrs",value=CountriesFull[Countries%in%c('HR','CY','GR','MT','IT','PT','ES','SI')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectSrec,{
+    updateAwesomeCheckbox(session,"RecCntrs",value=CountriesFull[Countries%in%c('HR','CY','GR','MT','IT','PT','ES','SI')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectWsen,{
+    updateAwesomeCheckbox(session,"SendCntrs",value=CountriesFull[Countries%in%c('FR','DE','NL','BE','LU','CH','AT')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectWrec,{
+    updateAwesomeCheckbox(session,"RecCntrs",value=CountriesFull[Countries%in%c('FR','DE','NL','BE','LU','CH','AT')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectEsen,{
+    updateAwesomeCheckbox(session,"SendCntrs",value=CountriesFull[Countries%in%c('CZ','PL','SK','HU','BG','RO')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectErec,{
+    updateAwesomeCheckbox(session,"RecCntrs",value=CountriesFull[Countries%in%c('CZ','PL','SK','HU','BG','RO')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  
+  
+  
+    # actionButton('selectallsen','All'),
+  # actionButton('selectnonesen','None'),
+  # actionButton('selectnonesen','Nordic'),
+  # actionButton('selectNsen','+ N EU'),
+  # actionButton('selectSsen','+ S EU'),
+  # actionButton('selectWsen','+ W EU'),
+  # actionButton('selectEsen','+ E EU'),
+  # 
   server_download_tables(input, output)
   
   output$ModelTableDownload <- downloadHandler(
@@ -334,6 +403,51 @@ shinyServer <-  function(input, output, session) {
       write.xlsx(tmp, file, rowNames =TRUE, colNames =TRUE, tabColour ='#607080', colWidths=list(3.9))
     }
   )
+  
+  output$SaveModel2Data <- downloadHandler(
+    filename = function() {
+      paste("HMigD_aggregateflows_table_", format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), ".xlsx", sep = "")
+    },
+    content = function(file) {  
+      write.xlsx(AggrSave(), file, rowNames =FALSE, colNames =TRUE, tabColour ='#607080')  
+    }
+  )
+  
+  output$SaveModel1Data <- downloadHandler(
+    filename = function() {
+      paste("HMigD_singleflows_table_", format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), ".xlsx", sep = "")
+    },
+    content = function(file) {  
+      write.xlsx(SingleSave(), file, rowNames =FALSE, colNames =TRUE, tabColour ='#607080')  
+    }
+  )
+  
+  
+  observeEvent( input$RecCntrs,{
+    req(c(input$RecCntrs,input$SendCntrs, input$MODEL1b, input$MODEL2b))
+    AggrSave(get_aggregated_(input))
+  })
+  
+  observeEvent(input$SendCntrs,{
+    req(c(input$RecCntrs,input$SendCntrs, input$MODEL1b, input$MODEL2b))
+    AggrSave(get_aggregated_(input))
+  })
+  
+  observeEvent( input$MODEL1b,{
+    req(c(input$RecCntrs,input$SendCntrs, input$MODEL1b, input$MODEL2b))
+    AggrSave(get_aggregated_(input))
+  })
+  
+  observeEvent(input$MODEL2b,{
+    req(c(input$RecCntrs,input$SendCntrs, input$MODEL1b, input$MODEL2b))
+    AggrSave(get_aggregated_(input))
+  })
+  
+  observeEvent(input$Examples1,{
+    req(c(input$RecCntrs,input$SendCntrs, input$MODEL1b, input$MODEL2b))
+    AggrSave(get_aggregated_(input))
+  })
+  
   
   output$SelectedModelTableDownload <- downloadHandler(
     filename = function() {
@@ -387,10 +501,44 @@ shinyServer <-  function(input, output, session) {
       )
     })
     if (!Ymaxenabled()) updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
+    # observeEvent( input$ReceivingCountry,{
+    #   req(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2))
+    #   print('ReceivingCountry changed')
+    #   print(paste(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2)))
+    SingleSave(get_single_(input))
+    #   print(names(SingleSave()))
+    # })
+    # 
+    # observeEvent( input$SendingCountry,{
+    #   req(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2))
+    #   print('SendingCountry changed')
+    #   print(paste(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2)))
+    #   SingleSave(get_single_(input))
+    #   print(names(SingleSave()))
+    # })
+    
   })
   
+  # 
+  # observeEvent(input$MODEL1,{
+  #   req(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2))
+  #   print('MODEL 1 changed')
+  #   print(paste(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2)))
+  #   SingleSave(get_single_(input))
+  #   print(names(SingleSave()))
+  # })
+  # 
+  # observeEvent(input$MODEL2,{
+  #   req(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2))
+  #   print('MODEL 2 changed')
+  #   print(paste(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2)))
+  #   SingleSave(get_single_(input))
+  #   print(names(SingleSave()))
+  # })
+
   observeEvent(c(input$MODEL1,input$MODEL2), {
     if (!Ymaxenabled()) updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
+    SingleSave(get_single_(input))
   })
   # observeEvent(c(input$MODEL_PANEL,input$MM1,input$MM2,input$MM3,input$MM4, input$reverse),{ # repair the shiny bug
   #   updateSelectInput(session, "MODEL3", label = NULL,
@@ -645,7 +793,7 @@ shinyServer <-  function(input, output, session) {
   })
   
   # Render data table of survey responses
-  DBsheets <- reactiveVal(googlesheets4::read_sheet(ss = sheet_id,  sheet = "Comments"))
+  DBsheets <- reactiveVal(try(googlesheets4::read_sheet(ss = sheet_id,  sheet = "Comments")))
   
   output$surveyTable <- renderDT({
     DBsheets(googlesheets4::read_sheet(ss = sheet_id,  sheet = "Comments"))
@@ -771,7 +919,7 @@ shinyServer <-  function(input, output, session) {
   }, height = 900, width = 1200, res=115)
   
   output$Model2Plot <- renderPlot({
-    par(mar=c(5.1, 4.1, 3.0, 16.0))
+    par(mar=c(5.1, 4.1, 3.0-2.4*!input$ShowTitleAgr, 16.0-15.4*!input$ShowLegendAgr))
     plot_aggregated_(input, TrYearV=ThresholdYear())
   }, height = 700, width = 1200, res=115)
   
@@ -792,7 +940,7 @@ shinyServer <-  function(input, output, session) {
           tiff(file,width=12*RES2,height=7*RES2,res=RES2,compression = 'rle')
         }
         
-        par(mar=c(5.1, 4.1, 3.0, 16.0))
+        par(mar=c(5.1, 4.1, 3.0-2.4*!input$ShowTitleAgr, 16.0-15.4*!input$ShowLegendAgr))
         # print('test1')
         # THRE<-input$ThrY - 1000*(1-as.numeric(input$UseThreshold))
         plot_aggregated_(input, ThresholdYear())

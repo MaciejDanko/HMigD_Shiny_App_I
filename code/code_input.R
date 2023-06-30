@@ -311,23 +311,35 @@ SaveBlock2 <- function (IDName, topmargin = 5,
   )
 }
 
+colorActionButton <- function (id,label,col1='#D4DDFF',col2='#FFC0C0',...){
+ tagList(
+   tags$head(
+    tags$style(HTML(paste0('#',id,'{background-color:',col1,'} #',id,':hover{background-color:',col2,'}')))
+  ),
+  actionButton(id,label,...))
+}
+
 SaveBlock2b <- function (IDName, topmargin = 5, 
                          bg = '#F5DFD5',
                          choice1ID, 
                          #choice2ID, 
-                         choices1#, 
+                         choices1,
+                         downbutton="Save aggregated flows"#, 
                          #choices2
 ){
   div(class="row", style=paste0('margin-left:0px; margin-top:',topmargin,'px; ; background-color:',bg,'; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f'),  
-      div(style="display:inline-block;vertical-align:top; width:300px;  margin-left:60px",
-          br()
+      div(style="display:inline-block;vertical-align:top; width:210px;  margin-left:90px",
+          br(),
+          h3("Export"),
+          downloadButton(paste0("Save",IDName,"Data"), downbutton),
+          tags$head(tags$style(paste0("#Save",IDName,"Data {width:200px}"), media="screen", type="text/css")),
       ),
-      div(style="display:inline-block;vertical-align:top; width:300px; margin-left:20px",
+      div(style="display:inline-block;vertical-align:top; width:210px; margin-left:60px",
           br(),
           h3('Plot style'),
           selectInput(choice1ID, label = NULL,
                       choices = makeList(choices1),
-                      selected = 2, width='300px'),
+                      selected = 2, width='200px'),
       ),
       # div(style="display:inline-block;vertical-align:top; width:300px;  margin-left:60px",
       #     br(),
@@ -336,17 +348,17 @@ SaveBlock2b <- function (IDName, topmargin = 5,
       #                 choices = makeList(choices2),
       #                 selected = 1, width='300px'),
       # ),
-      div(style="display:inline-block;vertical-align:top; width:200px;  margin-left:60px",
+      div(style="display:inline-block;vertical-align:top; width:210px;  margin-left:60px",
           br(),
           h3('Image format'),
           selectInput(paste0("Save",IDName,"Format"), NULL,
-                      choices = list("pdf" = 'pdf', "png" = 'png',"tiff" = 'tiff'), selected = 1, width='100%')
+                      choices = list("pdf" = 'pdf', "png" = 'png',"tiff" = 'tiff'), selected = 1, width='200px')
       ),
-      div(style="display:inline-block;vertical-align:top; width:200px;  margin-left:60px",
+      div(style="display:inline-block;vertical-align:top; width:210px;  margin-left:59px",
           br(),
           h3('Save'),
           downloadButton(paste0("Save",IDName,"Plot"), "Save image"),
-          tags$head(tags$style(paste0("#Save",IDName,"Plot {width:180px}"), media="screen", type="text/css")),
+          tags$head(tags$style(paste0("#Save",IDName,"Plot {width:200px}"), media="screen", type="text/css")),
       ),
   )
 }

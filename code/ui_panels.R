@@ -761,15 +761,15 @@ ui_compare_models_single<-function() tagList(
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#eee0b9; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f; height:132px',   #style='margin:0px; padding:0px',
       uiOutput('cm_m12')#
   ),
-  div(class="row", style='margin-left:0px; margin-top:5px; background-color:#e8e9d9; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
-      div(style="id:MM1;display:inline-block;vertical-align:top; width:210px; margin-left:20px",
+  div(class="row", style='display: inline-flex; margin-left:0px; margin-top:5px; background-color:#e8e9d9; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f; width:1215',  #style='margin:0px; padding:0px',
+      div(style="id:MM1;vertical-align:top; width:200px; margin-left:20px", #210 display:inline-block;
           br(),    
           h3('Sending country'),
           selectInput("SendingCountry", label = NULL,
                       choices = makeList(CountriesFull),
-                      selected = which(Countries=='GR'),width='200px'),
+                      selected = which(Countries=='GR'),width='190px'), #200
       ),
-      div(style="id:MM2;display:inline-block;vertical-align:top; width:180px; margin-left:10px",
+      div(style="id:MM2;vertical-align:top; width:180px; margin-left:10px", #180 display:inline-block;
           br(),    
           h3(HTML('&#160;')),
           tags$head(
@@ -778,23 +778,33 @@ ui_compare_models_single<-function() tagList(
           actionButton("Reverse", HTML("<center>&#8592 Swap countries &#8594</center>"), width='160px'),
       ),
       
-      div(style="id:MM3;display:inline-block;vertical-align:top; width:210px;  margin-left:0px",
+      div(style="id:MM3;vertical-align:top; width:200px;  margin-left:0px", #210display:inline-block
           br(),     
           h3('Receiving country'),
           selectInput("ReceivingCountry", label = NULL, # move to server, uodate sending and input
                       choices = makeList(CountriesFull),
-                      selected = which(Countries=='CY'),width='200px'),
+                      selected = which(Countries=='CY'),width='190px'),
       ),
       
-      div(style="display:inline-block;vertical-align:top; width:250px;  margin-left:120px",
+      div(style=" vertical-align:top; width:380px;  margin-left:30px",
           br(),
           h3(HTML('Graphical options')),
-          myPrettyCheckbox("FixedYMaxCompareModels", h4('Fix maximum value on the Y-axis'), value = FALSE, width = '240px'),
+          div(
+            style = "display: inline-flex; align-items: top",
+          div(style="display:inline-block;width: 160px;",
+              myPrettyCheckbox("ShowLegendSin", h4('Show legend'), 
+                               value = TRUE), width = '150px'),
+          div(style="display:inline-block;width: 190px;",
+              myPrettyCheckbox("FixedYMaxCompareModels", h4('Fix maximum value on the Y-axis'), 
+                               value = FALSE, width = '180px')
+              ),
+          ),
       ),
  
-      div(style="display:inline-block; width:155px;  margin-left:20px; margin-top:25px",
+      div(style=" width:148px;  margin-left:22px; margin-top:33px; margin-right:23px",#display:inline-block;
         numericInput('YMaxCompareModels', min=0,value=get_ymax_raw('GR','CY',2,2),label='Max Y-axis value')
       ),
+      
       br()
   ),
   
@@ -810,7 +820,8 @@ ui_compare_models_single<-function() tagList(
               bg = '#F5DFD5',
               choice1ID="STYLE1", 
               #choice2ID="PRED1", 
-              choices1=c('Linear interpolation','Stair steps plot','Spline interpolation')#, 
+              choices1=c('Linear interpolation','Stair steps plot','Spline interpolation'),
+              downbutton="Extract flows"#, 
               #choices2=c('Basic','Alternative')
   ),
   mySurveyFrame(),
@@ -896,6 +907,13 @@ ui_compare_models_aggregated<-function() tagList(
                                 choices = CountriesFull, selected = CountriesFull[Countries%in%c('CZ','PL','SK')], inline = TRUE, ncol = 2),
           
           
+          colorActionButton('selectallsen','All'),
+          colorActionButton('selectnonesen','None'),
+          colorActionButton('selectnordicsen','Nordic'),
+          colorActionButton('selectNsen','North'),
+          colorActionButton('selectSsen','South'),
+          colorActionButton('selectWsen','West'),
+          colorActionButton('selectEsen','East'),
       ),
       
       div(style="display:inline-block;vertical-align:top; width:300px; margin-left:20px; margin-bottom:20px",
@@ -903,8 +921,16 @@ ui_compare_models_aggregated<-function() tagList(
           h3("Receiving countries"),
           myPrettyGroupCheckbox("RecCntrs", label=NULL,
                                 choices = CountriesFull, selected = CountriesFull[Countries%in%c('DE')], inline = TRUE, active.bg = "#0861ae", ncol=2),
+          colorActionButton('selectallrec','All'),
+          colorActionButton('selectnonerec','None'),
+          colorActionButton('selectnordicrec','Nordic'),
+          colorActionButton('selectNrec','North'),
+          colorActionButton('selectSrec','South'),
+          colorActionButton('selectWrec','West'),
+          colorActionButton('selectErec','East'),
           
       ),
+      
       div(style="display:inline-block;vertical-align:top; width:525px; margin-left:20px",
           #br(),
           div(style="display:inline-block;vertical-align:top; width:525px; margin-left:0px",
@@ -923,7 +949,7 @@ ui_compare_models_aggregated<-function() tagList(
               #     style="margin-bottom:-10px"),
               
               div(class = 'row', style = 'display: inline-block; align-items: left; margin-bottom:5px; margin-left:0px; width:525px',
-                  div(class = 'col', style = 'display: inline-block; text-align: left; width:370px',
+                  div(class = 'col', style = 'display: inline-block; text-align: left; width:370px;  margin-bottom:-10px',
                       myPrettyCheckbox("UseThreshold", h4('Mark threshold year on the plot:'), value = FALSE)
                       
                   ),
@@ -943,8 +969,14 @@ ui_compare_models_aggregated<-function() tagList(
                   ),
                   
                   div(class = 'col', style = 'display: inline-block; text-align: center; width:30px',
-                      actionButton('bnext',">>", style="padding-top:0px; padding-left:10px; padding-right:10px; padding-bottom:0px; margin-top:-5px")
-                  )
+                      actionButton('bnext',">>", style="padding-top:0px; padding-left:10px; padding-right:10px; padding-bottom:0px; margin-top:-5px;")
+                  ),
+                  div(class = 'col', style = 'display: inline-block; text-align: left; width:370px;margin-top:-5px; margin-bottom:-10px',
+                      myPrettyCheckbox("ShowLegendAgr", h4('Show legend'), value = TRUE)
+                  ),
+                  div(class = 'col', style = 'display: inline-block; text-align: left; width:370px;margin-top:-5px;',
+                      myPrettyCheckbox("ShowTitleAgr", h4('Show title bar'), value = TRUE)
+                  ),
               ),
               # br(), 
               # h3('Exemplary sets'),
@@ -975,7 +1007,8 @@ ui_compare_models_aggregated<-function() tagList(
               bg = '#F5DFD5',
               choice1ID="STYLE2", 
               #choice2ID="PRED2", 
-              choices1=c('Linear interpolation','Stair steps plot','Spline interpolation')#, 
+              choices1=c('Linear interpolation','Stair steps plot','Spline interpolation'),
+              downbutton="Save aggregated flows"#, 
               #choices2=c('Basic','Alternative')
   ),
   #br(),br(),br(),br(),br(),br(),

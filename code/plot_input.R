@@ -1,10 +1,102 @@
+get_aggregated_ <<- function(inputs){
+  L1<-Countries[CountriesFull%in%inputs$SendCntrs]
+  L2<-Countries[CountriesFull%in%inputs$RecCntrs]
+  if(length(L1)&&length(L2)) {
+    res<-get_aggregated(L1,
+                    L2,
+                    #Threshold=as.numeric(TrYearV) - 1000*(1-as.numeric(input$UseThreshold)),
+                    m1=inputs$MODEL1b,
+                    m2=inputs$MODEL2b,
+                    #linetype=as.numeric(input$STYLE2),
+                    flow = 'pred'#c('pred',"pred_alt")[as.numeric(input$UseAltPred2)+1],
+                    #spaceX = 15,
+                    #col1 = 'orange2',
+                    #col2 = 'purple4',
+                    #alpha.75 = 0.3,
+                    #alpha.95 = 0.1,
+                    #MODELS2 = MODELS2
+                    #show.data = input$sdat,
+                    #na.rm=FALSE#input$narm,
+                    #plotCI=input$aCI,
+                    #plotLegend=input$ShowLegendAgr,
+                    #plotTitle=input$ShowTitleAgr)
+    )
+    L1<-CountriesFull[CountriesFull%in%inputs$SendCntrs]
+    L2<-CountriesFull[CountriesFull%in%inputs$RecCntrs]
+    if (as.numeric(inputs$MODEL1b) != as.numeric(inputs$MODEL2b)) {
+      tmp<-matrix('',4,max(length(L1),length(L2))+1)
+      tmp[,1]<-c('Sending countries:','Receiving countries:','Model 1 (M1):','Model 2 (M2):')
+      tmp[1,2:(length(L1)+1)]<-L1
+      tmp[2,2:(length(L2)+1)]<-L2
+      tmp[3,2]<-paste(MODELS[as.numeric(inputs$MODEL1b)])
+      tmp[4,2]<-paste(MODELS[as.numeric(inputs$MODEL2b)])
+      #tmp[3,3]<-inputs$MODEL1b
+      #tmp[4,3]<-inputs$MODEL2b
+    } else {
+      tmp<-matrix('',3,max(length(L1),length(L2))+1)
+      tmp[,1]<-c('Sending countries:','Receiving countries:','Model 1 (M1):')
+      tmp[1,2:(length(L1)+1)]<-L1
+      tmp[2,2:(length(L2)+1)]<-L2
+      tmp[3,2]<-paste(MODELS[as.numeric(inputs$MODEL1b)])
+      #tmp[3,3]<-inputs$MODEL1b
+      #tmp[3,4]<-inputs$MODEL2b
+      res$M2<-NULL
+    }
+    #print(paste('....',MODELS[as.numeric(inputs$MODEL1b)]))
+    res$info<-data.frame(tmp)
+    colnames(res$info)<-rep('  ', length(colnames(res$info)))
+    res
+  } else NULL
+}
+
+get_single_ <<- function(inputs){
+  L1<-Countries[as.numeric(inputs$SendingCountry)]
+  L2<-Countries[as.numeric(inputs$ReceivingCountry)]
+  #if(length(L1)&&length(L2)) {
+    res<-get_single_flows(
+                        L1,
+                        L2,
+                        m1=inputs$MODEL1,
+                        m2=inputs$MODEL2,
+                        flow = 'pred'
+                        
+    )
+    L1<-CountriesFull[as.numeric(inputs$SendingCountry)]
+    L2<-CountriesFull[as.numeric(inputs$ReceivingCountry)]
+    if (as.numeric(inputs$MODEL1) != as.numeric(inputs$MODEL2)) {
+      tmp<-matrix('',4,2)
+      tmp[,1]<-c('Sending country:','Receiving country:','Model 1 (M1):','Model 2 (M2):')
+      tmp[1,2]<-L1
+      tmp[2,2]<-L2
+      tmp[3,2]<-paste(MODELS[as.numeric(inputs$MODEL1)])
+      tmp[4,2]<-paste(MODELS[as.numeric(inputs$MODEL2)])
+    } else {
+      tmp<-matrix('',3,2)
+      tmp[,1]<-c('Sending country:','Receiving country:','Model 1 (M1):')
+      tmp[1,2]<-L1
+      tmp[2,2]<-L2
+      tmp[3,2]<-paste(MODELS[as.numeric(inputs$MODEL1)])
+      res$M2<-NULL
+    }
+    res$info<-data.frame(tmp)
+    colnames(res$info)<-rep('  ', length(colnames(res$info)))
+    print('****>****')
+    print(res$info)
+    return(res)
+  #} else NULL
+}
+
+
 plot_aggregated_<<-function(input, TrYearV){
-  print('%%%%%%%%%%%%')
-  print(as.numeric(TrYearV))
-  print(as.numeric(input$UseThreshold))
-  print('%%%%%%%%%%%%')
-  plot_aggregated(cntr_sen_list=Countries[CountriesFull%in%input$SendCntrs],
-                  cntr_rec_list=Countries[CountriesFull%in%input$RecCntrs],
+  # print('%%%%%%%%%%%%')
+  # print(as.numeric(TrYearV))
+  # print(as.numeric(input$UseThreshold))
+  # print('%%%%%%%%%%%%')
+  L1<-Countries[CountriesFull%in%input$SendCntrs]
+  L2<-Countries[CountriesFull%in%input$RecCntrs]
+  if(length(L1)&&length(L2)) {
+  plot_aggregated(cntr_sen_list=L1,
+                  cntr_rec_list=L2,
                   Threshold=as.numeric(TrYearV) - 1000*(1-as.numeric(input$UseThreshold)),
                   m1=input$MODEL1b,
                   m2=input$MODEL2b,
@@ -18,8 +110,14 @@ plot_aggregated_<<-function(input, TrYearV){
                   MODELS2 = MODELS2,
                   show.data = input$sdat,
                   na.rm=input$narm,
-                  plotCI=input$aCI)
-  
+                  plotCI=input$aCI,
+                  plotLegend=input$ShowLegendAgr,
+                  plotTitle=input$ShowTitleAgr)
+  } else {
+    par(mar=rep(0,4))
+    plot(1:10,1:10, axes = F, xlab = '', ylab = '',main = '',pch=NA)
+    text(1,10,'Please select at least one receving and sending coutries!',cex=2,adj=c(0,1), col='red')
+  }
 }
 
 plot_single_flow_<<-function(input){
@@ -46,7 +144,8 @@ plot_single_flow_<<-function(input){
               col2 = 'purple4',
               pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22),
               setYmax = as.logical(input$FixedYMaxCompareModels),
-              Ymax =as.numeric(input$YMaxCompareModels)) 
+              Ymax =as.numeric(input$YMaxCompareModels),
+              plotLegend=input$ShowLegendSin) 
 }
 
 get_ymax<<-function(input){
