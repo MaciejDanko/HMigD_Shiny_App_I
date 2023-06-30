@@ -311,12 +311,12 @@ SaveBlock2 <- function (IDName, topmargin = 5,
   )
 }
 
-colorActionButton <- function (id,label,col1='#D4DDFF',col2='#FFC0C0',...){
+colorActionButton <- function (id,label,col1='#D4DDFF',col2='#FFC0C0',height='25px',...){
  tagList(
    tags$head(
-    tags$style(HTML(paste0('#',id,'{background-color:',col1,'} #',id,':hover{background-color:',col2,'}')))
+    tags$style(HTML(paste0('#',id,'{background-color:',col1,';height:',height,';margin-top:4px} #',id,':hover{background-color:',col2,'}')))
   ),
-  actionButton(id,label,...))
+  actionButton(id,label,style="padding-top:0px; padding-left:10px; padding-right:10px; padding-bottom:0px;",...))
 }
 
 SaveBlock2b <- function (IDName, topmargin = 5, 

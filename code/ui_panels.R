@@ -914,6 +914,8 @@ ui_compare_models_aggregated<-function() tagList(
           colorActionButton('selectSsen','South'),
           colorActionButton('selectWsen','West'),
           colorActionButton('selectEsen','East'),
+          colorActionButton('selectBigsen','Biggest'),
+          colorActionButton('selectReliablesen','Reliable'),
       ),
       
       div(style="display:inline-block;vertical-align:top; width:300px; margin-left:20px; margin-bottom:20px",
@@ -928,7 +930,8 @@ ui_compare_models_aggregated<-function() tagList(
           colorActionButton('selectSrec','South'),
           colorActionButton('selectWrec','West'),
           colorActionButton('selectErec','East'),
-          
+          colorActionButton('selectBigrec','Biggest'),
+          colorActionButton('selectReliablerec','Reliable'),
       ),
       
       div(style="display:inline-block;vertical-align:top; width:525px; margin-left:20px",
@@ -1034,11 +1037,20 @@ ui_compare_models_circular <- function() tagList(
           
           myPrettyGroupCheckbox("SendCntrs3", label =NULL,
                                 choices = CountriesFull, selected = CountriesFull[Countries%in%c('DE','PL','UK','IT','FR')], inline = TRUE),
-          tags$head(
-            tags$style(HTML('#EqualizeSending{background-color:#D4DDFF} #EqualizeSending:hover{background-color:#FFC0C0}'))
-          ),
-          br(),
-          actionButton("EqualizeSending", "Make sending countries the same as receiving countries", width='475px'),    
+          colorActionButton('selectallsen3','All'),
+          colorActionButton('selectnonesen3','None'),
+          colorActionButton('selectnordicsen3','Nordic'),
+          colorActionButton('selectNsen3','North'),
+          colorActionButton('selectSsen3','South'),
+          colorActionButton('selectWsen3','West'),
+          colorActionButton('selectEsen3','East'),
+          colorActionButton('selectBigsen3','Biggest'),
+          colorActionButton('selectReliablesen3','Reliable'),
+          # tags$head(
+          #   tags$style(HTML('#EqualizeSending{background-color:#D4DDFF} #EqualizeSending:hover{background-color:#FFC0C0}'))
+          # ),
+          # br(),
+          colorActionButton("EqualizeSending", "Same as receiving countries"),    
           
       ),
       
@@ -1048,12 +1060,22 @@ ui_compare_models_circular <- function() tagList(
           myPrettyGroupCheckbox("RecCntrs3", label=NULL,
                                 choices = CountriesFull, selected = CountriesFull[Countries%in%c('DE','PL','UK','IT','FR')], inline = TRUE,
                                 active.bg = "#0861ae"),
-          tags$head(
-            tags$style(HTML('#EqualizeReceiving{background-color:#D4DDFF} #EqualizeReceiving:hover{background-color:#FFC0C0}'))
-          ),
-          br(),
-          actionButton("EqualizeReceiving", "Make receiving countries the same as sending countries", width='475px'),    
-          
+          #div(style='align-items: center',
+          colorActionButton('selectallrec3','All'),
+          colorActionButton('selectnonerec3','None'),
+          colorActionButton('selectnordicrec3','Nordic'),
+          colorActionButton('selectNrec3','North'),
+          colorActionButton('selectSrec3','South'),
+          colorActionButton('selectWrec3','West'),
+          colorActionButton('selectErec3','East'),
+          colorActionButton('selectBigrec3','Biggest'),
+          colorActionButton('selectReliablerec3','Reliable'),
+          # tags$head(
+          #   tags$style(HTML('#EqualizeReceiving{background-color:#D4DDFF} #EqualizeReceiving:hover{background-color:#FFC0C0}'))
+          # ),
+          # br(),
+          colorActionButton("EqualizeReceiving", "Same as sending countries"),    
+          #),
           
           # actionButton("SCall", "All"),actionButton("SCnone", "None"),
       ),

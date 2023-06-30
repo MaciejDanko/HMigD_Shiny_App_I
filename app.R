@@ -379,8 +379,79 @@ shinyServer <-  function(input, output, session) {
     updateAwesomeCheckbox(session,"RecCntrs",value=CountriesFull[Countries%in%c('CZ','PL','SK','HU','BG','RO')])
     updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
   })
+  observeEvent(input$selectBigsen,{
+    updateAwesomeCheckbox(session,"SendCntrs",value=CountriesFull[Countries%in%c('UK','PL','DE','IT','ES','FR')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectBigrec,{
+    updateAwesomeCheckbox(session,"RecCntrs",value=CountriesFull[Countries%in%c('UK','PL','DE','IT','ES','FR')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectReliablesen,{
+    updateAwesomeCheckbox(session,"SendCntrs",value=CountriesFull[Countries%in%c('NO','SE','FI','DK','BE','NL','CH','IS')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
+  observeEvent(input$selectReliablerec,{
+    updateAwesomeCheckbox(session,"RecCntrs",value=CountriesFull[Countries%in%c('NO','SE','FI','DK','BE','NL','CH','IS')])
+    updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
+  })
   
+  ###
   
+  observeEvent(input$selectallsen3,{
+    updateAwesomeCheckbox(session,"SendCntrs3",value=CountriesFull)
+  })
+  observeEvent(input$selectallrec3,{
+    updateAwesomeCheckbox(session,"RecCntrs3",value=CountriesFull)
+  })
+  observeEvent(input$selectnonesen3,{
+    updateAwesomeCheckbox(session,"SendCntrs3",value=CountriesFull[0])
+  })
+  observeEvent(input$selectnonerec3,{
+    updateAwesomeCheckbox(session,"RecCntrs3",value=CountriesFull[0])
+  })
+  observeEvent(input$selectnordicsen3,{
+    updateAwesomeCheckbox(session,"SendCntrs3",value=CountriesFull[Countries%in%c('SE','NO','IS','DK','FI')])
+  })
+  observeEvent(input$selectnordicrec3,{
+    updateAwesomeCheckbox(session,"RecCntrs3",value=CountriesFull[Countries%in%c('SE','NO','IS','DK','FI')])
+  })
+  observeEvent(input$selectNsen3,{
+    updateAwesomeCheckbox(session,"SendCntrs3",value=CountriesFull[Countries%in%c('SE','NO','IS','DK','FI','IE','UK','LT','EE','LV')])
+  })
+  observeEvent(input$selectNrec3,{
+    updateAwesomeCheckbox(session,"RecCntrs3",value=CountriesFull[Countries%in%c('SE','NO','IS','DK','FI','IE','UK','LT','EE','LV')])
+  })
+  observeEvent(input$selectSsen3,{
+    updateAwesomeCheckbox(session,"SendCntrs3",value=CountriesFull[Countries%in%c('HR','CY','GR','MT','IT','PT','ES','SI')])
+  })
+  observeEvent(input$selectSrec3,{
+    updateAwesomeCheckbox(session,"RecCntrs3",value=CountriesFull[Countries%in%c('HR','CY','GR','MT','IT','PT','ES','SI')])
+  })
+  observeEvent(input$selectWsen3,{
+    updateAwesomeCheckbox(session,"SendCntrs3",value=CountriesFull[Countries%in%c('FR','DE','NL','BE','LU','CH','AT')])
+  })
+  observeEvent(input$selectWrec3,{
+    updateAwesomeCheckbox(session,"RecCntrs3",value=CountriesFull[Countries%in%c('FR','DE','NL','BE','LU','CH','AT')])
+  })
+  observeEvent(input$selectEsen3,{
+    updateAwesomeCheckbox(session,"SendCntrs3",value=CountriesFull[Countries%in%c('CZ','PL','SK','HU','BG','RO')])
+  })
+  observeEvent(input$selectErec3,{
+    updateAwesomeCheckbox(session,"RecCntrs3",value=CountriesFull[Countries%in%c('CZ','PL','SK','HU','BG','RO')])
+  })
+  observeEvent(input$selectBigsen3,{
+    updateAwesomeCheckbox(session,"SendCntrs3",value=CountriesFull[Countries%in%c('UK','PL','DE','IT','ES','FR')])
+  })
+  observeEvent(input$selectBigrec3,{
+    updateAwesomeCheckbox(session,"RecCntrs3",value=CountriesFull[Countries%in%c('UK','PL','DE','IT','ES','FR')])
+  })
+  observeEvent(input$selectReliablesen3,{
+    updateAwesomeCheckbox(session,"SendCntrs3",value=CountriesFull[Countries%in%c('NO','SE','FI','DK','BE','NL','CH','IS')])
+  })
+  observeEvent(input$selectReliablerec3,{
+    updateAwesomeCheckbox(session,"RecCntrs3",value=CountriesFull[Countries%in%c('NO','SE','FI','DK','BE','NL','CH','IS')])
+  })
   
     # actionButton('selectallsen','All'),
   # actionButton('selectnonesen','None'),
