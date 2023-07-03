@@ -1,5 +1,4 @@
 # To be done
-# reverse buttons for coutries
 # animation button for cirucular plot
 # watermark HMigD on flow plots, right bottom corner
 
@@ -131,6 +130,21 @@ ModelMixedResultsDefault<<-mix_models(initial_values)
 
 users <<- reactiveValues(count = 0)
 
+sortmix<-function(x){
+  X<-sort(x)
+  L<-length(x)
+  L2<-ceiling(L/2)
+  Y<-t(matrix(1:(L2*2), L2,2))
+  Y[2,]<-rev(Y[2,])
+  Y<-as.vector(Y)
+  Y<-Y[Y%in%(1:L)]
+  X[Y]
+}
+
+src_summary_I <<- sortmix(get_src_stats('I'))
+src_summary_E <<- sortmix(get_src_stats('E'))
+
+
 shinyServer <-  function(input, output, session) {
   
   OLD_send <- reactiveVal(OLD_send_ini)
@@ -145,6 +159,45 @@ shinyServer <-  function(input, output, session) {
   
   AggrSave <- reactiveVal(NULL)
   SingleSave <- reactiveVal(NULL)
+  
+  output$piesrcI <- renderPlot({
+    plot_src_summary(src_summary_I)
+  })
+
+  output$piesrcE <- renderPlot({
+    plot_src_summary(src_summary_E)
+  })
+  
+  output$pielfs <- renderPlot({
+    plot_lfs_stats()
+  })
+  
+  observeEvent(input$showsumlfs, {
+    showModal(
+      modalDialog(
+        title = "LFS data availability (All years)",
+        plotOutput("pielfs")
+      )
+    )
+  })
+  
+  observeEvent(input$showsumsrcI, {
+    showModal(
+      modalDialog(
+        title = "Immigrtion data sources summary (all years)",
+        plotOutput("piesrcI")
+      )
+    )
+  })
+  
+  observeEvent(input$showsumsrcE, {
+    showModal(
+      modalDialog(
+        title = "Emigrtion data sources summary (all years)",
+        plotOutput("piesrcE")
+      )
+    )
+  })
   
   observeEvent(input$bprev, {
     #print('dec')
@@ -214,6 +267,33 @@ shinyServer <-  function(input, output, session) {
   ModelMixingTable<-reactiveVal(initial_values)
   ModelMixedResults<-reactiveVal(mix_models(initial_values))
   
+
+  
+  output$ModelTable <- renderRHandsontable({
+    
+    
+    tmp<-ModelMixingTable()
+    for (i in 1:NCntr) tmp[i,i]<-''
+    ModelMixingTable(tmp)
+    rhandsontable(ModelMixingTable(), colWidths=32, rowHeaderWidth=32, colHeaderWidth=32, contextMenu = FALSE, height=747) %>% #overflow = 'visible' remove if more countries
+      
+      hot_cols(renderer = "
+        function(instance, td, row, col, prop, value, cellProperties) {
+          Handsontable.renderers.TextRenderer.apply(this, arguments);
+          var colors = [ '#FFE3A3', '#F7B6B6', '#FFB273', '#968EE4', '#C9C5BA', '#A6D1B6'];
+          var index = value.charCodeAt(0) - 'a'.charCodeAt(0);
+          var color = colors[index];
+          td.style.backgroundColor = color;
+          td.style.textAlign = 'center'; 
+          if (row === col) {
+           cellProperties.readOnly = true;
+          }
+        }
+      ") %>%
+      hot_col(col = 1:NCntr, type = "dropdown", source = c("a", "b", "c", "d", "e", "f"))
+    
+  })
+
   server_show_tables(input, output)
   output$MixedModelTable <- renderDT({if (length(colnames(ModelMixedResults()))) {
     shiny::req(ModelMixedResults())
@@ -302,32 +382,7 @@ shinyServer <-  function(input, output, session) {
     ModelMixingTable(tmp)  
     ModelMixedResults(mix_models(tmp))
   })
-  
-  output$ModelTable <- renderRHandsontable({
     
-    
-    tmp<-ModelMixingTable()
-    for (i in 1:NCntr) tmp[i,i]<-''
-    ModelMixingTable(tmp)
-    rhandsontable(ModelMixingTable(), colWidths=32, rowHeaderWidth=32, colHeaderWidth=32, contextMenu = FALSE, height=747) %>% #overflow = 'visible' remove if more countries
-      
-      hot_cols(renderer = "
-        function(instance, td, row, col, prop, value, cellProperties) {
-          Handsontable.renderers.TextRenderer.apply(this, arguments);
-          var colors = [ '#FFE3A3', '#F7B6B6', '#FFB273', '#968EE4', '#C9C5BA', '#A6D1B6'];
-          var index = value.charCodeAt(0) - 'a'.charCodeAt(0);
-          var color = colors[index];
-          td.style.backgroundColor = color;
-          td.style.textAlign = 'center'; 
-          if (row === col) {
-           cellProperties.readOnly = true;
-          }
-        }
-      ") %>%
-      hot_col(col = 1:NCntr, type = "dropdown", source = c("a", "b", "c", "d", "e", "f"))
-    
-  })
-  
   observeEvent(input$selectallsen,{
     updateAwesomeCheckbox(session,"SendCntrs",value=CountriesFull)
     updateAwesomeCheckbox(session,"UseThreshold", value=FALSE)
@@ -931,13 +986,36 @@ shinyServer <-  function(input, output, session) {
   
   observe_helpers(withMathJax = TRUE, help_dir = 'helpfiles')
   
-  observeEvent(input$EqualizeSending,{
+  observeEvent(input$equalsen3,{
     updateAwesomeCheckboxGroup(session = session, inputId="SendCntrs3" , selected = input$RecCntrs3)
   })
   
-  observeEvent(input$EqualizeReceiving,{
+  observeEvent(input$equalrec3,{
     updateAwesomeCheckboxGroup(session = session, inputId="RecCntrs3" , selected = input$SendCntrs3)
   })
+  
+  observeEvent(input$equalsen,{
+    updateAwesomeCheckboxGroup(session = session, inputId="SendCntrs" , selected = input$RecCntrs)
+  })
+  
+  observeEvent(input$equalrec,{
+    updateAwesomeCheckboxGroup(session = session, inputId="RecCntrs" , selected = input$SendCntrs)
+  })
+  
+  observeEvent(c(input$swapsen3,input$swaprec3),{
+    send<-input$SendCntrs3
+    rec<-input$RecCntrs3
+    updateAwesomeCheckboxGroup(session = session, inputId="SendCntrs3" , selected = rec)
+    updateAwesomeCheckboxGroup(session = session, inputId="RecCntrs3" , selected = send)
+  })
+  
+  observeEvent(c(input$swapsen,input$swaprec),{
+    send<-input$SendCntrs
+    rec<-input$RecCntrs
+    updateAwesomeCheckboxGroup(session = session, inputId="SendCntrs" , selected = rec)
+    updateAwesomeCheckboxGroup(session = session, inputId="RecCntrs" , selected = send)
+  })
+  
   
   
   observeEvent(input$SendCntrs,{
@@ -986,7 +1064,8 @@ shinyServer <-  function(input, output, session) {
     #print(ThresholdYear())
     #print('***')
   })
-  
+
+    
   server_plot_figures(input, output)
   
   output$OutputFlowsPlot <- renderPlot({

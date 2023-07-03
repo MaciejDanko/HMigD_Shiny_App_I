@@ -889,13 +889,52 @@ my2dplot<-function(mat, LEVELS, txtLEVELS = paste(LEVELS), namat=NULL, cexx=1, c
   }
 }
 
+get_src_stats<-function(direction='E'){
+  if (direction=='E') DAA<-rsm.data$x.emi.src else DAA<-rsm.data$x.imm.src
+  res<-table(DAA, useNA = 'always')
+  names(res)[is.na(names(res))]<-'Unknown'
+  res['Unknown']<-res['Unknown']-dim(DAA)[1]*dim(DAA)[3]
+  res
+}
+
+get_lfs_stats<-function(){
+  DAA<-rsm.data$k.imm
+  if (any(diag(DAA[,,1])!=0)) stop()
+  res<-table(is.na(DAA))
+  names(res)<-c('Known','Unknown')
+  res['Known']<-res['Known']-dim(DAA)[1]*dim(DAA)[3] #diag is 0
+  res
+}
+
+plot_src_summary<-function (data){
+  srcpalette<- c(EUROSTAT='green3',UN='blue2',DE_NSO='orange2',UK_NSO='red2',IMEM='yellow',Unknown='white')
+  srcpalette<-srcpalette[names(data)]
+  labels <- paste(names(data), ':  ',sprintf("%.1f%%", data / sum(data) * 100), " (", data, ")", sep = "")
+  par(mar=c(2,0,0,0))
+  pie(data, main = NULL, col = srcpalette, labels = names(data), cex = 1)
+  legend("bottomleft", legend = labels, ncol=3, bty = "n", cex = 1, fill = srcpalette,
+         xpd=TRUE,inset = c(0, -0.05))
+  
+}
+
+plot_lfs_stats<-function (){
+  data <- get_lfs_stats()
+  srcpalette<- c(Known='green3',Unknown='white')
+  srcpalette<-srcpalette[names(data)]
+  labels <- paste(names(data), ':  ',sprintf("%.1f%%", data / sum(data,na.rm = TRUE) * 100), " (", data, ")", sep = "")
+  par(mar=c(2,0,0,0))
+  pie(data, main = NULL, col = srcpalette, labels = names(data), cex = 1)
+  legend("bottomleft", legend = labels, ncol=3, bty = "n", cex = 1, fill = srcpalette,
+         xpd=TRUE,inset = c(0, -0.05))
+  
+}
 
 
 plot_Sources<-function(direction='E',year=2002,cexx=1, cexy=1, lox=1, loy=1,NoDataTxt='Missing data') {
   if (direction=='E') DAA<-rsm.data$x.emi.src else DAA<-rsm.data$x.imm.src
   
   LEVELS<-paste(unique(as.vector(c(rsm.data$x.imm.src,rsm.data$x.emi.src))))
-  colors=paletteer::paletteer_d("ggsci::hallmarks_light_cosmic")[-(1:3)]
+  #colors=paletteer::paletteer_d("ggsci::hallmarks_light_cosmic")[-(1:3)]
   DAAY<-DAA[,,paste(year)]
   diag(DAAY)<-' '
   colors<-c('black','green3','blue2','orange2','red2','yellow','white')

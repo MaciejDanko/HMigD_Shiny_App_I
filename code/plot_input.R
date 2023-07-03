@@ -3,23 +3,23 @@ get_aggregated_ <<- function(inputs){
   L2<-Countries[CountriesFull%in%inputs$RecCntrs]
   if(length(L1)&&length(L2)) {
     res<-get_aggregated(L1,
-                    L2,
-                    #Threshold=as.numeric(TrYearV) - 1000*(1-as.numeric(input$UseThreshold)),
-                    m1=inputs$MODEL1b,
-                    m2=inputs$MODEL2b,
-                    #linetype=as.numeric(input$STYLE2),
-                    flow = 'pred'#c('pred',"pred_alt")[as.numeric(input$UseAltPred2)+1],
-                    #spaceX = 15,
-                    #col1 = 'orange2',
-                    #col2 = 'purple4',
-                    #alpha.75 = 0.3,
-                    #alpha.95 = 0.1,
-                    #MODELS2 = MODELS2
-                    #show.data = input$sdat,
-                    #na.rm=FALSE#input$narm,
-                    #plotCI=input$aCI,
-                    #plotLegend=input$ShowLegendAgr,
-                    #plotTitle=input$ShowTitleAgr)
+                        L2,
+                        #Threshold=as.numeric(TrYearV) - 1000*(1-as.numeric(input$UseThreshold)),
+                        m1=inputs$MODEL1b,
+                        m2=inputs$MODEL2b,
+                        #linetype=as.numeric(input$STYLE2),
+                        flow = 'pred'#c('pred',"pred_alt")[as.numeric(input$UseAltPred2)+1],
+                        #spaceX = 15,
+                        #col1 = 'orange2',
+                        #col2 = 'purple4',
+                        #alpha.75 = 0.3,
+                        #alpha.95 = 0.1,
+                        #MODELS2 = MODELS2
+                        #show.data = input$sdat,
+                        #na.rm=FALSE#input$narm,
+                        #plotCI=input$aCI,
+                        #plotLegend=input$ShowLegendAgr,
+                        #plotTitle=input$ShowTitleAgr)
     )
     L1<-CountriesFull[CountriesFull%in%inputs$SendCntrs]
     L2<-CountriesFull[CountriesFull%in%inputs$RecCntrs]
@@ -53,36 +53,36 @@ get_single_ <<- function(inputs){
   L1<-Countries[as.numeric(inputs$SendingCountry)]
   L2<-Countries[as.numeric(inputs$ReceivingCountry)]
   #if(length(L1)&&length(L2)) {
-    res<-get_single_flows(
-                        L1,
-                        L2,
-                        m1=inputs$MODEL1,
-                        m2=inputs$MODEL2,
-                        flow = 'pred'
-                        
-    )
-    L1<-CountriesFull[as.numeric(inputs$SendingCountry)]
-    L2<-CountriesFull[as.numeric(inputs$ReceivingCountry)]
-    if (as.numeric(inputs$MODEL1) != as.numeric(inputs$MODEL2)) {
-      tmp<-matrix('',4,2)
-      tmp[,1]<-c('Sending country:','Receiving country:','Model 1 (M1):','Model 2 (M2):')
-      tmp[1,2]<-L1
-      tmp[2,2]<-L2
-      tmp[3,2]<-paste(MODELS[as.numeric(inputs$MODEL1)])
-      tmp[4,2]<-paste(MODELS[as.numeric(inputs$MODEL2)])
-    } else {
-      tmp<-matrix('',3,2)
-      tmp[,1]<-c('Sending country:','Receiving country:','Model 1 (M1):')
-      tmp[1,2]<-L1
-      tmp[2,2]<-L2
-      tmp[3,2]<-paste(MODELS[as.numeric(inputs$MODEL1)])
-      res$M2<-NULL
-    }
-    res$info<-data.frame(tmp)
-    colnames(res$info)<-rep('  ', length(colnames(res$info)))
-    #print('****>****')
-    #print(res$info)
-    return(res)
+  res<-get_single_flows(
+    L1,
+    L2,
+    m1=inputs$MODEL1,
+    m2=inputs$MODEL2,
+    flow = 'pred'
+    
+  )
+  L1<-CountriesFull[as.numeric(inputs$SendingCountry)]
+  L2<-CountriesFull[as.numeric(inputs$ReceivingCountry)]
+  if (as.numeric(inputs$MODEL1) != as.numeric(inputs$MODEL2)) {
+    tmp<-matrix('',4,2)
+    tmp[,1]<-c('Sending country:','Receiving country:','Model 1 (M1):','Model 2 (M2):')
+    tmp[1,2]<-L1
+    tmp[2,2]<-L2
+    tmp[3,2]<-paste(MODELS[as.numeric(inputs$MODEL1)])
+    tmp[4,2]<-paste(MODELS[as.numeric(inputs$MODEL2)])
+  } else {
+    tmp<-matrix('',3,2)
+    tmp[,1]<-c('Sending country:','Receiving country:','Model 1 (M1):')
+    tmp[1,2]<-L1
+    tmp[2,2]<-L2
+    tmp[3,2]<-paste(MODELS[as.numeric(inputs$MODEL1)])
+    res$M2<-NULL
+  }
+  res$info<-data.frame(tmp)
+  colnames(res$info)<-rep('  ', length(colnames(res$info)))
+  #print('****>****')
+  #print(res$info)
+  return(res)
   #} else NULL
 }
 
@@ -95,24 +95,24 @@ plot_aggregated_<<-function(input, TrYearV){
   L1<-Countries[CountriesFull%in%input$SendCntrs]
   L2<-Countries[CountriesFull%in%input$RecCntrs]
   if(length(L1)&&length(L2)) {
-  plot_aggregated(cntr_sen_list=L1,
-                  cntr_rec_list=L2,
-                  Threshold=as.numeric(TrYearV) - 1000*(1-as.numeric(input$UseThreshold)),
-                  m1=input$MODEL1b,
-                  m2=input$MODEL2b,
-                  linetype=as.numeric(input$STYLE2),
-                  flow = 'pred',#c('pred',"pred_alt")[as.numeric(input$UseAltPred2)+1],
-                  spaceX = 15,
-                  col1 = 'orange2',
-                  col2 = 'purple4',
-                  alpha.75 = 0.3,
-                  alpha.95 = 0.1,
-                  MODELS2 = MODELS2,
-                  show.data = input$sdat,
-                  na.rm=input$narm,
-                  plotCI=input$aCI,
-                  plotLegend=input$ShowLegendAgr,
-                  plotTitle=input$ShowTitleAgr)
+    plot_aggregated(cntr_sen_list=L1,
+                    cntr_rec_list=L2,
+                    Threshold=as.numeric(TrYearV) - 1000*(1-as.numeric(input$UseThreshold)),
+                    m1=input$MODEL1b,
+                    m2=input$MODEL2b,
+                    linetype=as.numeric(input$STYLE2),
+                    flow = 'pred',#c('pred',"pred_alt")[as.numeric(input$UseAltPred2)+1],
+                    spaceX = 15,
+                    col1 = 'orange2',
+                    col2 = 'purple4',
+                    alpha.75 = 0.3,
+                    alpha.95 = 0.1,
+                    MODELS2 = MODELS2,
+                    show.data = input$sdat,
+                    na.rm=input$narm,
+                    plotCI=input$aCI,
+                    plotLegend=input$ShowLegendAgr,
+                    plotTitle=input$ShowTitleAgr)
   } else {
     par(mar=rep(0,4))
     plot(1:10,1:10, axes = F, xlab = '', ylab = '',main = '',pch=NA)
@@ -161,20 +161,30 @@ get_ymax<<-function(input){
 
 plot_circular_flows_<-function(input){
   data<-switch(paste(input$MODEL3), 
-              '1' = Data_input_80a, 
-              '2' = Data_input_80b,
-              '3' = Data_input_80c,
-              '4' = Data_input_80d,
-              '5' = Data_input_80e,
-              '6' = Data_input_80f)
-  plot_circular(data=data, 
-                year=as.numeric(as.character(input$YearSel)), 
-                orig = Countries[CountriesFull%in%input$SendCntrs3], 
-                dest = Countries[CountriesFull%in%input$RecCntrs3],
-                alt=FALSE,#input$UseAltPred3, 
-                link.lwd=1, border.alpha=0.5, arrow.alpha=0.5, link.arr.length=0.1, 
-                showscale=input$ShowScale, 
-                show.big.perc=input$Percentiles)
+               '1' = Data_input_80a, 
+               '2' = Data_input_80b,
+               '3' = Data_input_80c,
+               '4' = Data_input_80d,
+               '5' = Data_input_80e,
+               '6' = Data_input_80f)
+  
+  L1<-Countries[CountriesFull%in%input$SendCntrs3]
+  L2<-Countries[CountriesFull%in%input$RecCntrs3]
+  if(length(L1)&&length(L2)) {
+    
+    plot_circular(data=data, 
+                  year=as.numeric(as.character(input$YearSel)), 
+                  orig = Countries[CountriesFull%in%input$SendCntrs3], 
+                  dest = Countries[CountriesFull%in%input$RecCntrs3],
+                  alt=FALSE,#input$UseAltPred3, 
+                  link.lwd=1, border.alpha=0.5, arrow.alpha=0.5, link.arr.length=0.1, 
+                  showscale=input$ShowScale, 
+                  show.big.perc=input$Percentiles)
+  } else {
+    par(mar=rep(0,4))
+    plot(1:10,1:10, axes = F, xlab = '', ylab = '',main = '',pch=NA)
+    text(1,10,'Please select at least one receving\n and sending coutries!',cex=2,adj=c(0,1), col='red')
+  }
 }
 
 plot_freedom_<<-function(input){
@@ -189,14 +199,14 @@ plot_freedom_<<-function(input){
 }
 
 myPAL<<-c('#8BAB82','#3D4C9F','#DD8C6E',
-         '#98ACB5',
-         #'#174333',
-         #'#0C2521',
-         #'#C2882B',
-         '#7B3400','#E8553C','#A84233','#2E748A','#013C4C',#'#E3DED7',#'#6A958C',
-         #'#8EAD7C',
-         #"#5D1D2E",#'#951233','#C15937',
-         '#997929')
+          '#98ACB5',
+          #'#174333',
+          #'#0C2521',
+          #'#C2882B',
+          '#7B3400','#E8553C','#A84233','#2E748A','#013C4C',#'#E3DED7',#'#6A958C',
+          #'#8EAD7C',
+          #"#5D1D2E",#'#951233','#C15937',
+          '#997929')
 #plot(seq_along(myPAL),seq_along(myPAL),pch=19, col=(myPAL),cex=4)
 plot_dur_emi_<<-function(input){
   par(mar=c(4,4,1.5,10),oma=c(0,0,0,0))
@@ -259,8 +269,8 @@ plot_dist_<<-function(input){
     my2dplotClassify(rsm.data$log_distwces,digits=2, include_zero = FALSE, use.na=FALSE)
     mtext(expression('Log-centered population-weighted distance between countries in km'),3,0,cex=1.2)
   } else {
-     my2dplotClassify(rsm.data$grav_dist/1000,digits=2, use.na=FALSE)
-     mtext(expression('Population-weighted distance between countries in thousands of km'),3,0,cex=1.2)
+    my2dplotClassify(rsm.data$grav_dist/1000,digits=2, use.na=FALSE)
+    mtext(expression('Population-weighted distance between countries in thousands of km'),3,0,cex=1.2)
   }
   mtext(expression(bold('Sending country')),2,2.5,cex=1.2)
   mtext(expression(bold('Receiving country')),1,2.5,cex=1.2)
@@ -314,12 +324,12 @@ plot_trade_<<-function(input){
 plot_transitions_count_ <<-function(input){
   par(mar=c(4,4,1.5,10),oma=c(0,0,0,0))
   ncat<<-20
-    rr<<- c(0, 10, 100, 1000, 10000, 100000, 1e6)
-    la <- c('(0, 10]','(10,100]','(100, 1K]','(1K, 10K]','(10K, 100K]','(100K, 1M]')
-    CC <- rsm.data$k.imm[,,paste(input$transitions_count_year)]
-    diag(CC)<-NA
-    my2dplotClassify(CC, digits=2, rr=rr, labels = la, ncat=ncat, diagwhite=TRUE, nodata='Missing data or\nno migration\nreported', legoffs=0.5, include.lowest = FALSE, include_zero = FALSE)
-    mtext(paste('Migration transitions in',input$transitions_count_year),3,0.1,cex=1.2)
+  rr<<- c(0, 10, 100, 1000, 10000, 100000, 1e6)
+  la <- c('(0, 10]','(10,100]','(100, 1K]','(1K, 10K]','(10K, 100K]','(100K, 1M]')
+  CC <- rsm.data$k.imm[,,paste(input$transitions_count_year)]
+  diag(CC)<-NA
+  my2dplotClassify(CC, digits=2, rr=rr, labels = la, ncat=ncat, diagwhite=TRUE, nodata='Missing data or\nno migration\nreported', legoffs=0.5, include.lowest = FALSE, include_zero = FALSE)
+  mtext(paste('Migration transitions in',input$transitions_count_year),3,0.1,cex=1.2)
   mtext(expression(bold('Sending country')),2,2.5,cex=1.2)
   mtext(expression(bold('Receiving country')),1,2.5,cex=1.2)
   # stop('check lebeling in other plots, log_centered* - help')

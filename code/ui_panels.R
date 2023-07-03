@@ -22,15 +22,17 @@ ui_flow_sources_imm <- function() tagList(
           h3('Year'),
       ),
       
-      div(style="display:inline-block;vertical-align:top; width:1000px;  margin-left:40px; margin-top:5px",
+      div(style="display:inline-block;vertical-align:top; width:850px;  margin-left:40px; margin-top:5px",
           
           sliderInput(inputId = "src_i_year", label = NULL, 
                       min = min(Years), max = max(Years), value = Years[10], step=1, sep='',
-                      width='1000px', round=TRUE,
+                      width='850px', round=TRUE,
           ),
           br(),
       ),
-      
+      div(style="display:inline-block;vertical-align:top; width:152px;  margin-left:50px; margin-top:20px",
+          colorActionButton("showsumsrcI",'Show summary',height='33px',width='150px')
+          ),
       br(),
   ),
   div(class="row", style='margin-left:0px;border-style: solid; border-color:#9985A2; border-width:1px; margin-top:5px; width=1260px; background-color: #FFFFFF',
@@ -48,19 +50,21 @@ ui_flow_sources_emi<-function() tagList(
           h3('Year'),
       ),
       
-      div(style="display:inline-block;vertical-align:top; width:1000px;  margin-left:40px; margin-top:5px",
+      div(style="display:inline-block;vertical-align:top; width:850px;  margin-left:40px; margin-top:5px",
           
           sliderInput(inputId = "src_e_year", label = NULL, 
                       min = min(Years), max = max(Years), value = Years[10], step=1, sep='',
                       #format = wNumbFormat(decimals = 0), 
-                      width='1000px', round=TRUE,
+                      width='850px', round=TRUE,
                       #pips=list(mode= 'values',values=seq(min(Years),max(Years),1)
                       #          ),
                       #color="#00B2EEFF"
           ),
           br(),
       ),
-      
+      div(style="display:inline-block;vertical-align:top; width:152px;  margin-left:50px; margin-top:20px",
+          colorActionButton("showsumsrcE",'Show summary',height='33px',width='150px')
+      ),
       br(),
   ),
   div(class="row", style='margin-left:0px;border-style: solid; border-color:#9985A2; border-width:1px; margin-top:5px; width=1260px; background-color: #FFFFFF',
@@ -123,7 +127,7 @@ ui_flow_undercounting_imm <-function() tagList(
           "The app is accessible through both the ",tags$a(href = "https://github.com/MaciejDanko/UndercountMigScores", "Github repository"),"and the",
           tags$a(href = "https://maciej-jan-danko.shinyapps.io/undercountmigscores/", "Shinyapps.io repository"),
           p(""),
-          "The methodology is described in"
+          "The methodology is described in",tags$a(href="https://www.demogr.mpg.de/publications/files/7791_1685547532_1_Assessing%20the%20quality%20of%20data%20on%20international%20migration%20flows%20in%20Europe%20-%20the%20case%20of%20undercounting%20MPIDR%20Working%20Paper%2031_05_2023.pdf","MPIDR Working Paper" )
       ),         
   ),
   SaveBlock1('UNDERCOUNT_IMM',5,'#F5DFD5'),
@@ -605,10 +609,10 @@ ui_model_schemes <- function() tagList(
                       selected = 1, width='800px'),
           
       ),
-      div(style="display:inline-block;vertical-align:top; width:100px; margin-left:20px",
-          br(), h3(HTML('&#160;')),
-          downloadButton('DownloadCode','Download JAGS code')
-      ),
+      # div(style="display:inline-block;vertical-align:top; width:100px; margin-left:20px",
+      #     br(), h3(HTML('&#160;')),
+      #     downloadButton('DownloadCode','Download JAGS code')
+      # ),
   ),
   #h3('Under construction - Model selection and ploting algorithm schemes for selected model'),
   div(class="row", style='margin-left:0px;border-style: solid; border-color:#9985A2; border-width:1px;  margin-top:5px;  background-color: #FFFFFF',
@@ -686,21 +690,24 @@ ui_visualize_output <- function() tagList(
 
 ui_transitions_count <- function() tagList(
   div(class="row", style='margin-left:0px; margin-top:5px; background-color:#e8e9d9; border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  #style='margin:0px; padding:0px',
-      
       br(),
       div(style="display:inline-block;vertical-align:top; width:50px;  margin-left:20px; margin-top:20px",
           h3('Year'),
       ),
       
-      div(style="display:inline-block;vertical-align:top; width:1000px;  margin-left:40px; margin-top:5px",
+      div(style="display:inline-block;vertical-align:top; width:850px;  margin-left:40px; margin-top:5px",
           
           sliderInput(inputId = "transitions_count_year", label = NULL, 
                       min = min(Years), max = max(Years), value = Years[10], step=1, sep='',
-                      width='1000px', round=TRUE,
+                      width='850px', round=TRUE,
           ),
           br(),
       ),
+      div(style="display:inline-block;vertical-align:top; width:152px;  margin-left:50px; margin-top:20px",
+          colorActionButton("showsumlfs",'Show summary',height='33px',width='150px')
+      ),
       br(),
+      
   ),    
   div(class="row", style='margin-left:0px;border-style: solid; border-color:#9985A2; border-width:1px; margin-top:5px; width=1260px; background-color: #FFFFFF',
       plotOutput(outputId = "TRANSITIONSCOUNTPlot",height="auto", width='auto'),
@@ -821,7 +828,7 @@ ui_compare_models_single<-function() tagList(
               choice1ID="STYLE1", 
               #choice2ID="PRED1", 
               choices1=c('Linear interpolation','Stair steps plot','Spline interpolation'),
-              downbutton="Extract flows"#, 
+              downbutton="Download"#, 
               #choices2=c('Basic','Alternative')
   ),
   mySurveyFrame(),
@@ -916,6 +923,9 @@ ui_compare_models_aggregated<-function() tagList(
           colorActionButton('selectEsen','East'),
           colorActionButton('selectBigsen','Biggest'),
           colorActionButton('selectReliablesen','Reliable'),
+          colorActionButton("equalsen", "Same as receiving countries"),    
+          colorActionButton("swapsen", "Swap with receiving countries"),
+          
       ),
       
       div(style="display:inline-block;vertical-align:top; width:580px; margin-left:20px; margin-bottom:20px",
@@ -932,6 +942,9 @@ ui_compare_models_aggregated<-function() tagList(
           colorActionButton('selectErec','East'),
           colorActionButton('selectBigrec','Biggest'),
           colorActionButton('selectReliablerec','Reliable'),
+          colorActionButton("equalrec", "Same as sending countries"),    
+          colorActionButton("swaprec", "Swap with sending countries"),
+          
       ),
       
       div(style="display:inline-block;vertical-align:top; width:1215px; margin-left:20px",
@@ -1013,7 +1026,7 @@ ui_compare_models_aggregated<-function() tagList(
               choice1ID="STYLE2", 
               #choice2ID="PRED2", 
               choices1=c('Linear interpolation','Stair steps plot','Spline interpolation'),
-              downbutton="Save aggregated flows"#, 
+              downbutton="Download"#, 
               #choices2=c('Basic','Alternative')
   ),
   #br(),br(),br(),br(),br(),br(),
@@ -1033,7 +1046,7 @@ ui_compare_models_circular <- function() tagList(
       
   ),     
   div(class="row", style='margin-left:0px; margin-top:5px; margin-bottom:0px; background-color:#e8e9d9;border-style: solid; border-color:#9985A2; border-width:1px; color:#2f4b2f',  
-      div(style="display:inline-block;vertical-align:top; width:475px; margin-left:20px",
+      div(style="display:inline-block;vertical-align:top; width:485px; margin-left:20px",
           br(),
           h3("Sending countries"),
           
@@ -1052,11 +1065,12 @@ ui_compare_models_circular <- function() tagList(
           #   tags$style(HTML('#EqualizeSending{background-color:#D4DDFF} #EqualizeSending:hover{background-color:#FFC0C0}'))
           # ),
           # br(),
-          colorActionButton("EqualizeSending", "Same as receiving countries"),    
+          colorActionButton("equalsen3", "Same as receiving countries"),    
+          colorActionButton("swapsen3", "Swap with receiving countries"),    
           
       ),
       
-      div(style="display:inline-block;vertical-align:top; width:475px; margin-left:5px; margin-bottom:20px",
+      div(style="display:inline-block;vertical-align:top; width:473px; margin-left:5px; margin-bottom:20px",
           br(),
           h3("Receiving countries"),
           myPrettyGroupCheckbox("RecCntrs3", label=NULL,
@@ -1076,12 +1090,13 @@ ui_compare_models_circular <- function() tagList(
           #   tags$style(HTML('#EqualizeReceiving{background-color:#D4DDFF} #EqualizeReceiving:hover{background-color:#FFC0C0}'))
           # ),
           # br(),
-          colorActionButton("EqualizeReceiving", "Same as sending countries"),    
+          colorActionButton("equalrec3", "Same as sending countries"),    
+          colorActionButton("swaprec3", "Swap with sending countries"),
           #),
           
           # actionButton("SCall", "All"),actionButton("SCnone", "None"),
       ),
-      div(style="display:inline-block;vertical-align:top; width:220px; margin-left:5px",
+      div(style="display:inline-block;vertical-align:top; width:210px; margin-left:5px",
           
           br(),
           h3('Options'),

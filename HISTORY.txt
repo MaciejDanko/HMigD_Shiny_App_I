@@ -19,9 +19,9 @@ History of major changes in the app:
 1.1.9 [June 2023]: 
       Added spiners and improved "threshold year" mechanics.
 1.2.0 [June - July 2023]:
-      Added buttons to aggregated flows plots and legend on/off checkbox.
-      Added resuts saving options to model panels
-      Optimized computations and improved layout
+      Added buttons to aggregated flows plots, the legend/title checkboxes,
+      results saving options to model panels, and modal for summarizing data sources.
+      Optimized data computations and improved layout. 
       
 
       
