@@ -606,7 +606,7 @@ ui_model_schemes <- function() tagList(
           h3('Model selection'),
           selectInput("MODEL4", label = NULL,
                       choices = makeList(MODELS),
-                      selected = 1, width='800px'),
+                      selected = 2, width='800px'),
           
       ),
       # div(style="display:inline-block;vertical-align:top; width:100px; margin-left:20px",

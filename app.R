@@ -691,7 +691,7 @@ shinyServer <-  function(input, output, session) {
   # })
   # 
   observeEvent(input$MODEL4, {
-    shinyjs::disable("DownloadCode")
+    #shinyjs::disable("DownloadCode")
     if (input$MODEL4==1) {
       output$png_view1 <- renderUI({
         tags$img(style="height:auto; width:90%; display: block; margin-left: auto; margin-right: auto;", src="figurespath/Model_ae.png")
@@ -1068,15 +1068,47 @@ shinyServer <-  function(input, output, session) {
     
   server_plot_figures(input, output)
   
+  observeEvent(c(input$SendingCountry, input$ReceivingCountry, input$MODEL1, input$MODEL2, input$STYLE1,
+                 input$FixedYMaxCompareModels,input$YMaxCompareModels,input$ShowLegendSin),{
+  output$Model1Plot <- renderPlot({
+    par(mar=c(5.1, 4.1, 3.0, 16.0))
+    #par(family = 'serif')
+    #print('test1')
+    #print(ls(), envir = .GlobalEnv)
+    req(input$SendingCountry, input$ReceivingCountry, input$MODEL1, input$MODEL2)
+    if (input$SendingCountry!=input$ReceivingCountry)
+      plot_single_flow_(input)
+  }, height = 700, width = 1200, res=115)
+  })
+  
+  observeEvent(c(input$MODEL3,input$SendCntrs3,input$RecCntrs3,input$Percentiles,input$ShowScale), {
+  output$Model3Plot <- renderPlot({
+    par(mar=rep(0,4), oma=rep(0,4))
+    # #par(family = 'serif')
+    # print('test1')
+    # THRE<-input$ThrY - 1000*(1-as.numeric(input$UseThreshold))
+    # print(input$UseThreshold)
+    # print(THRE)
+    plot_circular_flows_(input)
+    
+  }, height = 800, width = 800, res=115)
+  })
+  
+  observeEvent(ModelMixedResults(),{
   output$OutputFlowsPlot <- renderPlot({
     ModelMixedResultsArray<-xtabs(pred_q50 ~ orig + dest + year, data = ModelMixedResults())
     plot_output_flows_(input, ModelMixedResultsArray)
   }, height = 900, width = 1200, res=115)
+  })
   
-  output$Model2Plot <- renderPlot({
-    par(mar=c(5.1, 4.1, 3.0-2.4*!input$ShowTitleAgr, 16.0-15.4*!input$ShowLegendAgr))
-    plot_aggregated_(input, TrYearV=ThresholdYear())
-  }, height = 700, width = 1200, res=115)
+  observeEvent(c(input$ShowTitleAgr,input$ShowLegendAgr,input$SendCntrs,input$RecCntrs,input$MODEL1b,input$MODEL2b,input$STYLE2,
+                 input$sdat, input$narm, input$aCI, input$ShowLegendAgr, input$ShowTitleAgr,input$UseThreshold),{
+               output$Model2Plot <- renderPlot({
+                 par(mar=c(5.1, 4.1, 3.0-2.4*!input$ShowTitleAgr, 16.0-15.4*!input$ShowLegendAgr))
+                 plot_aggregated_(input, TrYearV=ThresholdYear())
+               }, height = 700, width = 1200, res=115)
+               }
+  )
   
   server_save_figures(input, output)
   

@@ -96,27 +96,5 @@ server_plot_figures<-function(input, output){
     plot_under_emi_(input)
   }, height = 900, width = 1200, res=115)
   
-  output$Model1Plot <- renderPlot({
-    par(mar=c(5.1, 4.1, 3.0, 16.0))
-    #par(family = 'serif')
-    #print('test1')
-    #print(ls(), envir = .GlobalEnv)
-    req(input$SendingCountry, input$ReceivingCountry, input$MODEL1, input$MODEL2)
-    if (input$SendingCountry!=input$ReceivingCountry)
-      plot_single_flow_(input)
-  }, height = 700, width = 1200, res=115)
-  
-  
-  output$Model3Plot <- renderPlot({
-    par(mar=rep(0,4), oma=rep(0,4))
-    # #par(family = 'serif')
-    # print('test1')
-    # THRE<-input$ThrY - 1000*(1-as.numeric(input$UseThreshold))
-    # print(input$UseThreshold)
-    # print(THRE)
-    plot_circular_flows_(input)
-    
-  }, height = 800, width = 800, res=115)
-  
   output
 }
