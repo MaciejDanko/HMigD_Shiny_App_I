@@ -160,18 +160,6 @@ shinyServer <-  function(input, output, session) {
   AggrSave <- reactiveVal(NULL)
   SingleSave <- reactiveVal(NULL)
   
-  output$piesrcI <- renderPlot({
-    plot_src_summary(src_summary_I)
-  })
-
-  output$piesrcE <- renderPlot({
-    plot_src_summary(src_summary_E)
-  })
-  
-  output$pielfs <- renderPlot({
-    plot_lfs_stats()
-  })
-  
   observeEvent(input$showsumlfs, {
     showModal(
       modalDialog(
@@ -512,15 +500,7 @@ shinyServer <-  function(input, output, session) {
   observeEvent(input$selectReliablerec3,{
     updateAwesomeCheckbox(session,"RecCntrs3",value=CountriesFull[Countries%in%c('NO','SE','FI','DK','BE','NL','CH','IS')])
   })
-  
-    # actionButton('selectallsen','All'),
-  # actionButton('selectnonesen','None'),
-  # actionButton('selectnonesen','Nordic'),
-  # actionButton('selectNsen','+ N EU'),
-  # actionButton('selectSsen','+ S EU'),
-  # actionButton('selectWsen','+ W EU'),
-  # actionButton('selectEsen','+ E EU'),
-  # 
+
   server_download_tables(input, output)
   
   output$ModelTableDownload <- downloadHandler(
@@ -528,8 +508,6 @@ shinyServer <-  function(input, output, session) {
       paste("HMigD_model_mixing_table_", format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), ".xlsx", sep = "")
     },
     content = function(file) {
-      #value<-googlesheets4::read_sheet(ss = sheet_id,  sheet = "Comments")
-      # Save the entire database connection object as an RDS file
       tmp <- data.frame(ModelMixingTable(), ' '='', check.names=FALSE, fix.empty.names =FALSE, stringsAsFactors = FALSE, check.rows = FALSE)
       write.xlsx(tmp, file, rowNames =TRUE, colNames =TRUE, tabColour ='#607080', colWidths=list(3.9))
     }
@@ -553,40 +531,16 @@ shinyServer <-  function(input, output, session) {
     }
   )
   
-  
-  observeEvent( input$RecCntrs,{
+  observeEvent( c(input$RecCntrs,input$SendCntrs,input$MODEL1b,input$MODEL2b),{
     req(c(input$RecCntrs,input$SendCntrs, input$MODEL1b, input$MODEL2b))
     AggrSave(get_aggregated_(input))
   })
-  
-  observeEvent(input$SendCntrs,{
-    req(c(input$RecCntrs,input$SendCntrs, input$MODEL1b, input$MODEL2b))
-    AggrSave(get_aggregated_(input))
-  })
-  
-  observeEvent( input$MODEL1b,{
-    req(c(input$RecCntrs,input$SendCntrs, input$MODEL1b, input$MODEL2b))
-    AggrSave(get_aggregated_(input))
-  })
-  
-  observeEvent(input$MODEL2b,{
-    req(c(input$RecCntrs,input$SendCntrs, input$MODEL1b, input$MODEL2b))
-    AggrSave(get_aggregated_(input))
-  })
-  
-  observeEvent(input$Examples1,{
-    req(c(input$RecCntrs,input$SendCntrs, input$MODEL1b, input$MODEL2b))
-    AggrSave(get_aggregated_(input))
-  })
-  
   
   output$SelectedModelTableDownload <- downloadHandler(
     filename = function() {
       paste("HMigD_raw_user_results_table_", format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), ".xlsx", sep = "")
     },
     content = function(file) {
-      #value<-googlesheets4::read_sheet(ss = sheet_id,  sheet = "Comments")
-      # Save the entire database connection object as an RDS file
       tmp <- data.frame(ModelMixedResults(), ' '='', check.names=FALSE, fix.empty.names =FALSE, stringsAsFactors = FALSE, check.rows = FALSE)
       write.xlsx(tmp, file, rowNames =FALSE, colNames =TRUE, tabColour ='#607080', colWidths=list(7))
     }
@@ -632,64 +586,14 @@ shinyServer <-  function(input, output, session) {
       )
     })
     if (!Ymaxenabled()) updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
-    # observeEvent( input$ReceivingCountry,{
-    #   req(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2))
-    #   print('ReceivingCountry changed')
-    #   print(paste(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2)))
     SingleSave(get_single_(input))
-    #   print(names(SingleSave()))
-    # })
-    # 
-    # observeEvent( input$SendingCountry,{
-    #   req(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2))
-    #   print('SendingCountry changed')
-    #   print(paste(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2)))
-    #   SingleSave(get_single_(input))
-    #   print(names(SingleSave()))
-    # })
-    
   })
   
-  # 
-  # observeEvent(input$MODEL1,{
-  #   req(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2))
-  #   print('MODEL 1 changed')
-  #   print(paste(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2)))
-  #   SingleSave(get_single_(input))
-  #   print(names(SingleSave()))
-  # })
-  # 
-  # observeEvent(input$MODEL2,{
-  #   req(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2))
-  #   print('MODEL 2 changed')
-  #   print(paste(c(input$ReceivingCountry,input$SendingCountry, input$MODEL1, input$MODEL2)))
-  #   SingleSave(get_single_(input))
-  #   print(names(SingleSave()))
-  # })
-
   observeEvent(c(input$MODEL1,input$MODEL2), {
     if (!Ymaxenabled()) updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
     SingleSave(get_single_(input))
   })
-  # observeEvent(c(input$MODEL_PANEL,input$MM1,input$MM2,input$MM3,input$MM4, input$reverse),{ # repair the shiny bug
-  #   updateSelectInput(session, "MODEL3", label = NULL,
-  #                     choices = makeList(MODELS),
-  #                     selected = input$MODEL3)
-  #   # updateSelectInput(session, "MODEL1b", label = NULL,
-  #   #                   choices = makeList(MODELS),
-  #   #                   selected = input$MODEL1b)
-  #   # updateSelectInput(session, "MODEL2b", label = NULL,
-  #   #                   choices = makeList(MODELS),
-  #   #                   selected = input$MODEL2b)
-  #   # # req(input$MODEL1, input$MODEL2)
-  #   # updateSelectInput(session, "MODEL1", label = NULL,
-  #   #                   choices = makeList(MODELS),
-  #   #                   selected = input$MODEL1)
-  #   # updateSelectInput(session, "MODEL2", label = NULL,
-  #   #                   choices = makeList(MODELS),
-  #   #                   selected = input$MODEL2)
-  # })
-  # 
+   
   observeEvent(input$MODEL4, {
     #shinyjs::disable("DownloadCode")
     if (input$MODEL4==1) {
@@ -739,7 +643,6 @@ shinyServer <-  function(input, output, session) {
   
   insertResponse <- function() {
     write_survey_to_google(session, input)
-    #rv$data <- dbGetQuery(con, "SELECT * FROM survey_responses")
     updateTextAreaInput(session, 'DBcomment', value='')
     DBsheets(googlesheets4::read_sheet(ss = sheet_id,  sheet = "Comments"))
   }
@@ -767,32 +670,21 @@ shinyServer <-  function(input, output, session) {
   removeSelectedRows <- function() {
     
     tryCatch({
-      # Get row IDs selected in DT table
       isolate({
         tmp<-as.data.frame(DBsheets())
         tmp$id<-paste(tmp$hash,tmp$ip,tmp$time,tmp$name)
         selected_rows <- unlist(tmp[input$surveyTable_rows_selected, "id"])
-        #cat('Rows to remove:\n')
-        #print(selected_rows)
         values <- as.data.frame(googlesheets4::read_sheet(ss = sheet_id,  sheet = "Comments"))
         values$id<-paste(values$hash,values$ip,values$time,values$name)
-        
         row_num<- sort(which(values$id %in% selected_rows) + 1, decreasing = TRUE)
-        #print(row_num)
         for (k in row_num){
-          #print(k)
           googlesheets4::range_delete(ss = sheet_id, sheet = "Comments", range=paste(k))
         }
       })
-      
       DBsheets(googlesheets4::read_sheet(ss = sheet_id,  sheet = "Comments"))
-      
     }, error = function(e) {
       showNotification("An error occurred while removing selected rows.", type = "error")
-      #print(e)
     })
-    
-    # reset the eraser password value
     eraser_password_value(FALSE)
   }
   
@@ -856,7 +748,6 @@ shinyServer <-  function(input, output, session) {
     h4('Please provide your comment and press submit button below',style=paste0('color:',cDBcomment()))
   })
   
-  
   # Submit survey response when button is clicked
   observeEvent(input$submit, {
     if (!length(input$DBname) || nchar(input$DBname)<=1) {
@@ -880,8 +771,6 @@ shinyServer <-  function(input, output, session) {
       cDBname('black')
       cDBemail('black')
       cDBcomment('black')
-      #progress <- Progress$new(session, min = 0, max = 1, message = "Inserting response", style = "notification")
-      
       withProgress(message = 'Calculation in progress',
                    style='notification',
                    detail = 'This may take a while...', value = 0,  {
@@ -916,7 +805,6 @@ shinyServer <-  function(input, output, session) {
       showModal(showsurvey_password_input(session=session), session=session)
     }
   })
-  
   
   # Remove selected rows when button pressed
   observeEvent(input$remove, {
@@ -962,7 +850,6 @@ shinyServer <-  function(input, output, session) {
       write.xlsx(value, file)
     }
   )
-  
   
   # trick to avoid bug in the updateSelectInput code
   observeEvent(input$MODEL2b,{
@@ -1016,8 +903,6 @@ shinyServer <-  function(input, output, session) {
     updateAwesomeCheckboxGroup(session = session, inputId="RecCntrs" , selected = send)
   })
   
-  
-  
   observeEvent(input$SendCntrs,{
     if (!firstrunSen()) {
       if ((!justchanged())&&(!identical(OLD_send(),input$SendCntrs)))
@@ -1053,16 +938,12 @@ shinyServer <-  function(input, output, session) {
   
   observeEvent(input$Examples1,{
     ww<-runexample1(session,input)
-    #print('***')
-    #print(ww)
     if (input$Examples1 >1) {
       ThresholdYear(ww)
       justchanged(TRUE)
       OLD_send(input$SendCntrs)
       OLD_rec(input$RecCntrs)
     } else justchanged(FALSE)
-    #print(ThresholdYear())
-    #print('***')
   })
 
     
@@ -1071,13 +952,10 @@ shinyServer <-  function(input, output, session) {
   observeEvent(c(input$SendingCountry, input$ReceivingCountry, input$MODEL1, input$MODEL2, input$STYLE1,
                  input$FixedYMaxCompareModels,input$YMaxCompareModels,input$ShowLegendSin),{
   output$Model1Plot <- renderPlot({
-    par(mar=c(5.1, 4.1, 3.0, 16.0))
-    #par(family = 'serif')
-    #print('test1')
-    #print(ls(), envir = .GlobalEnv)
+    #par(mar=c(5.1, 4.1, 3.0, 16.0))
     req(input$SendingCountry, input$ReceivingCountry, input$MODEL1, input$MODEL2)
     if (input$SendingCountry!=input$ReceivingCountry)
-      plot_single_flow_(input)
+      plot_single_flow_(input, saving=FALSE)
   }, height = 700, width = 1200, res=115)
   })
   
@@ -1119,18 +997,19 @@ shinyServer <-  function(input, output, session) {
       if (input$SendingCountry!=input$ReceivingCountry) {
         RES2<-800
         ffo <- input$SaveModel2Format
+        if (input$ShowLegendAgr) width<-10.6 else width<-7.7
         if(ffo=='pdf') {
-          pdf(file,12,7)
+          pdf(file,width,7)
         } else if(ffo=='png'){
-          png(file,width=12*RES2,height=7*RES2,res=RES2)
+          png(file,width=width*RES2,height=7*RES2,res=RES2)
         } else if(ffo=='tiff'){
-          tiff(file,width=12*RES2,height=7*RES2,res=RES2,compression = 'rle')
+          tiff(file,width=width*RES2,height=7*RES2,res=RES2,compression = 'rle')
         }
         
-        par(mar=c(5.1, 4.1, 3.0-2.4*!input$ShowTitleAgr, 16.0-15.4*!input$ShowLegendAgr))
+        #par(mar=c(5.1, 4.1, 3.0-2.4*!input$ShowTitleAgr, 16.0-15.4*!input$ShowLegendAgr))
         # print('test1')
         # THRE<-input$ThrY - 1000*(1-as.numeric(input$UseThreshold))
-        plot_aggregated_(input, ThresholdYear())
+        plot_aggregated_(input, ThresholdYear(), saving=TRUE)
         dev.off()
       }
     }

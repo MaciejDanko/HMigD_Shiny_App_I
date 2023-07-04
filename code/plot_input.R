@@ -87,7 +87,7 @@ get_single_ <<- function(inputs){
 }
 
 
-plot_aggregated_<<-function(input, TrYearV){
+plot_aggregated_<<-function(input, TrYearV, saving=FALSE){
   # print('%%%%%%%%%%%%')
   # print(as.numeric(TrYearV))
   # print(as.numeric(input$UseThreshold))
@@ -112,7 +112,8 @@ plot_aggregated_<<-function(input, TrYearV){
                     na.rm=input$narm,
                     plotCI=input$aCI,
                     plotLegend=input$ShowLegendAgr,
-                    plotTitle=input$ShowTitleAgr)
+                    plotTitle=input$ShowTitleAgr,
+                    saving=saving)
   } else {
     par(mar=rep(0,4))
     plot(1:10,1:10, axes = F, xlab = '', ylab = '',main = '',pch=NA)
@@ -120,7 +121,7 @@ plot_aggregated_<<-function(input, TrYearV){
   }
 }
 
-plot_single_flow_<<-function(input){
+plot_single_flow_<<-function(input, saving=FALSE){
   req(input$SendingCountry)
   req(input$ReceivingCountry)
   req(input$MODEL1)
@@ -145,7 +146,8 @@ plot_single_flow_<<-function(input){
               pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22),
               setYmax = as.logical(input$FixedYMaxCompareModels),
               Ymax =as.numeric(input$YMaxCompareModels),
-              plotLegend=input$ShowLegendSin) 
+              plotLegend=input$ShowLegendSin,
+              saving=saving) 
 }
 
 get_ymax<<-function(input){

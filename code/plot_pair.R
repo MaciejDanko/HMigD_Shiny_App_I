@@ -244,7 +244,8 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
                             na.rm=FALSE, 
                             plotCI=FALSE,
                             plotLegend=TRUE,
-                            plotTitle=TRUE
+                            plotTitle=TRUE,
+                            saving=FALSE
 ){
   m1=as.numeric(m1)
   m2=as.numeric(m2)
@@ -292,12 +293,28 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
   YLIM<-range(M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
   XLIM<-range(M1$year,M2$year)
   if (linetype==2) XLIM[2]<-XLIM[2]+1
+  
   Z<-par('mar')
+  Z[3]<-3
+  Z[1]<-5.1
+  Z[2]<-4.1
   if (plotLegend) Z[4]<-spaceX else {
-    mid<-(spaceX + Z[2])/2 
-    Z[4]<- mid-2
-    Z[2]<- mid+2
+    if (saving) {
+      Z[4] <- 0.5
+    } else {
+      mid <-(spaceX + Z[2])/2 
+      Z[4] <- mid-2
+      Z[2] <- mid+2
+    }
   }
+  
+  # Z<-par('mar')
+  # if (plotLegend) Z[4]<-spaceX else {
+  #   mid<-(spaceX + Z[2])/2 
+  #   Z[4]<- mid-2
+  #   Z[2]<- mid+2
+  # }
+  
   if (plotTitle) Z[3]<- 3 else Z[3]<-1.1
   
   par(mar=Z)
@@ -562,7 +579,8 @@ plot_models <- function(cntr_sen='PL',
                         pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22),
                         setYmax = FALSE,
                         Ymax = 1000,
-                        plotLegend = TRUE
+                        plotLegend = TRUE,
+                        saving = FALSE
                         
 ){
   m1=as.numeric(m1)
@@ -601,13 +619,19 @@ plot_models <- function(cntr_sen='PL',
   if (setYmax) YLIM[2] <- Ymax*1000
   XLIM<-range(M1$year,M2$year)
   if (linetype==2) XLIM[2]<-XLIM[2]+1
+  
   Z<-par('mar')
-  #Z[4]<-spaceX
   Z[3]<-3
+  Z[1]<-5.1
+  Z[2]<-4.1
   if (plotLegend) Z[4]<-spaceX else {
-    mid<-(spaceX + Z[2])/2 
-    Z[4]<- mid-2
-    Z[2]<- mid+2
+    if (saving) {
+      Z[4] <- 0.5
+    } else {
+      mid <-(spaceX + Z[2])/2 
+      Z[4] <- mid-2
+      Z[2] <- mid+2
+    }
   }
   #if (plotTitle) Z[3]<- 3 else Z[3]<-0.6
   

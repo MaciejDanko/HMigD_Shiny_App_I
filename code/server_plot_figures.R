@@ -96,5 +96,17 @@ server_plot_figures<-function(input, output){
     plot_under_emi_(input)
   }, height = 900, width = 1200, res=115)
   
+  output$piesrcI <- renderPlot({
+    plot_src_summary(src_summary_I)
+  })
+  
+  output$piesrcE <- renderPlot({
+    plot_src_summary(src_summary_E)
+  })
+  
+  output$pielfs <- renderPlot({
+    plot_lfs_stats()
+  })
+  
   output
 }

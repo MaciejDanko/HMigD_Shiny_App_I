@@ -283,20 +283,17 @@ server_save_figures <- function(input, output, server){
       cat('#',input$ReceivingCountry,'\n')
       if (input$SendingCountry!=input$ReceivingCountry) {
         RES <- 800
-        ffo <- input$SaveModel1Format
+        ffo <- input$SaveModel1Format 
+        if (input$ShowLegendSin) width<-10.8 else width<-7.7
         if(ffo=='pdf') {
-          pdf(file,12,7)
+          pdf(file,width,7)
         } else if(ffo=='png'){
-          png(file,width=12*RES,height=7*RES,res=RES)
+          png(file,width=width*RES,height=7*RES,res=RES)
         } else if(ffo=='tiff'){
-          tiff(file,width=12*RES,height=7*RES,res=RES,compression = 'rle')
+          tiff(file,width=width*RES,height=7*RES,res=RES,compression = 'rle')
         }
-        par(mar=c(5.1, 4.1, 3.0, 16.0))
-        
-        
-        plot_single_flow_(input)
-        
-        
+        #par(mar=c(5.1, 4.1, 3.0, 16.0))
+        plot_single_flow_(input, saving=TRUE)
         dev.off()
       }
     }
