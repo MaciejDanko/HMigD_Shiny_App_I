@@ -50,6 +50,7 @@ get_aggregated_ <<- function(inputs){
 }
 
 get_single_ <<- function(inputs){
+  
   L1<-Countries[as.numeric(inputs$SendingCountry)]
   L2<-Countries[as.numeric(inputs$ReceivingCountry)]
   #if(length(L1)&&length(L2)) {
@@ -59,10 +60,10 @@ get_single_ <<- function(inputs){
     m1=inputs$MODEL1,
     m2=inputs$MODEL2,
     flow = 'pred'
-    
   )
   L1<-CountriesFull[as.numeric(inputs$SendingCountry)]
   L2<-CountriesFull[as.numeric(inputs$ReceivingCountry)]
+  if (length(inputs$MODEL1) && length(inputs$MODEL2)) {
   if (as.numeric(inputs$MODEL1) != as.numeric(inputs$MODEL2)) {
     tmp<-matrix('',4,2)
     tmp[,1]<-c('Sending country:','Receiving country:','Model 1 (M1):','Model 2 (M2):')
@@ -80,6 +81,7 @@ get_single_ <<- function(inputs){
   }
   res$info<-data.frame(tmp)
   colnames(res$info)<-rep('  ', length(colnames(res$info)))
+  }
   #print('****>****')
   #print(res$info)
   return(res)
@@ -121,22 +123,25 @@ plot_aggregated_<<-function(input, TrYearV, saving=FALSE){
   }
 }
 
-plot_single_flow_<<-function(input, saving=FALSE){
-  req(input$SendingCountry)
-  req(input$ReceivingCountry)
-  req(input$MODEL1)
-  req(input$MODEL2)
-  req(input$STYLE1)
-  plot_models(cntr_sen=Countries[as.numeric(input$SendingCountry)],
-              cntr_rec=Countries[as.numeric(input$ReceivingCountry)],
-              m1=input$MODEL1,
-              m2=input$MODEL2,
-              linetype=as.numeric(input$STYLE1),
+plot_single_flow_<<-function(inputs, saving=FALSE){
+  # req(inputs$SendingCountry)
+  # req(inputs$ReceivingCountry)
+  # req(inputs$MODEL1)
+  # req(inputs$MODEL2)
+  # req(inputs$STYLE1)
+  # req(c(inputs$SendingCountry, inputs$ReceivingCountry,inputs$MODEL1,inputs$MODEL2, inputs$STYLE1,
+  #       inputs$YMaxCompareModels,inputs$ShowLegendSin,inputs$FixedYMaxCompareModels))
+  if (length(inputs$MODEL1)>0 && length(inputs$MODEL2)>0)
+  plot_models(cntr_sen=Countries[as.numeric(inputs$SendingCountry)],
+              cntr_rec=Countries[as.numeric(inputs$ReceivingCountry)],
+              m1=inputs$MODEL1,
+              m2=inputs$MODEL2,
+              linetype=as.numeric(inputs$STYLE1),
               max.cex.lfs=2, 
               max.cex.rec=3.5, 
               max.cex.sen=3.5,
               max.alfa.lfs=0.5,
-              flow = 'pred',#c('pred',"pred_alt")[as.numeric(input$UseAltPred1)+1],
+              flow = 'pred',#c('pred',"pred_alt")[as.numeric(inputs$UseAltPred1)+1],
               spaceX=16,
               alpha.75 = 0.2,
               alpha.95 = 0.1,
@@ -144,24 +149,23 @@ plot_single_flow_<<-function(input, saving=FALSE){
               col1 = 'orange2',
               col2 = 'purple4',
               pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22),
-              setYmax = as.logical(input$FixedYMaxCompareModels),
-              Ymax =as.numeric(input$YMaxCompareModels),
-              plotLegend=input$ShowLegendSin,
+              setYmax = as.logical(inputs$FixedYMaxCompareModels),
+              Ymax =as.numeric(inputs$YMaxCompareModels),
+              plotLegend=inputs$ShowLegendSin,
               saving=saving) 
 }
 
 get_ymax<<-function(input){
-  req(input$SendingCountry)
-  req(input$ReceivingCountry)
-  req(input$MODEL1)
-  req(input$MODEL2)
+  req(input$SendingCountry, input$ReceivingCountry,input$MODEL1,input$MODEL2)
+  if (length(input$MODEL1) && length(input$MODEL2) && length(input$ReceivingCountry) && length(input$SendingCountry))
   get_ymax_raw(cntr_sen=Countries[as.numeric(input$SendingCountry)],
                cntr_rec=Countries[as.numeric(input$ReceivingCountry)],
                m1=input$MODEL1,
-               m2=input$MODEL2)}
+               m2=input$MODEL2) else 10
+  }
 
 
-plot_circular_flows_<-function(input){
+plot_circular_flows_<<-function(input){
   data<-switch(paste(input$MODEL3), 
                '1' = Data_input_80a, 
                '2' = Data_input_80b,
@@ -200,26 +204,38 @@ plot_freedom_<<-function(input){
   mtext(expression('Freedom of movement of workers'),3, 0,cex=1.2, xpd=TRUE)
 }
 
-myPAL<<-c('#8BAB82','#3D4C9F','#DD8C6E',
-          '#98ACB5',
-          #'#174333',
-          #'#0C2521',
-          #'#C2882B',
-          '#7B3400','#E8553C','#A84233','#2E748A','#013C4C',#'#E3DED7',#'#6A958C',
-          #'#8EAD7C',
-          #"#5D1D2E",#'#951233','#C15937',
-          '#997929')
+#' myPAL<<-c('#8BAB82','orange2','#DD8C6E',
+#'           'pink3',
+#'           #'#174333',
+#'           #'#0C2521',
+#'           #'#C2882B',
+#'           '#E8553C','blue3','blue4','#2E748A','#013C4C',#'#E3DED7',#'#6A958C',
+#'           #'#8EAD7C',
+#'           #"#5D1D2E",#'#951233','#C15937',
+#'           '#997929','green4','#0C2521')
+# colors <- c("#FFFFFF", "#FFE3A1", "#FFB94D", "#FF8800", "#FF5800", "#5988CC", "#366BA3", "#195482", "#0B7E5C", "#006644", "#004D33", "#000000")
+# colors <- c("#FFFFFF", "#FFE3A1", "#FFB94D", "#FF8800", "#FF5800", "#B4E5F9", "#6FC2FF", "#3EA8FF", "#007CFF", "#006644", "#004D33", "#000000")
+# colors <- c("#FFFFFF", "#FFD480", "#FFA600", "#FF8000", "#FF4D00", "#82C5FF", "#0E7AFF", "#0D55D1", "#0638A6", "#7FCEBA", "#2E856E", "#000000")
+# colors <- c("#FFFFFF", "#FFD480", "#FFA600", "#FF8000", "#FF4D00", "#82C5FF", "#0E7AFF", "#0D55D1", "#1C4488", "#438570", "#2E856E", "#000000")
+# colors <- c("#FFFFFF", "#FFD480", "#FFA600", "#FF8000", "#FF4D00", "#82C5FF", "#0E7AFF", "#0056B8", "#003E80", "#11735B", "#2E856E", "#000000")
+myPAL <<- c("#FFFFFF", "#FFD480", "#FFA600", "#FF8000", "#FF4D00", "#82C5FF", "#0E7AFF", "#0082B6", "#700075", "#00552F", "#2EA56E", "#000000")
+
+ 
+
+# plot(1:12, cex=3,pch=19, col=myPAL, xlim = c(0,13))
+# text((2:13),1:12,AllLevels)
+# grid()
 #plot(seq_along(myPAL),seq_along(myPAL),pch=19, col=(myPAL),cex=4)
 plot_dur_emi_<<-function(input){
   par(mar=c(4,4,1.5,10),oma=c(0,0,0,0))
-  plot_duration(dE[,paste(Years)], AllLevels = AllLevels, colors=myPAL[1:10])
+  plot_duration(dE[,paste(Years)], AllLevels = AllLevels, colors=myPAL[1:12])
   mtext(expression('Duration of stay of emigration flows'),3,0.1,cex=1.2)
   mtext(expression(bold('Sending country')),2,2.5, cex=1.2)
 }
 
 plot_dur_imm_<<-function(input){
   par(mar=c(4,4,1.5,10),oma=c(0,0,0,0))
-  plot_duration(dI[,paste(Years)], AllLevels = AllLevels, colors=myPAL[1:10])
+  plot_duration(dI[,paste(Years)], AllLevels = AllLevels, colors=myPAL[1:12])
   mtext(expression('Duration of stay of immigration flows'),3,0.1,cex=1.2)
   mtext(expression(bold('Receiving country')),2,2.5,cex=1.2)
 }

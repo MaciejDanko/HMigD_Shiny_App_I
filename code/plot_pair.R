@@ -245,7 +245,8 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
                             plotCI=FALSE,
                             plotLegend=TRUE,
                             plotTitle=TRUE,
-                            saving=FALSE
+                            saving=FALSE,
+                            alternativetitle=NULL
 ){
   m1=as.numeric(m1)
   m2=as.numeric(m2)
@@ -441,7 +442,8 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
   cntr_sen_listP<-cntr_sen_list; cntr_rec_listP<-cntr_rec_list
   if(length(cntr_sen_listP)>6) cntr_sen_listP<-c(cntr_sen_listP[1:6],'...')
   if(length(cntr_rec_listP)>6) cntr_rec_listP<-c(cntr_rec_listP[1:6],'...')
-  if (plotTitle) top_text(paste0('Migration flows from ',make_str_list(cntr_sen_listP),' to ',make_str_list(cntr_rec_listP)), fill='lightgray')
+  if (length(alternativetitle)) toptxt <- alternativetitle else toptxt <- paste0('Migration flows from ',make_str_list(cntr_sen_listP),' to ',make_str_list(cntr_rec_listP))
+  if (plotTitle) top_text(toptxt, fill='lightgray')
   
   usr<-par('usr')
   #size=0.1
@@ -491,11 +493,13 @@ get_ymax_raw <- function(cntr_sen='PL',
                          m2=2,
                          flow = "pred"
 ){
-  #print(cntr_sen)
-  #print(cntr_rec)
-  #print(m1)
-  #print(m2)
-  #print(flow)
+  # print(cntr_sen)
+  # print(cntr_rec)
+  # print(m1)
+  # print(m2)
+  # print(flow)
+  # print('ymax')
+  if (length(m1) && length(m2)){
   MO1<-switch(paste(m1), 
               '1' = Data_input_80a, 
               '2' = Data_input_80b,
@@ -522,6 +526,7 @@ get_ymax_raw <- function(cntr_sen='PL',
                    pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22))
   YLIM<-range(M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
   as.numeric(YLIM[2])/1000
+  } else 10
 }
 
 get_single_flows <- function(
@@ -535,6 +540,13 @@ get_single_flows <- function(
 ){
   m1=as.numeric(m1)
   m2=as.numeric(m2)
+  # print(cntr_sen)
+  # print(cntr_rec)
+  # print(m1)
+  # print(m2)
+  # print(flow)
+  # print('data')
+  if (length(m1) && length(m2)){
   MO1<-switch(paste(m1), 
               '1' = Data_input_80a, 
               '2' = Data_input_80b,
@@ -556,6 +568,7 @@ get_single_flows <- function(
   M2$model<-letters[as.integer(m2)]
   #print(paste('>>>D>>>',m1,m2))
   list(M1=M1,M2=M2)
+  } else list(M1='ERROR',M2='ERROR')
 }
 
 plot_models <- function(cntr_sen='PL',
@@ -580,15 +593,27 @@ plot_models <- function(cntr_sen='PL',
                         setYmax = FALSE,
                         Ymax = 1000,
                         plotLegend = TRUE,
-                        saving = FALSE
+                        saving = FALSE,
+                        ignoremar = FALSE,
+                        plotlegendlines = TRUE,
+                        plottitle = TRUE,
+                        alternativetitle=NULL
                         
 ){
   m1=as.numeric(m1)
   m2=as.numeric(m2)
+  # print(cntr_sen)
+  # print(cntr_rec)
+  # print(m1)
+  # print(m2)
+  # print("flow")
+  if (length(m1) && length(m2)){
+    
   if (m1==m2) col1<-col2<-'black'
   #print(setYmax)
   #print(Ymax)
   ##print(ls())
+  
   MO1<-switch(paste(m1), 
               '1' = Data_input_80a, 
               '2' = Data_input_80b,
@@ -635,7 +660,7 @@ plot_models <- function(cntr_sen='PL',
   }
   #if (plotTitle) Z[3]<- 3 else Z[3]<-0.6
   
-  par(mar=Z)
+  if (!ignoremar) par(mar=Z)
   plot(M1$year, M1$r_sen/1000, ylim=c(0,YLIM[2])/1000, xlim=XLIM, type='n', axes='F',
        xlab='',ylab='')
   mtext(expression(bold(Year)),1,3.5, cex=1.2)
@@ -749,8 +774,10 @@ plot_models <- function(cntr_sen='PL',
   
   
   #mark accession !!!
-  top_text(paste0('Migration flows from ',cntr_sen,' to ',cntr_rec), fill='lightgray')
-  
+  if (plottitle) {
+    if(length(alternativetitle)) top_text(alternativetitle, fill='lightgray') else 
+    top_text(paste0('Migration flows from ',cntr_sen,' to ',cntr_rec), fill='lightgray')
+  }
   usr<-par('usr')
   size=0.05
   usr[4]<-usr[4]+size*diff(usr[3:4])
@@ -810,7 +837,7 @@ plot_models <- function(cntr_sen='PL',
     )
     text(usr[2]+(4.5+x0*1.5)*facx ,usr[4] - y0*(11+sy), '0-2 months', cex=0.7, adj=0, xpd=TRUE)
     text(usr[2]+(4.5+x0*1.5)*facx ,usr[4] - y0*(14+sy), '3 months', cex=0.7, adj=0, xpd=TRUE)
-    text(usr[2]+(4.5+x0*1.5)*facx ,usr[4] - y0*(17+sy), '6 months', cex=0.7, adj=0, xpd=TRUE)
+    text(usr[2]+(4.5+x0*1.5)*facx ,usr[4] - y0*(17+sy), '4-6 months', cex=0.7, adj=0, xpd=TRUE)
     text(usr[2]+(4.5+x0*1.5)*facx ,usr[4] - y0*(20+sy), '8-12 months', cex=0.7, adj=0, xpd=TRUE)
     text(usr[2]+(4.5+x0*1.5)*facx ,usr[4] - y0*(23+sy), 'Permanent', cex=0.7, adj=0, xpd=TRUE)
     
@@ -824,15 +851,19 @@ plot_models <- function(cntr_sen='PL',
       text(usr[2]+(0:1+x0*1.5)*facx ,rep(usr[4] - y0*(27.25+sy),2), c('high','low'), xpd=TRUE, cex=0.7, adj=c(0.5,0))
     }
     
+    if (plotlegendlines) {
     lines(c(usr[2]+(x0*0.5*facx),usr[2]+(x0*0.5+1)*facx), rep(usr[4] - y0*(32+sy),2), lwd=2, col=col1, xpd=TRUE)
     if (m1!=m2) lines(c(usr[2]+(x0*0.5*facx),usr[2]+(x0*0.5+1)*facx), rep(usr[4] - y0*(36.5+sy+(m1>4)*1.5),2), lwd=2, col=col2, xpd=TRUE)
     
     if (m1==m2) text(usr[2]+(x0*0.5*facx), usr[4] - y0*(30.5+sy), 'Model', xpd=TRUE, adj=0) else text(usr[2]+(x0*0.5*facx), usr[4] - y0*(30.5+sy), 'Models', xpd=TRUE, adj=0)
+    
     #print(MODELS2)
     #print(m1)
     #print(MODELS2[m1])
     text(usr[2]+(1.5+x0*0.5)*facx ,usr[4] - y0*(32+sy-0.5), paste('#1',MODELS2[m1]), cex=0.8, adj=c(0,1), xpd=TRUE)
     if (m1!=m2) text(usr[2]+(1.5+x0*0.5) ,usr[4] - y0*(36.5+sy+(m1>4)*1.5-0.5), paste('#2',MODELS2[m2]), cex=0.8, adj=c(0,1), xpd=TRUE)
+    }
+  }
   }
 }
 
@@ -1157,11 +1188,13 @@ toNuM<-function(df, levels=NULL){
 }
 
 plot_duration<-function(DURATION, LEVELS=sortdur(unique(as.vector(unlist(DURATION)))),
-                        AllLevels=LEVELS, cexx=1, cexy=1, lox=1, loy=1, colors=paletteer_d("ggsci::hallmarks_light_cosmic")){
+                        AllLevels=LEVELS, cexx=1, cexy=1, lox=1, loy=1, colors=paletteer::paletteer_d("ggsci::hallmarks_light_cosmic")){
   #naalpha=0.2
   #cexx=1; cexy=1; #lox=1; loy=1
   #namat=NULL
-  LEVELS<-sortdur(unique(as.vector(unlist(DURATION))))
+  #DURATION<-DURATION[,dimnames(rsm.data$x.emi)[[3]]]
+  if (!length(LEVELS)) LEVELS<-sortdur(unique(as.vector(unlist(DURATION))))
+  
   groups=length(AllLevels)
   #c("#000000FF",paletteer_d("ggthemes::Hue_Circle",groups-1, type='continuous'))
   #class(colors)<-'colors'

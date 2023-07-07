@@ -1,11 +1,12 @@
 # To be done
 # animation button for cirucular plot
 # watermark HMigD on flow plots, right bottom corner
+# write how duration is grouped in the model
 
 rm(list=ls())
 set.seed(123)
 defaultW <- getOption("warn") # 0
-options(warn = 1)
+options(warn = 2)
 
 library(Cairo)
 library(RColorBrewer)
@@ -118,6 +119,7 @@ initial_values[c('CY','GR','IT','NL','SK'), 'PL'] <- "b"
 initial_values[c('CY','IT','UK'), 'SK'] <- "b"
 initial_values[c('UK','BE','FR','CH','HU','IE','ES','NL','PL'), 'CZ'] <- "b"
 initial_values[c('UK','IE'), 'LT'] <- "b"
+initial_values[c('BG','RO'), 'UK'] <- "b"
 initial_values[c('BG','DK','GR','IE','MT','PT','UK'), 'LV'] <- "b"
 initial_values[c('UK','SI','LT'), 'LU'] <- "b"
 initial_values[c('IE','HU','EE','DK','CH','BE','AT'), 'LU'] <- "b"
@@ -159,6 +161,10 @@ shinyServer <-  function(input, output, session) {
   
   AggrSave <- reactiveVal(NULL)
   SingleSave <- reactiveVal(NULL)
+  
+  ymaxsingle <- reactive(get_ymax(input))
+  #optmodels <-reactiveVal(FALSE)  
+  calledby <-reactiveVal('')
   
   observeEvent(input$showsumlfs, {
     showModal(
@@ -233,6 +239,7 @@ shinyServer <-  function(input, output, session) {
     req(input$ReceivingCountry)
     req(input$MODEL1)
     req(input$MODEL2)
+    isolate({
     if (input$FixedYMaxCompareModels) {
       shinyjs::enable('YMaxCompareModels')
       shinyjs::html("YMaxCompareModels-label",'<span style="color: black;">Max Y-axis value</span>')
@@ -247,7 +254,10 @@ shinyServer <-  function(input, output, session) {
       
       Ymaxenabled(FALSE)
     }
-    updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
+    })
+    updateNumericInput(session, inputId="YMaxCompareModels", value = ymaxsingle()) #get_ymax(input))#
+    calledby('FixedYMaxCompareModels')
+    print('@@FixedYMaxCompareModels')
   })
   
   output$aboutContent <- renderText({about_list})
@@ -532,7 +542,7 @@ shinyServer <-  function(input, output, session) {
   )
   
   observeEvent( c(input$RecCntrs,input$SendCntrs,input$MODEL1b,input$MODEL2b),{
-    req(c(input$RecCntrs,input$SendCntrs, input$MODEL1b, input$MODEL2b))
+    req(input$RecCntrs,input$SendCntrs, input$MODEL1b, input$MODEL2b)
     AggrSave(get_aggregated_(input))
   })
   
@@ -547,9 +557,16 @@ shinyServer <-  function(input, output, session) {
   )
   
   observeEvent(c(input$ReceivingCountry,input$SendingCountry),{
+    req(input$SendingCountry,input$ReceivingCountry)
+    if(length(input$ReceivingCountry) && length(input$SendingCountry)) isolate({
     selectedl<-ModelMixedResultsDefault$model[(ModelMixedResultsDefault$dest==Countries[as.numeric(input$ReceivingCountry)]) & 
                                                 (ModelMixedResultsDefault$orig==Countries[as.numeric(input$SendingCountry)])][1]
     selected<-which(letters==selectedl)
+    print('cm12:')
+    print(selected)
+    print(input$MODEL1)
+    print(input$MODEL2)
+    if (!length(input$MODEL1) || !length(input$MODEL2) || selected!= input$MODEL1 || selected!= input$MODEL2) {
     output$cm_m12<-renderUI({
       tagList(
         br(),
@@ -585,13 +602,23 @@ shinyServer <-  function(input, output, session) {
         ),
       )
     })
-    if (!Ymaxenabled()) updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
+    
+    if (!Ymaxenabled()) updateNumericInput(session, inputId="YMaxCompareModels", value = ymaxsingle())#get_ymax(input))#ymaxsingle)
     SingleSave(get_single_(input))
+    calledby('cm_m12')
+    print('@@cm_m12')
+    
+    }
+    })
+    #optmodels(TRUE)
+    
   })
   
   observeEvent(c(input$MODEL1,input$MODEL2), {
-    if (!Ymaxenabled()) updateNumericInput(session, inputId="YMaxCompareModels", value = get_ymax(input))
+    if (!Ymaxenabled()) updateNumericInput(session, inputId="YMaxCompareModels", value = ymaxsingle())#get_ymax(input))#ymaxsingle)
     SingleSave(get_single_(input))
+    calledby('MODELS')
+    print('@@MODELS')
   })
    
   observeEvent(input$MODEL4, {
@@ -929,11 +956,13 @@ shinyServer <-  function(input, output, session) {
   })
   
   observeEvent(input$Reverse,{
+    
     RecC <- input$ReceivingCountry
     SenC <- input$SendingCountry
     updateSelectInput(session = session, inputId = "SendingCountry", selected = RecC)
     updateSelectInput(session = session, inputId = "ReceivingCountry", selected = SenC)
-    
+    calledby('rev')
+    print('@@rev')
   })
   
   observeEvent(input$Examples1,{
@@ -949,15 +978,44 @@ shinyServer <-  function(input, output, session) {
     
   server_plot_figures(input, output)
   
-  observeEvent(c(input$SendingCountry, input$ReceivingCountry, input$MODEL1, input$MODEL2, input$STYLE1,
-                 input$FixedYMaxCompareModels,input$YMaxCompareModels,input$ShowLegendSin),{
-  output$Model1Plot <- renderPlot({
+  #observeEvent(c(input$SendingCountry, input$ReceivingCountry, input$MODEL1, input$MODEL2, input$STYLE1,
+   #              input$FixedYMaxCompareModels,input$YMaxCompareModels,input$ShowLegendSin),
+  
+  #lastPlotInput<-reactiveVal(list(a=NA))
+  
+  plotInput<-reactive(list(SendingCountry=input$SendingCountry, 
+                           ReceivingCountry=input$ReceivingCountry, 
+                           MODEL1=input$MODEL1, 
+                           MODEL2=input$MODEL2, 
+                           STYLE1=input$STYLE1,
+                           FixedYMaxCompareModels=input$FixedYMaxCompareModels,
+                           YMaxCompareModels=input$YMaxCompareModels,
+                           ShowLegendSin=input$ShowLegendSin))
+  
+  observeEvent(plotInput(), 
+    output$Model1Plot <- renderPlot({
     #par(mar=c(5.1, 4.1, 3.0, 16.0))
-    req(input$SendingCountry, input$ReceivingCountry, input$MODEL1, input$MODEL2)
-    if (input$SendingCountry!=input$ReceivingCountry)
-      plot_single_flow_(input, saving=FALSE)
-  }, height = 700, width = 1200, res=115)
-  })
+    req(plotInput())
+    req(input$SendingCountry)
+    req(input$ReceivingCountry)
+    req(input$MODEL1)
+    req(input$MODEL2)
+    req(input$STYLE1)
+    #req(input$SendingCountry, input$ReceivingCountry, input$MODEL1, input$MODEL2)
+    #print(plotInput())
+    #print('plot')
+    
+    print(paste('>>',calledby()))
+    if (length(input$SendingCountry) && length(input$ReceivingCountry) &&
+        length(input$MODEL1) && length(input$MODEL2) && plotInput()$SendingCountry!=plotInput()$ReceivingCountry){
+      #if (as.logical(optmodels())) {
+        plot_single_flow_(plotInput(), saving=FALSE)
+        #lastPlotInput(plotInput())
+        #optmodels(FALSE)
+      #}
+    }
+  }, height = 700, width = 1200, res=115))
+
   
   observeEvent(c(input$MODEL3,input$SendCntrs3,input$RecCntrs3,input$Percentiles,input$ShowScale), {
   output$Model3Plot <- renderPlot({
@@ -982,7 +1040,7 @@ shinyServer <-  function(input, output, session) {
   observeEvent(c(input$ShowTitleAgr,input$ShowLegendAgr,input$SendCntrs,input$RecCntrs,input$MODEL1b,input$MODEL2b,input$STYLE2,
                  input$sdat, input$narm, input$aCI, input$ShowLegendAgr, input$ShowTitleAgr,input$UseThreshold),{
                output$Model2Plot <- renderPlot({
-                 par(mar=c(5.1, 4.1, 3.0-2.4*!input$ShowTitleAgr, 16.0-15.4*!input$ShowLegendAgr))
+                 #par(mar=c(5.1, 4.1, 3.0-2.4*!input$ShowTitleAgr, 16.0-15.4*!input$ShowLegendAgr))
                  plot_aggregated_(input, TrYearV=ThresholdYear())
                }, height = 700, width = 1200, res=115)
                }

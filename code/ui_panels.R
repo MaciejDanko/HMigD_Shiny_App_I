@@ -819,7 +819,9 @@ ui_compare_models_single<-function() tagList(
   
   div(class="row", style='id:MM4; margin-left:0px;border-style: solid; border-color:#9985A2; border-width:1px; margin-top:5px; background-color: #FFFFFF',
       #div(class="col-lg-8",
-      shinycssloaders::withSpinner(plotOutput(outputId = "Model1Plot",height="auto", width='auto')),
+      #shinycssloaders::withSpinner(
+        plotOutput(outputId = "Model1Plot",height="auto", width='auto')
+        #),
       
       #)
   ),

@@ -126,6 +126,9 @@ FREEDOM.txtLEVELS[FREEDOM.LEVELS==2019] <- '2019 or later'
 decode_and_load_rda(file='./data/DurEmi.RDA',envir = .GlobalEnv)
 decode_and_load_rda(file='./data/DurImm.RDA',envir = .GlobalEnv)
 
+dE<-dE[,dimnames(rsm.data$x.emi)[[3]]]
+dI<-dI[,dimnames(rsm.data$x.imm)[[3]]]
+
 # rsm.data$I_R[,'DE',]
 # rsm.data$I_S['DE',,]
 # unique(as.vector(rsm.data$I_R))
@@ -145,6 +148,7 @@ CountriesFull <<- paste0(CountriesFull, ' (',Countries,')')
 
 levelsE<<-paste(sort(unique(unlist(dE))))
 levelsI<<-paste(sort(unique(unlist(dI))))
+
 AllLevels<<-sortdur(unique(c(levelsE,levelsI)))
 
 DTCoverage<-data.frame('Country name'= substr(CountriesFull,1,nchar(CountriesFull)-4), Iso2=Countries, Coverage='Low', check.names = FALSE, check.rows = FALSE)
