@@ -800,12 +800,22 @@ ui_compare_models_single<-function() tagList(
             style = "display: inline-flex; align-items: top",
           div(style="display:inline-block;width: 160px;",
               myPrettyCheckbox("ShowLegendSin", h4('Show legend'), 
-                               value = TRUE), width = '150px'),
+                               value = TRUE),
+              width = '150px'),
           div(style="display:inline-block;width: 190px;",
               myPrettyCheckbox("FixedYMaxCompareModels", h4('Fix maximum value on the Y-axis'), 
                                value = FALSE, width = '180px')
               ),
           ),
+          div(style="margin-top:-20px; margin-bottom:5px; width:300px",
+              ui_password_btn('UnlockIMEMSin'),
+              
+              
+          # helper(myPrettyCheckbox("ShowIMEMSin", h4('Show IMEM/QuantMig estimates'), 
+          #                  value = FALSE),colour='#FF0000',type='inline',title='IMEM and QuantMig',buttonLabel = 'Close',
+          # content="Unofficial results of IMEM and QuantMig models accessed at July 2023. ")
+          # #at <a href='http://quantmig.eu/apps/imem/'> http://quantmig.eu/apps/imem/</a></p>")
+          ), 
       ),
  
       div(style=" width:148px;  margin-left:22px; margin-top:33px; margin-right:23px",#display:inline-block;
@@ -994,10 +1004,15 @@ ui_compare_models_aggregated<-function() tagList(
                   div(class = 'col', style = 'display: inline-block; text-align: left; width:370px;margin-top:-5px; margin-bottom:-10px',
                       myPrettyCheckbox("ShowLegendAgr", h4('Show legend'), value = TRUE)
                   ),
-                  div(class = 'col', style = 'display: inline-block; text-align: left; width:370px;margin-top:-5px;',
-                      myPrettyCheckbox("ShowTitleAgr", h4('Show title bar'), value = TRUE)
+                  div(class = 'col', style = 'display: inline-block; text-align: left; width:150px;margin-top:-5px; margin-bottom:-10px',
+                      myPrettyCheckbox("ShowTitleAgr", h4('Show title bar'), value = TRUE),
+                  ),
+                  div(class = 'col', style = 'display: inline-block; text-align: left; width:300px;margin-top:-5px; margin-bottom:-10px',
+                      ui_password_btn('UnlockIMEMAgr'),    
                   ),
               ),
+              
+                     
               # br(), 
               # h3('Exemplary sets'),
               # selectInput("Examples1", label = NULL,

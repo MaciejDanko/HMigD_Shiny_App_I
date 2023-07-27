@@ -3,7 +3,7 @@
 
 Shiny application [https://maciej-jan-danko.shinyapps.io/HMigD_Shiny_App_I/](https://maciej-jan-danko.shinyapps.io/HMigD_Shiny_App_I/)
 
-Current version 1.2.0, Jun 2023; 
+Current version 1.2.1, Jun 2023; 
 
 Author and maintainer: Maciej J. Dańko [[email1](mailto:danko@demogr.mpg.de)] [[email2](mailto:maciej.danko@gmail.com)]
 

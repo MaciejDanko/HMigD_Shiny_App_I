@@ -22,6 +22,6 @@ History of major changes in the app:
       Added buttons to aggregated flows plots, the legend/title checkboxes,
       results saving options to model panels, and modal for summarizing data sources.
       Optimized data computations and improved layout. Corrected mistakes in duration plot.
-      
+1.2.1 [July - August 2023] Some expeimental hidden options added to be tested and aproved.
 
       

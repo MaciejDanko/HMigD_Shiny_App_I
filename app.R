@@ -2,11 +2,13 @@
 # animation button for cirucular plot
 # watermark HMigD on flow plots, right bottom corner
 # write how duration is grouped in the model
+# write helper for show IMEM results, why there are no credibility intervals for 
+# write helpers for credibility intervals (interquartile 90perc)
 
 rm(list=ls())
 set.seed(123)
 defaultW <- getOption("warn") # 0
-options(warn = 2)
+#options(warn = 2)
 
 library(Cairo)
 library(RColorBrewer)
@@ -291,8 +293,23 @@ shinyServer <-  function(input, output, session) {
       hot_col(col = 1:NCntr, type = "dropdown", source = c("a", "b", "c", "d", "e", "f"))
     
   })
-
+  
+  
+  server_password_btn(input, output, session, 'UnlockIMEMSin', pas=data_download_password, download_btn = FALSE,
+                      custom_ui_output = tagList(helper(myPrettyCheckbox("ShowIMEMSin", h4('Show IMEM/QuantMig estimates'), 
+                                                                         value = FALSE),colour='#FF0000',type='inline',title='IMEM and QuantMig',buttonLabel = 'Close',
+                                                        content="Unofficial results of IMEM and QuantMig models retrived at July 2023 from <a href='http://quantmig.eu/apps/imem/'> http://quantmig.eu/apps/imem/</a></p>"))
+  )
+  
+  server_password_btn(input, output, session, 'UnlockIMEMAgr', pas=data_download_password, download_btn = FALSE,
+                      custom_ui_output = tagList(helper(myPrettyCheckbox("ShowIMEMAgr", h4('Show IMEM/QuantMig estimates'), 
+                                                                         value = FALSE),colour='#FF0000',type='inline',title='IMEM and QuantMig',buttonLabel = 'Close',
+                                                        content="Unofficial results of IMEM and QuantMig models retrived at July 2023 from <a href='http://quantmig.eu/apps/imem/'> http://quantmig.eu/apps/imem/</a></p>. Confidence intevals for aggregated plots cannot be calculated")
+                      )
+  )
+  
   server_show_tables(input, output)
+
   output$MixedModelTable <- renderDT({if (length(colnames(ModelMixedResults()))) {
     shiny::req(ModelMixedResults())
     dbdata<-ModelMixedResults()[, c('orig','dest','year','model','pred_q50')]#,'pred_alt_q50')]
@@ -990,7 +1007,8 @@ shinyServer <-  function(input, output, session) {
                            STYLE1=input$STYLE1,
                            FixedYMaxCompareModels=input$FixedYMaxCompareModels,
                            YMaxCompareModels=input$YMaxCompareModels,
-                           ShowLegendSin=input$ShowLegendSin))
+                           ShowLegendSin=input$ShowLegendSin,
+                           ShowIMEMSin=input$ShowIMEMSin))
   
   observeEvent(plotInput(), 
     output$Model1Plot <- renderPlot({

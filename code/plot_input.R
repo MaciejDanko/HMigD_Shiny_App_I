@@ -1,7 +1,10 @@
 get_aggregated_ <<- function(inputs){
+  
   L1<-Countries[CountriesFull%in%inputs$SendCntrs]
   L2<-Countries[CountriesFull%in%inputs$RecCntrs]
-  if(length(L1)&&length(L2)) {
+  sameone<- all(L1%in%L2) & all(L2%in%L1) & (length(L1)==1)
+  
+  if(length(L1)&&length(L2)&& !sameone) {
     res<-get_aggregated(L1,
                         L2,
                         #Threshold=as.numeric(TrYearV) - 1000*(1-as.numeric(input$UseThreshold)),
@@ -9,6 +12,7 @@ get_aggregated_ <<- function(inputs){
                         m2=inputs$MODEL2b,
                         #linetype=as.numeric(input$STYLE2),
                         flow = 'pred'#c('pred',"pred_alt")[as.numeric(input$UseAltPred2)+1],
+                        #showIMEM = inputs$ShowIMEMAgr
                         #spaceX = 15,
                         #col1 = 'orange2',
                         #col2 = 'purple4',
@@ -50,7 +54,7 @@ get_aggregated_ <<- function(inputs){
 }
 
 get_single_ <<- function(inputs){
-  
+  if (inputs$SendingCountry!=inputs$ReceivingCountry) {
   L1<-Countries[as.numeric(inputs$SendingCountry)]
   L2<-Countries[as.numeric(inputs$ReceivingCountry)]
   #if(length(L1)&&length(L2)) {
@@ -86,6 +90,7 @@ get_single_ <<- function(inputs){
   #print(res$info)
   return(res)
   #} else NULL
+  }
 }
 
 
@@ -96,7 +101,9 @@ plot_aggregated_<<-function(input, TrYearV, saving=FALSE){
   # print('%%%%%%%%%%%%')
   L1<-Countries[CountriesFull%in%input$SendCntrs]
   L2<-Countries[CountriesFull%in%input$RecCntrs]
-  if(length(L1)&&length(L2)) {
+  sameone<- all(L1%in%L2) & all(L2%in%L1) & (length(L1)==1)
+  if(length(L1)&&length(L2) && !sameone) {
+    #if (length(input$ShowIMEMAgr)) showIMEM<-input$ShowIMEMAgr else showIMEM<-FALSE
     plot_aggregated(cntr_sen_list=L1,
                     cntr_rec_list=L2,
                     Threshold=as.numeric(TrYearV) - 1000*(1-as.numeric(input$UseThreshold)),
@@ -115,7 +122,8 @@ plot_aggregated_<<-function(input, TrYearV, saving=FALSE){
                     plotCI=input$aCI,
                     plotLegend=input$ShowLegendAgr,
                     plotTitle=input$ShowTitleAgr,
-                    saving=saving)
+                    saving=saving,
+                    showIMEM = ifelse(length(input$ShowIMEMAgr), input$ShowIMEMAgr, FALSE))
   } else {
     par(mar=rep(0,4))
     plot(1:10,1:10, axes = F, xlab = '', ylab = '',main = '',pch=NA)
@@ -131,8 +139,9 @@ plot_single_flow_<<-function(inputs, saving=FALSE){
   # req(inputs$STYLE1)
   # req(c(inputs$SendingCountry, inputs$ReceivingCountry,inputs$MODEL1,inputs$MODEL2, inputs$STYLE1,
   #       inputs$YMaxCompareModels,inputs$ShowLegendSin,inputs$FixedYMaxCompareModels))
-  if (length(inputs$MODEL1)>0 && length(inputs$MODEL2)>0)
-  plot_models(cntr_sen=Countries[as.numeric(inputs$SendingCountry)],
+  if (length(inputs$MODEL1)>0 && length(inputs$MODEL2)>0  && inputs$SendingCountry!=inputs$ReceivingCountry){
+    #print(paste('ffff',ifelse(length(inputs$ShowIMEMSin), inputs$ShowIMEMSin, FALSE)))
+    plot_models(cntr_sen=Countries[as.numeric(inputs$SendingCountry)],
               cntr_rec=Countries[as.numeric(inputs$ReceivingCountry)],
               m1=inputs$MODEL1,
               m2=inputs$MODEL2,
@@ -152,16 +161,20 @@ plot_single_flow_<<-function(inputs, saving=FALSE){
               setYmax = as.logical(inputs$FixedYMaxCompareModels),
               Ymax =as.numeric(inputs$YMaxCompareModels),
               plotLegend=inputs$ShowLegendSin,
-              saving=saving) 
+              saving=saving,
+              showIMEM = ifelse(length(inputs$ShowIMEMSin), inputs$ShowIMEMSin, FALSE)) 
+  }
 }
 
 get_ymax<<-function(input){
   req(input$SendingCountry, input$ReceivingCountry,input$MODEL1,input$MODEL2)
-  if (length(input$MODEL1) && length(input$MODEL2) && length(input$ReceivingCountry) && length(input$SendingCountry))
+  #if (length(input$ShowIMEMSin)) showIMEM<-input$ShowIMEMSin else showIMEM<-FALSE
+  if (length(input$MODEL1) && length(input$MODEL2) && length(input$ReceivingCountry) && length(input$SendingCountry) && input$SendingCountry!=input$ReceivingCountry)
   get_ymax_raw(cntr_sen=Countries[as.numeric(input$SendingCountry)],
                cntr_rec=Countries[as.numeric(input$ReceivingCountry)],
                m1=input$MODEL1,
-               m2=input$MODEL2) else 10
+               m2=input$MODEL2,
+               useIMEM= ifelse(length(input$ShowIMEMSin), input$ShowIMEMSin, FALSE)) else 10
   }
 
 

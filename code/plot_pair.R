@@ -59,7 +59,7 @@ prepare_data <- function(Data_input, orig, dest, flow = "pred",
                          pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22)) {
   Data_input <- as.data.frame(Data_input)
   Data_input<- Data_input[(Data_input$orig==orig) & (Data_input$dest == dest),]
-  
+  IMEM <- QuantMigEst[(QuantMigEst$origin2==orig) & (QuantMigEst$dest2==dest),]
   data.frame(sen=Data_input$orig, rec=Data_input$dest, year=Data_input$year,
              r_sen=Data_input$r_sen, 
              r_rec=Data_input$r_rec, 
@@ -82,6 +82,11 @@ prepare_data <- function(Data_input, orig, dest, flow = "pred",
              Flow50=unname(Data_input[,paste0(flow,"_q50")]),
              Flow75=unname(Data_input[,paste0(flow,"_q75")]),
              Flow95=unname(Data_input[,paste0(flow,"_q95")]),
+             QFlow05=unname(IMEM$p10), 
+             QFlow25=unname(IMEM$q25),
+             QFlow50=unname(IMEM$median),
+             QFlow75=unname(IMEM$q75),
+             QFlow95=unname(IMEM$p90),
              stringsAsFactors = FALSE)
 }
 
@@ -152,8 +157,11 @@ prepare_aggregated_data <- function(Data_input, Data_input2, orig, dest, flow = 
   Data_input<-apply(Data_input,c(1,4),sum, na.rm=TRUE)
   Data_input2 <- as.data.frame(Data_input2)
   Data_input2<- Data_input2[(Data_input2$orig%in%orig) & (Data_input2$dest %in% dest),]
+  IMEM <- QuantMigEst[(QuantMigEst$origin2%in%orig) & (QuantMigEst$dest2%in%dest),]
+  IMEMY <- unique(sort(IMEM$year))
+  IMEM <- sapply(IMEMY, function (k) sum(IMEM$median[which(IMEM$year==k)]))
   Y<-sort(unique(Data_input2$year))
-  data.frame( year=Y,
+  as.data.frame(merge(data.frame( year=Y,
               r_sen=sapply(Y, function(k) sum(Data_input2$r_sen[which(Data_input2$year==k)],na.rm=na.rm)), 
               r_rec=sapply(Y, function(k) sum(Data_input2$r_rec[which(Data_input2$year==k)],na.rm=na.rm)), 
               r_lfs=sapply(Y, function(k) sum(Data_input2$s_rec[which(Data_input2$year==k)],na.rm=na.rm)),
@@ -162,7 +170,7 @@ prepare_aggregated_data <- function(Data_input, Data_input2, orig, dest, flow = 
               Flow50=sapply(1:ncol(Data_input),function(k) quantile(Data_input[,k], 0.50)),
               Flow75=sapply(1:ncol(Data_input),function(k) quantile(Data_input[,k], 0.75)+1),
               Flow95=sapply(1:ncol(Data_input),function(k) quantile(Data_input[,k], 0.95)+1),
-              stringsAsFactors = FALSE)
+              stringsAsFactors = FALSE), data.frame(year = IMEMY, IMEM50=IMEM), by = 'year'))
 }
 
 
@@ -237,6 +245,9 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
                             spaceX = 15,
                             col1 = 'orange2',
                             col2 = 'deepskyblue2',
+                            colS = 'black',
+                            col3 = '#119F71',
+                            lwd = 3,
                             alpha.75 = 0.3,
                             alpha.95 = 0.1,
                             MODELS2 = NULL,
@@ -246,11 +257,19 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
                             plotLegend=TRUE,
                             plotTitle=TRUE,
                             saving=FALSE,
-                            alternativetitle=NULL
+                            alternativetitle=NULL,
+                            grid.lty = 2,
+                            grid.plot = TRUE,
+                            showxlab = TRUE,
+                            showylab = TRUE,
+                            min.top = 1.1,
+                            setYmax = FALSE,
+                            Ymax = 1000,
+                            showIMEM = FALSE
 ){
   m1=as.numeric(m1)
   m2=as.numeric(m2)
-  if (m1==m2) col1<-col2<-'black'
+  if (m1==m2) col1<-col2<-colS
   #print('test2')
   #print(ls())
   MO1D<-switch(paste(m1),
@@ -291,13 +310,20 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
     M1$r_rec[M1$r_rec==0]<-NA
     M2$r_rec[M2$r_rec==0]<-NA
   }
-  YLIM<-range(M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
+  #YLIM<-range(M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
+  if (showIMEM){
+    YLIM<-range(M1$QFlow05,M1$QFlow95,M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
+  } else {
+    YLIM<-range(M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
+  }
+  
   XLIM<-range(M1$year,M2$year)
+  if (setYmax) YLIM[2] <- Ymax*1000
   if (linetype==2) XLIM[2]<-XLIM[2]+1
   
   Z<-par('mar')
   Z[3]<-3
-  Z[1]<-5.1
+  Z[1]<-5.1 - 2.7*!showxlab
   Z[2]<-4.1
   if (plotLegend) Z[4]<-spaceX else {
     if (saving) {
@@ -308,7 +334,8 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
       Z[2] <- mid+2
     }
   }
-  
+  Z[2] <- Z[2] - 2*!showylab
+  Z[4] <- Z[4] + 2*!showylab
   # Z<-par('mar')
   # if (plotLegend) Z[4]<-spaceX else {
   #   mid<-(spaceX + Z[2])/2 
@@ -316,15 +343,15 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
   #   Z[2]<- mid+2
   # }
   
-  if (plotTitle) Z[3]<- 3 else Z[3]<-1.1
+  if (plotTitle) Z[3]<- 3 else Z[3]<-min.top
   
   par(mar=Z)
   plot(M1$year, M1$r_sen/1000, ylim=c(0,YLIM[2])/1000, xlim=XLIM, type='n', axes='F',
        xlab='',ylab='')
-  mtext(expression(bold(Year)),1,3.5, cex=1.2)
-  mtext(expression(bold('Flows (in 1,000)')),2,2.2,cex=1.2)
+  if (showxlab) mtext(expression(bold(Year)),1,3.5, cex=1.2)
+  if (showylab) mtext(expression(bold('Flows (in 1,000)')),2,2.2,cex=1.2)
   axis(1,at=XLIM[1]:XLIM[2], las=3)
-  abline(v=1950:2050, h=axis(2), lty=2, col='gray')
+  if (grid.plot) abline(v=1950:2050, h=axis(2), lty=grid.lty, col='gray')
   box()
   
   if (linetype==3){
@@ -338,6 +365,9 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
     M2L05<-spline(M2$year, M2$Flow05/1000, xout=seq(min(M2$year),max(M2$year), length.out=100))
     M1L95<-spline(M1$year, M1$Flow95/1000, xout=seq(min(M1$year),max(M1$year), length.out=100))
     M2L95<-spline(M2$year, M2$Flow95/1000, xout=seq(min(M2$year),max(M2$year), length.out=100))
+    if (showIMEM){
+      IMEM50 <- spline(M1$year, M1$IMEM50/1000, xout=seq(min(M1$year),max(M1$year), length.out=100))
+    }
     
     if (plotCI) {
       polygon(c(M1L25$x,rev(M1L75$x)),c(M1L25$y,rev(M1L75$y)), border=NA, col=adjustcolor(col1,alpha.f = alpha.75))
@@ -348,8 +378,15 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
       }
     }
     
-    lines(M1L, lwd=3, col=adjustcolor(col1,alpha.f = 0.9))
-    if (m1!=m2) lines(M2L, lwd=3, col=adjustcolor(col2,alpha.f = 0.9))
+    if (showIMEM) {
+      ind1<-IMEM50$x<=2008
+      ind2<-IMEM50$x>=2009
+      lines(IMEM50$x[ind1],IMEM50$y[ind1], lwd=lwd, col=adjustcolor(col3,alpha.f = 0.9))
+      lines(IMEM50$x[ind2],IMEM50$y[ind2], lwd=lwd, col=adjustcolor(col3,alpha.f = 0.9,green.f = 0.4))
+    }
+    lines(M1L, lwd=lwd, col=adjustcolor(col1,alpha.f = 0.9))
+    if (m1!=m2) lines(M2L, lwd=lwd, col=adjustcolor(col2,alpha.f = 0.9))
+    
   } else if (linetype==2){
     M1L<-approx(M1$year, M1$Flow50/1000, xout=seq(min(M1$year),max(M1$year)+1, length.out=1000), method = 'constant',rule=2)
     M2L<-approx(M2$year, M2$Flow50/1000, xout=seq(min(M2$year),max(M2$year)+1, length.out=1000), method = 'constant',rule=2)
@@ -361,6 +398,9 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
     M2L05<-approx(M2$year, M2$Flow05/1000, xout=seq(min(M2$year),max(M2$year)+1, length.out=1000), method = 'constant',rule=2)
     M1L95<-approx(M1$year, M1$Flow95/1000, xout=seq(min(M1$year),max(M1$year)+1, length.out=1000), method = 'constant',rule=2)
     M2L95<-approx(M2$year, M2$Flow95/1000, xout=seq(min(M2$year),max(M2$year)+1, length.out=1000), method = 'constant',rule=2)
+    if (showIMEM){
+      IMEM50<-approx(M1$year, M1$IMEM50/1000, xout=seq(min(M1$year),max(M1$year)+1, length.out=1000), method = 'constant',rule=2)
+    }
     
     if (plotCI) {
       polygon(c(M1L25$x,rev(M1L75$x)),c(M1L25$y,rev(M1L75$y)), border=NA, col=adjustcolor(col1,alpha.f = alpha.75))
@@ -371,8 +411,15 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
       }
     }
     
-    lines(M1L, lwd=3, col=adjustcolor(col1,alpha.f = 0.9))
-    if (m1!=m2) lines(M2L, lwd=3, col=adjustcolor(col2,alpha.f = 0.9))
+    if (showIMEM) {
+      ind1 <- IMEM50$x<2009
+      ind2 <- IMEM50$x>=2009
+      lines(IMEM50$x[ind1],IMEM50$y[ind1], lwd=lwd, col=adjustcolor(col3,alpha.f = 0.9))
+      lines(IMEM50$x[ind2],IMEM50$y[ind2], lwd=lwd, col=adjustcolor(col3,alpha.f = 0.9,green.f = 0.4))
+      
+    }
+    lines(M1L, lwd=lwd, col=adjustcolor(col1,alpha.f = 0.9))
+    if (m1!=m2) lines(M2L, lwd=lwd, col=adjustcolor(col2,alpha.f = 0.9))
     #lines(M1$year, M1$Flow50/1000, lwd=2, col=adjustcolor(col1,alpha.f = 0.8),type='s')
     #lines(M2$year, M2$Flow50/1000, lwd=2, col=adjustcolor(col2,alpha.f = 0.8),type='s')
   } else if (linetype==1){
@@ -386,6 +433,10 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
     M2L05<-approx(M2$year, M2$Flow05/1000, xout=seq(min(M2$year),max(M2$year), length.out=100), method = 'linear')
     M1L95<-approx(M1$year, M1$Flow95/1000, xout=seq(min(M1$year),max(M1$year), length.out=100), method = 'linear')
     M2L95<-approx(M2$year, M2$Flow95/1000, xout=seq(min(M2$year),max(M2$year), length.out=100), method = 'linear')
+    if (showIMEM){
+      IMEM50<-approx(M1$year, M1$IMEM50/1000, xout=seq(min(M1$year),max(M1$year), length.out=1000), method = 'linear')
+      
+    }
     
     if (plotCI) {
       polygon(c(M1L25$x,rev(M1L75$x)),c(M1L25$y,rev(M1L75$y)), border=NA, col=adjustcolor(col1,alpha.f = alpha.75))
@@ -398,11 +449,17 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
     }
     #lines(M1$year, M1$Flow50/1000, lwd=2, col=adjustcolor(col1,alpha.f = 0.8),type='l')
     #if (m1!=m2) lines(M2$year, M2$Flow50/1000, lwd=2, col=adjustcolor(col2,alpha.f = 0.8),type='l')
-    lines(M1L, lwd=3, col=adjustcolor(col1,alpha.f = 0.9))
-    if (m1!=m2) lines(M2L, lwd=3, col=adjustcolor(col2,alpha.f = 0.9))
+    if (showIMEM) {
+      ind1 <- IMEM50$x<=2008
+      ind2 <- IMEM50$x>=2009
+      lines(IMEM50$x[ind1],IMEM50$y[ind1], lwd=lwd, col=adjustcolor(col3,alpha.f = 0.9))
+      lines(IMEM50$x[ind2],IMEM50$y[ind2], lwd=lwd, col=adjustcolor(col3,alpha.f = 0.9,green.f = 0.4))
+    }
+    lines(M1L, lwd=lwd, col=adjustcolor(col1,alpha.f = 0.9))
+    if (m1!=m2) lines(M2L, lwd=lwd, col=adjustcolor(col2,alpha.f = 0.9))
     
   }
-  abline(v=Threshold, lwd=2, lty=2)
+  abline(v=Threshold, lwd=2, lty=2, col='red4')
   if (show.data){
     lines(M1$year+0.5, M1$r_sen/1000, ylim=c(0,YLIM[2])/1000, 
           col='white',
@@ -483,7 +540,12 @@ plot_aggregated <- function(cntr_sen_list=c('RO','BG'),
     if (m1==m2) text(usr[2]+facx*(x0*0.5), usr[4] - y0*(30.5+sy), 'Model', xpd=TRUE, adj=0) else text(usr[2]+facx*(x0*0.5), usr[4] - y0*(30.5+sy), 'Models', xpd=TRUE, adj=0)
     text(usr[2]+facx*(1.5+x0*0.5) ,usr[4] - y0*(32+sy-0.5), paste('#1',MODELS2[m1]), cex=0.8, adj=c(0,1), xpd=TRUE)
     if (m1!=m2) text(usr[2]+facx*(1.5+x0*0.5) ,usr[4] - y0*(36.5+sy+(m1>4)*1.5-0.5), paste('#2',MODELS2[m2]), cex=0.8, adj=c(0,1), xpd=TRUE)
-  }
+    if (showIMEM) if (m1==m2) { 
+      legend('topleft', bty = 'n', col = c(col2,adjustcolor(col3,alpha.f = 0.9),adjustcolor(col3,alpha.f = 0.9,green.f = 0.4)), lwd = 3, lty = 1, legend = c('HMigD model','IMEM','QuantMig'))
+    } else {
+      legend('topleft', bty = 'n', col = c(col1,col2,adjustcolor(col3,alpha.f = 0.9),adjustcolor(col3,alpha.f = 0.9,green.f = 0.4)), lwd = 3, lty = 1, legend = c('HMigD model 1','HMigD model 2','IMEM','QuantMig'))      
+    }
+    }
 }
 
 
@@ -491,7 +553,8 @@ get_ymax_raw <- function(cntr_sen='PL',
                          cntr_rec='DE',
                          m1=1,
                          m2=2,
-                         flow = "pred"
+                         flow = "pred",
+                         useIMEM = FALSE 
 ){
   # print(cntr_sen)
   # print(cntr_rec)
@@ -524,7 +587,11 @@ get_ymax_raw <- function(cntr_sen='PL',
                    max.cex.lfs=max.cex.lfs, max.cex.rec=max.cex.rec, max.cex.sen=max.cex.sen,
                    max.alfa.lfs=0.5,
                    pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22))
-  YLIM<-range(M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
+  if (useIMEM){
+    YLIM<-range(M1$QFlow05,M1$QFlow95,M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
+  } else {
+     YLIM<-range(M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
+  }
   as.numeric(YLIM[2])/1000
   } else 10
 }
@@ -586,6 +653,8 @@ plot_models <- function(cntr_sen='PL',
                         spaceX = 16,
                         col1 = 'orange2',
                         col2 = 'deepskyblue2',
+                        col3 = '#119F71',
+                        lwd = 3,
                         alpha.75 = 0.3,
                         alpha.95 = 0.1,
                         MODELS2 = NULL,
@@ -597,7 +666,14 @@ plot_models <- function(cntr_sen='PL',
                         ignoremar = FALSE,
                         plotlegendlines = TRUE,
                         plottitle = TRUE,
-                        alternativetitle=NULL
+                        alternativetitle = NULL,
+                        grid.lty = 2,
+                        leg.tab = 1.5,
+                        leg.spread = 1,
+                        leg.cex=0.7,
+                        showxlab = TRUE,
+                        showylab = TRUE,
+                        showIMEM = FALSE  
                         
 ){
   m1=as.numeric(m1)
@@ -640,15 +716,21 @@ plot_models <- function(cntr_sen='PL',
                    max.alfa.lfs=0.5,
                    pch.values=c('0-2'=23, '3'=25, '6'=24, '8-12'=21, 'P'=22))
 
-  YLIM<-range(M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
-  if (setYmax) YLIM[2] <- Ymax*1000
+  #YLIM<-range(M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
+  if (showIMEM){
+    YLIM<-range(M1$QFlow05,M1$QFlow95,M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
+  } else {
+    YLIM<-range(M1$r_sen,M2$r_sen,M1$r_rec,M2$r_rec,M1$r_lfs,M2$r_lfs, M1$Flow05,M2$Flow05,M1$Flow95,M2$Flow95, na.rm=TRUE)
+  }
+  
+   if (setYmax) YLIM[2] <- Ymax*1000
   XLIM<-range(M1$year,M2$year)
   if (linetype==2) XLIM[2]<-XLIM[2]+1
   
   Z<-par('mar')
   Z[3]<-3
-  Z[1]<-5.1
-  Z[2]<-4.1
+  Z[1]<-5.1 - 2.7*!showxlab
+  Z[2]<-4.1 
   if (plotLegend) Z[4]<-spaceX else {
     if (saving) {
       Z[4] <- 0.5
@@ -658,15 +740,18 @@ plot_models <- function(cntr_sen='PL',
       Z[2] <- mid+2
     }
   }
+  Z[2] <- Z[2] - 2*!showylab
   #if (plotTitle) Z[3]<- 3 else Z[3]<-0.6
   
   if (!ignoremar) par(mar=Z)
   plot(M1$year, M1$r_sen/1000, ylim=c(0,YLIM[2])/1000, xlim=XLIM, type='n', axes='F',
        xlab='',ylab='')
-  mtext(expression(bold(Year)),1,3.5, cex=1.2)
-  mtext(expression(bold('Flows (in 1,000)')),2,2.2,cex=1.2)
+  if (showxlab)
+    mtext(expression(bold(Year)),1,3.5, cex=1.2)
+  if (showylab)
+    mtext(expression(bold('Flows (in 1,000)')),2,2.2,cex=1.2)
   axis(1,at=XLIM[1]:XLIM[2], las=3)
-  abline(v=1950:2050, h=axis(2), lty=2, col='gray')
+  abline(v=1950:2050, h=axis(2), lty=grid.lty, col='gray')
   box()
   
   if (linetype==3){
@@ -680,6 +765,13 @@ plot_models <- function(cntr_sen='PL',
     M2L05<-spline(M2$year, M2$Flow05/1000, xout=seq(min(M2$year),max(M2$year), length.out=100))
     M1L95<-spline(M1$year, M1$Flow95/1000, xout=seq(min(M1$year),max(M1$year), length.out=100))
     M2L95<-spline(M2$year, M2$Flow95/1000, xout=seq(min(M2$year),max(M2$year), length.out=100))
+    if (showIMEM){
+      IMEM50 <- spline(M1$year, M1$QFlow50/1000, xout=seq(min(M1$year),max(M1$year), length.out=100))
+      IMEM10 <- spline(M1$year, M1$QFlow05/1000, xout=seq(min(M1$year),max(M1$year), length.out=100))
+      IMEM90 <- spline(M1$year, M1$QFlow95/1000, xout=seq(min(M1$year),max(M1$year), length.out=100))
+      IMEM25 <- spline(M1$year, M1$QFlow25/1000, xout=seq(min(M1$year),max(M1$year), length.out=100))
+      IMEM75 <- spline(M1$year, M1$QFlow75/1000, xout=seq(min(M1$year),max(M1$year), length.out=100))
+    }
     
     polygon(c(M1L25$x,rev(M1L75$x)),c(M1L25$y,rev(M1L75$y)), border=NA, col=adjustcolor(col1,alpha.f = alpha.75))
     polygon(c(M1L05$x,rev(M1L95$x)),c(M1L05$y,rev(M1L95$y)), border=NA, col=adjustcolor(col1,alpha.f = alpha.95))
@@ -687,9 +779,19 @@ plot_models <- function(cntr_sen='PL',
       polygon(c(M2L25$x,rev(M2L75$x)),c(M2L25$y,rev(M2L75$y)), border=NA, col=adjustcolor(col2,alpha.f = alpha.75))
       polygon(c(M2L05$x,rev(M2L95$x)),c(M2L05$y,rev(M2L95$y)), border=NA, col=adjustcolor(col2,alpha.f = alpha.95))
     }
-    
-    lines(M1L, lwd=3, col=adjustcolor(col1,alpha.f = 0.9))
-    if (m1!=m2) lines(M2L, lwd=3, col=adjustcolor(col2,alpha.f = 0.9))
+    if (showIMEM) {
+      ind1<-IMEM50$x<=2008
+      ind2<-IMEM50$x>=2009
+      polygon(c(IMEM25$x[ind1],rev(IMEM75$x[ind1])),c(IMEM25$y[ind1],rev(IMEM75$y[ind1])), border=NA, col=adjustcolor(col3,alpha.f = alpha.75))
+      polygon(c(IMEM10$x[ind1],rev(IMEM90$x[ind1])),c(IMEM10$y[ind1],rev(IMEM90$y[ind1])), border=NA, col=adjustcolor(col3,alpha.f = alpha.95))
+      polygon(c(IMEM25$x[ind2],rev(IMEM75$x[ind2])),c(IMEM25$y[ind2],rev(IMEM75$y[ind2])), border=NA, col=adjustcolor(col3,alpha.f = alpha.75,green.f = 0.4))
+      polygon(c(IMEM10$x[ind2],rev(IMEM90$x[ind2])),c(IMEM10$y[ind2],rev(IMEM90$y[ind2])), border=NA, col=adjustcolor(col3,alpha.f = alpha.95,green.f = 0.4))
+      lines(IMEM50$x[ind1],IMEM50$y[ind1], lwd=lwd, col=adjustcolor(col3,alpha.f = 0.9))
+      lines(IMEM50$x[ind2],IMEM50$y[ind2], lwd=lwd, col=adjustcolor(col3,alpha.f = 0.9,green.f = 0.4))
+      
+    }
+    lines(M1L, lwd=lwd, col=adjustcolor(col1,alpha.f = 0.9))
+    if (m1!=m2) lines(M2L, lwd=lwd, col=adjustcolor(col2,alpha.f = 0.9))
   } else if (linetype==2){
     M1L<-approx(M1$year, M1$Flow50/1000, xout=seq(min(M1$year),max(M1$year)+1, length.out=1000), method = 'constant',rule=2)
     M2L<-approx(M2$year, M2$Flow50/1000, xout=seq(min(M2$year),max(M2$year)+1, length.out=1000), method = 'constant',rule=2)
@@ -702,6 +804,14 @@ plot_models <- function(cntr_sen='PL',
     M1L95<-approx(M1$year, M1$Flow95/1000, xout=seq(min(M1$year),max(M1$year)+1, length.out=1000), method = 'constant',rule=2)
     M2L95<-approx(M2$year, M2$Flow95/1000, xout=seq(min(M2$year),max(M2$year)+1, length.out=1000), method = 'constant',rule=2)
     
+    if (showIMEM){
+      IMEM50<-approx(M1$year, M1$QFlow50/1000, xout=seq(min(M1$year),max(M1$year)+1, length.out=1000), method = 'constant',rule=2)
+      IMEM75<-approx(M1$year, M1$QFlow75/1000, xout=seq(min(M1$year),max(M1$year)+1, length.out=1000), method = 'constant',rule=2)
+      IMEM25<-approx(M1$year, M1$QFlow25/1000, xout=seq(min(M1$year),max(M1$year)+1, length.out=1000), method = 'constant',rule=2)
+      IMEM10<-approx(M1$year, M1$QFlow05/1000, xout=seq(min(M1$year),max(M1$year)+1, length.out=1000), method = 'constant',rule=2)
+      IMEM90<-approx(M1$year, M1$QFlow95/1000, xout=seq(min(M1$year),max(M1$year)+1, length.out=1000), method = 'constant',rule=2)
+    }
+    
     polygon(c(M1L25$x,rev(M1L75$x)),c(M1L25$y,rev(M1L75$y)), border=NA, col=adjustcolor(col1,alpha.f = alpha.75))
     polygon(c(M1L05$x,rev(M1L95$x)),c(M1L05$y,rev(M1L95$y)), border=NA, col=adjustcolor(col1,alpha.f = alpha.95))
     if (m1!=m2) {
@@ -709,8 +819,19 @@ plot_models <- function(cntr_sen='PL',
       polygon(c(M2L05$x,rev(M2L95$x)),c(M2L05$y,rev(M2L95$y)), border=NA, col=adjustcolor(col2,alpha.f = alpha.95))
     }
     
-    lines(M1L, lwd=3, col=adjustcolor(col1,alpha.f = 0.9))
-    if (m1!=m2) lines(M2L, lwd=3, col=adjustcolor(col2,alpha.f = 0.9))
+    lines(M1L, lwd=lwd, col=adjustcolor(col1,alpha.f = 0.9))
+    if (showIMEM) {
+      ind1 <- IMEM50$x<2009
+      ind2 <- IMEM50$x>=2009
+      polygon(c(IMEM25$x[ind1],rev(IMEM75$x[ind1])),c(IMEM25$y[ind1],rev(IMEM75$y[ind1])), border=NA, col=adjustcolor(col3,alpha.f = alpha.75))
+      polygon(c(IMEM10$x[ind1],rev(IMEM90$x[ind1])),c(IMEM10$y[ind1],rev(IMEM90$y[ind1])), border=NA, col=adjustcolor(col3,alpha.f = alpha.95))
+      polygon(c(IMEM25$x[ind2],rev(IMEM75$x[ind2])),c(IMEM25$y[ind2],rev(IMEM75$y[ind2])), border=NA, col=adjustcolor(col3,alpha.f = alpha.75, green.f =  0.4))
+      polygon(c(IMEM10$x[ind2],rev(IMEM90$x[ind2])),c(IMEM10$y[ind2],rev(IMEM90$y[ind2])), border=NA, col=adjustcolor(col3,alpha.f = alpha.95,green.f = 0.4))
+      lines(IMEM50$x[ind1],IMEM50$y[ind1], lwd=lwd, col=adjustcolor(col3,alpha.f = 0.9))
+      lines(IMEM50$x[ind2],IMEM50$y[ind2], lwd=lwd, col=adjustcolor(col3,alpha.f = 0.9,green.f = 0.4))
+      
+    }
+    if (m1!=m2) lines(M2L, lwd=lwd, col=adjustcolor(col2,alpha.f = 0.9))
     #lines(M1$year, M1$Flow50/1000, lwd=2, col=adjustcolor(col1,alpha.f = 0.8),type='s')
     #lines(M2$year, M2$Flow50/1000, lwd=2, col=adjustcolor(col2,alpha.f = 0.8),type='s')
   } else if (linetype==1){
@@ -725,6 +846,15 @@ plot_models <- function(cntr_sen='PL',
     M1L95<-approx(M1$year, M1$Flow95/1000, xout=seq(min(M1$year),max(M1$year), length.out=100), method = 'linear')
     M2L95<-approx(M2$year, M2$Flow95/1000, xout=seq(min(M2$year),max(M2$year), length.out=100), method = 'linear')
     
+    if (showIMEM){
+      IMEM50<-approx(M1$year, M1$QFlow50/1000, xout=seq(min(M1$year),max(M1$year), length.out=1000), method = 'linear')
+      IMEM25<-approx(M1$year, M1$QFlow25/1000, xout=seq(min(M1$year),max(M1$year), length.out=1000), method = 'linear')
+      IMEM75<-approx(M1$year, M1$QFlow75/1000, xout=seq(min(M1$year),max(M1$year), length.out=1000), method = 'linear')
+      IMEM10<-approx(M1$year, M1$QFlow05/1000, xout=seq(min(M1$year),max(M1$year), length.out=1000), method = 'linear')
+      IMEM90<-approx(M1$year, M1$QFlow95/1000, xout=seq(min(M1$year),max(M1$year), length.out=1000), method = 'linear')
+      
+    }
+    
     polygon(c(M1L25$x,rev(M1L75$x)),c(M1L25$y,rev(M1L75$y)), border=NA, col=adjustcolor(col1,alpha.f = alpha.75))
     polygon(c(M1L05$x,rev(M1L95$x)),c(M1L05$y,rev(M1L95$y)), border=NA, col=adjustcolor(col1,alpha.f = alpha.95))
     
@@ -735,38 +865,48 @@ plot_models <- function(cntr_sen='PL',
     
     #lines(M1$year, M1$Flow50/1000, lwd=2, col=adjustcolor(col1,alpha.f = 0.8),type='l')
     #if (m1!=m2) lines(M2$year, M2$Flow50/1000, lwd=2, col=adjustcolor(col2,alpha.f = 0.8),type='l')
-    lines(M1L, lwd=3, col=adjustcolor(col1,alpha.f = 0.9))
-    if (m1!=m2) lines(M2L, lwd=3, col=adjustcolor(col2,alpha.f = 0.9))
-    
+    lines(M1L, lwd=lwd, col=adjustcolor(col1,alpha.f = 0.9))
+    if (m1!=m2) lines(M2L, lwd=lwd, col=adjustcolor(col2,alpha.f = 0.9))
+    if (showIMEM) {
+      ind1 <- IMEM50$x<=2008
+      ind2 <- IMEM50$x>=2009
+      polygon(c(IMEM25$x[ind1],rev(IMEM75$x[ind1])),c(IMEM25$y[ind1],rev(IMEM75$y[ind1])), border=NA, col=adjustcolor(col3,alpha.f = alpha.75))
+      polygon(c(IMEM10$x[ind1],rev(IMEM90$x[ind1])),c(IMEM10$y[ind1],rev(IMEM90$y[ind1])), border=NA, col=adjustcolor(col3,alpha.f = alpha.95))
+      polygon(c(IMEM25$x[ind2],rev(IMEM75$x[ind2])),c(IMEM25$y[ind2],rev(IMEM75$y[ind2])), border=NA, col=adjustcolor(col3,alpha.f = alpha.75, green.f = 0.4))
+      polygon(c(IMEM10$x[ind2],rev(IMEM90$x[ind2])),c(IMEM10$y[ind2],rev(IMEM90$y[ind2])), border=NA, col=adjustcolor(col3,alpha.f = alpha.95, green.f = 0.4))
+      lines(IMEM50$x[ind1],IMEM50$y[ind1], lwd=lwd, col=adjustcolor(col3,alpha.f = 0.9))
+      lines(IMEM50$x[ind2],IMEM50$y[ind2], lwd=lwd, col=adjustcolor(col3,alpha.f = 0.9,green.f = 0.4))
+      
+    }
   }
-  lines(M1$year+0.5, M1$r_sen/1000, ylim=c(0,YLIM[2])/1000, 
+  lines(M1$year+0.5*(linetype==2), M1$r_sen/1000, ylim=c(0,YLIM[2])/1000, 
         col='white',
         bg='white',
         pch=M1$pch_sen, 
         cex=(M1$cex_sen-1)/2+1, type='p')
-  lines(M1$year+0.5, M1$r_rec/1000, ylim=c(0,YLIM[2])/1000, 
+  lines(M1$year+0.5*(linetype==2), M1$r_rec/1000, ylim=c(0,YLIM[2])/1000, 
         col='white', 
         bg='white', 
         pch=M1$pch_rec, 
         cex=(M1$cex_rec-1)/2+1, type='p')
-  if (plot_LFS) lines(M1$year+0.5, M1$r_lfs/1000, ylim=c(0,YLIM[2])/1000, 
+  if (plot_LFS) lines(M1$year+0.5*(linetype==2), M1$r_lfs/1000, ylim=c(0,YLIM[2])/1000, 
                       col='white', 
                       bg = 'white', 
                       pch=M1$pch_lfs, 
                       cex=(M1$cex_lfs-1)/2+1, type='p')
   
-  lines(M1$year+0.5, M1$r_sen/1000, ylim=c(0,YLIM[2])/1000, 
+  lines(M1$year+0.5*(linetype==2), M1$r_sen/1000, ylim=c(0,YLIM[2])/1000, 
         col=sapply(M1$alpha_sen, function(a) adjustcolor(2,alpha.f = a, red.f = 0.8, green.f = 0.8, blue.f = 0.8)),
         bg=sapply(M1$alpha_sen, function(a) adjustcolor(2,alpha.f = a)),
         pch=M1$pch_sen, 
         cex=(M1$cex_sen-1)/2+1, type='p')
-  lines(M1$year+0.5, M1$r_rec/1000, ylim=c(0,YLIM[2])/1000, 
+  lines(M1$year+0.5*(linetype==2), M1$r_rec/1000, ylim=c(0,YLIM[2])/1000, 
         col=sapply(M1$alpha_rec, function(a) adjustcolor(4,alpha.f = a, red.f = 0.8, green.f = 0.8, blue.f = 0.8)), 
         bg=sapply(M1$alpha_rec, function(a) adjustcolor(4,alpha.f = a)), 
         pch=M1$pch_rec, 
         cex=(M1$cex_rec-1)/2+1, type='p')
   
-  if (plot_LFS) lines(M1$year+0.5, M1$r_lfs/1000, ylim=c(0,YLIM[2])/1000, 
+  if (plot_LFS) lines(M1$year+0.5*(linetype==2), M1$r_lfs/1000, ylim=c(0,YLIM[2])/1000, 
                       col=sapply(M1$alpha_lfs, function(a) adjustcolor(3,alpha.f = a, red.f = 0.8, green.f = 0.8, blue.f = 0.8)), 
                       bg = sapply(M1$alpha_lfs, function(a) adjustcolor(3,alpha.f = a)), 
                       pch=M1$pch_lfs, 
@@ -785,83 +925,88 @@ plot_models <- function(cntr_sen='PL',
   x0<-max(sapply(c(letters,LETTERS),strwidth))
   y0<-max(sapply(c(letters,LETTERS),strheight))
   if (linetype==2) facx<-(length(unique(M1$year))+1)/length(unique(M1$year)) else facx<-1
-  
+
   if (plotLegend) {
     #rect(usr[2],usr[3],usr[2]+max(sapply(c(letters,LETTERS),strwidth))*10,usr[4],xpd=TRUE,lwd=1.5, col=0, border=1)
     text(usr[2]+(x0*0.5)*facx, usr[4] - y0, 'Accuracy and data source', xpd=TRUE, adj=0)
-    text(usr[2]+(0:2+x0*1.5)*facx ,rep(usr[4] - y0*2.6,3), c('low','med','high'), xpd=TRUE, cex=0.7, adj=c(0.5,0))
-    lines(usr[2]+(0:2+x0*1.5)*facx ,rep(usr[4] - y0*4,3),
+    text(usr[2]+((0:2)*leg.spread+x0*leg.tab)*facx ,rep(usr[4] - y0*2.6,3), c('low','med','high'), xpd=TRUE, cex=leg.cex, adj=c(0.5,0))
+    lines(usr[2]+((0:2)*leg.spread+x0*leg.tab)*facx ,rep(usr[4] - y0*4,3),
           col=sapply((1:3)/3, function(a) adjustcolor(2,alpha.f = a, red.f = 0.8, green.f = 0.8, blue.f = 0.8)), 
           bg = sapply((1:3)/3, function(a) adjustcolor(2,alpha.f = a)), 
           pch=20, xpd=TRUE, type='p', cex=3)
-    lines(usr[2]+(0:2+x0*1.5)*facx ,rep(usr[4] - y0*6,3),
+    lines(usr[2]+((0:2)*leg.spread+x0*leg.tab)*facx ,rep(usr[4] - y0*6,3),
           col=sapply((1:3)/3, function(a) adjustcolor(4,alpha.f = a, red.f = 0.8, green.f = 0.8, blue.f = 0.8)), 
           bg = sapply((1:3)/3, function(a) adjustcolor(4,alpha.f = a)), 
           pch=20, xpd=TRUE, type='p', cex=3)
-    if (plot_LFS) lines(usr[2]+(c(0:1)+x0*1.5)*facx ,rep(usr[4] - y0*8,2),
+    if (plot_LFS) lines(usr[2]+((0:1)*leg.spread+x0*leg.tab)*facx ,rep(usr[4] - y0*8,2),
                         col=sapply((1:3)/3, function(a) adjustcolor(3,alpha.f = a, red.f = 0.8, green.f = 0.8, blue.f = 0.8)), 
                         bg = sapply((1:3)/3, function(a) adjustcolor(3,alpha.f = a)), 
                         pch=20, xpd=TRUE, type='p', cex=3)
-    text(usr[2]+(2.5+x0*1.5)*facx ,usr[4] - y0*4, paste(cntr_sen,'(sending)'), cex=0.7, adj=0, xpd=TRUE)
-    text(usr[2]+(2.5+x0*1.5)*facx ,usr[4] - y0*6, paste(cntr_rec,'(receiving)'), cex=0.7, adj=0, xpd=TRUE)
-    if (plot_LFS) text(usr[2]+(2.5+x0*1.5)*facx ,usr[4] - y0*8, paste(cntr_rec,'(LFS, receiving)'), cex=0.7, adj=0, xpd=TRUE)
+    text(usr[2]+((2.5)*leg.spread+x0*leg.tab)*facx ,usr[4] - y0*4, paste(cntr_sen,'(sending)'), cex=leg.cex, adj=0, xpd=TRUE)
+    text(usr[2]+((2.5)*leg.spread+x0*leg.tab)*facx ,usr[4] - y0*6, paste(cntr_rec,'(receiving)'), cex=leg.cex, adj=0, xpd=TRUE)
+    if (plot_LFS) text(usr[2]+((2.5)*leg.spread+x0*leg.tab)*facx ,usr[4] - y0*8, paste(cntr_rec,'(LFS, receiving)'), cex=leg.cex, adj=0, xpd=TRUE)
     
     sy=3
     text(usr[2]+(x0*0.5)*facx, usr[4] - y0*(7.5+sy), 'Undercounting and duration of stay', xpd=TRUE, adj=0)
-    text(usr[2]+(0:4+x0*1.5)*facx ,rep(usr[4] - y0*(8.8+sy),5), c('v. high','high','med','low','v. low'), xpd=TRUE, cex=0.7, adj=c(0.5,1))
+    text(usr[2]+((0:4)*leg.spread+x0*leg.tab)*facx ,rep(usr[4] - y0*(8.8+sy),5), c('v. high','high','med','low','v. low'), xpd=TRUE, cex=leg.cex, adj=c(0.5,1))
     
-    lines(usr[2]+(0:4+x0*1.5)*facx ,rep(usr[4] - y0*(11+sy),5),
+    lines(usr[2]+((0:4)*leg.spread+x0*leg.tab)*facx ,rep(usr[4] - y0*(11+sy),5),
           col= adjustcolor(1,alpha.f = 2/3, red.f = 0.8, green.f = 0.8, blue.f = 0.8), 
           bg = adjustcolor(1,alpha.f = 2/3), 
           pch=pch.values['0-2'], xpd=TRUE, type='p', cex=rev(((5-1:5)*(max.cex.sen-1)/4)/2+1)
     )
-    lines(usr[2]+(0:4+x0*1.5)*facx ,rep(usr[4] - y0*(14+sy),5),
+    lines(usr[2]+((0:4)*leg.spread+x0*leg.tab)*facx ,rep(usr[4] - y0*(14+sy),5),
           col= adjustcolor(1,alpha.f = 2/3, red.f = 0.8, green.f = 0.8, blue.f = 0.8), 
           bg = adjustcolor(1,alpha.f = 2/3), 
           pch=pch.values['3'], xpd=TRUE, type='p', cex=rev(((5-1:5)*(max.cex.sen-1)/4)/2+1)
     )
-    lines(usr[2]+(0:4+x0*1.5)*facx ,rep(usr[4] - y0*(17+sy),5),
+    lines(usr[2]+((0:4)*leg.spread+x0*leg.tab)*facx ,rep(usr[4] - y0*(17+sy),5),
           col= adjustcolor(1,alpha.f = 2/3, red.f = 0.8, green.f = 0.8, blue.f = 0.8), 
           bg = adjustcolor(1,alpha.f = 2/3), 
           pch=pch.values['6'], xpd=TRUE, type='p', cex=rev(((5-(1:5))*(max.cex.sen-1)/4)/2+1)
     )
-    lines(usr[2]+(0:4+x0*1.5)*facx ,rep(usr[4] - y0*(20+sy),5),
+    lines(usr[2]+((0:4)*leg.spread+x0*leg.tab)*facx ,rep(usr[4] - y0*(20+sy),5),
           col= adjustcolor(1,alpha.f = 2/3, red.f = 0.8, green.f = 0.8, blue.f = 0.8), 
           bg = adjustcolor(1,alpha.f = 2/3), 
           pch=pch.values['8-12'], xpd=TRUE, type='p', cex=rev(((5-1:5)*(max.cex.sen-1)/4)/2+1)
     )
-    lines(usr[2]+(0:4+x0*1.5)*facx ,rep(usr[4] - y0*(23+sy),5),
+    lines(usr[2]+((0:4)*leg.spread+x0*leg.tab)*facx ,rep(usr[4] - y0*(23+sy),5),
           col= adjustcolor(1,alpha.f = 2/3, red.f = 0.8, green.f = 0.8, blue.f = 0.8), 
           bg = adjustcolor(1,alpha.f = 2/3), 
           pch=pch.values['P'], xpd=TRUE, type='p', cex=rev(((5-1:5)*(max.cex.sen-1)/4)/2+1)
     )
-    text(usr[2]+(4.5+x0*1.5)*facx ,usr[4] - y0*(11+sy), '0-2 months', cex=0.7, adj=0, xpd=TRUE)
-    text(usr[2]+(4.5+x0*1.5)*facx ,usr[4] - y0*(14+sy), '3 months', cex=0.7, adj=0, xpd=TRUE)
-    text(usr[2]+(4.5+x0*1.5)*facx ,usr[4] - y0*(17+sy), '4-6 months', cex=0.7, adj=0, xpd=TRUE)
-    text(usr[2]+(4.5+x0*1.5)*facx ,usr[4] - y0*(20+sy), '8-12 months', cex=0.7, adj=0, xpd=TRUE)
-    text(usr[2]+(4.5+x0*1.5)*facx ,usr[4] - y0*(23+sy), 'Permanent', cex=0.7, adj=0, xpd=TRUE)
+    text(usr[2]+((4.5)*leg.spread+x0*leg.tab)*facx ,usr[4] - y0*(11+sy), '0-2 months', cex=leg.cex, adj=0, xpd=TRUE)
+    text(usr[2]+((4.5)*leg.spread+x0*leg.tab)*facx ,usr[4] - y0*(14+sy), '3 months', cex=leg.cex, adj=0, xpd=TRUE)
+    text(usr[2]+((4.5)*leg.spread+x0*leg.tab)*facx ,usr[4] - y0*(17+sy), '4-6 months', cex=leg.cex, adj=0, xpd=TRUE)
+    text(usr[2]+((4.5)*leg.spread+x0*leg.tab)*facx ,usr[4] - y0*(20+sy), '8-12 months', cex=leg.cex, adj=0, xpd=TRUE)
+    text(usr[2]+((4.5)*leg.spread+x0*leg.tab)*facx ,usr[4] - y0*(23+sy), 'Permanent', cex=leg.cex, adj=0, xpd=TRUE)
     
     if (plot_LFS) {
       text(usr[2]+(x0*0.5)*facx, usr[4] - y0*(25.25+sy), 'Undercounting of LFS data', xpd=TRUE, adj=0)
-      lines(usr[2]+(0:1+x0*1.5)*facx ,rep(usr[4] - y0*(28.5+sy),2),
+      lines(usr[2]+((0:1)*leg.spread+x0*leg.tab)*facx ,rep(usr[4] - y0*(28.5+sy),2),
             col= adjustcolor(3,alpha.f = 2/3, red.f = 0.8, green.f = 0.8, blue.f = 0.8), 
             bg = adjustcolor(3,alpha.f = 2/3), 
             pch=pch.values['8-12'], xpd=TRUE, type='p', 
             cex=rev((1-(0:1))*(max.cex.lfs-1))/2+1 )
-      text(usr[2]+(0:1+x0*1.5)*facx ,rep(usr[4] - y0*(27.25+sy),2), c('high','low'), xpd=TRUE, cex=0.7, adj=c(0.5,0))
+      text(usr[2]+((0:1)*leg.spread+x0*leg.tab)*facx ,rep(usr[4] - y0*(27.25+sy),2), c('high','low'), xpd=TRUE, cex=leg.cex, adj=c(0.5,0))
     }
     
     if (plotlegendlines) {
     lines(c(usr[2]+(x0*0.5*facx),usr[2]+(x0*0.5+1)*facx), rep(usr[4] - y0*(32+sy),2), lwd=2, col=col1, xpd=TRUE)
-    if (m1!=m2) lines(c(usr[2]+(x0*0.5*facx),usr[2]+(x0*0.5+1)*facx), rep(usr[4] - y0*(36.5+sy+(m1>4)*1.5),2), lwd=2, col=col2, xpd=TRUE)
+    if (m1!=m2) lines(c(usr[2]+(x0*0.5*facx),usr[2]+(x0*0.5+1)*facx), rep(usr[4] - y0*(36.5+sy+(m1>4)*leg.tab),2), lwd=2, col=col2, xpd=TRUE)
     
     if (m1==m2) text(usr[2]+(x0*0.5*facx), usr[4] - y0*(30.5+sy), 'Model', xpd=TRUE, adj=0) else text(usr[2]+(x0*0.5*facx), usr[4] - y0*(30.5+sy), 'Models', xpd=TRUE, adj=0)
     
     #print(MODELS2)
     #print(m1)
     #print(MODELS2[m1])
-    text(usr[2]+(1.5+x0*0.5)*facx ,usr[4] - y0*(32+sy-0.5), paste('#1',MODELS2[m1]), cex=0.8, adj=c(0,1), xpd=TRUE)
-    if (m1!=m2) text(usr[2]+(1.5+x0*0.5) ,usr[4] - y0*(36.5+sy+(m1>4)*1.5-0.5), paste('#2',MODELS2[m2]), cex=0.8, adj=c(0,1), xpd=TRUE)
+    text(usr[2]+(leg.tab+x0*0.5)*facx ,usr[4] - y0*(32+sy-0.5), paste('#1',MODELS2[m1]), cex=0.8, adj=c(0,1), xpd=TRUE)
+    if (m1!=m2) text(usr[2]+(leg.tab+x0*0.5) ,usr[4] - y0*(36.5+sy+(m1>4)*leg.tab-0.5), paste('#2',MODELS2[m2]), cex=0.8, adj=c(0,1), xpd=TRUE)
+    }
+    if (showIMEM) if (m1==m2) { 
+      legend('topleft', bty = 'n', col = c(col2,adjustcolor(col3,alpha.f = 0.9),adjustcolor(col3,alpha.f = 0.9,green.f = 0.4)), lwd = 3, lty = 1, legend = c('HMigD model','IMEM','QuantMig'))
+    } else {
+      legend('topleft', bty = 'n', col = c(col1,col2,adjustcolor(col3,alpha.f = 0.9),adjustcolor(col3,alpha.f = 0.9,green.f = 0.4)), lwd = 3, lty = 1, legend = c('HMigD model 1','HMigD model 2','IMEM','QuantMig'))      
     }
   }
   }

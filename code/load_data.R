@@ -46,12 +46,24 @@ raw_int_flows_d<<-get_data_raw('./data/raw_int_flows_86d.enc')
 raw_int_flows_e<<-get_data_raw('./data/raw_int_flows_86e.enc')
 raw_int_flows_f<<-get_data_raw('./data/raw_int_flows_86f.enc')
 
+#QuantMigFlows
+
 decode_and_load_rda('./data/input_data_VI_2023.RDA')
 decode_and_load_rda('./data/LFS_Undercounting.RDA')
 toSHINY_LFS_UNDERCOUNTING_OLD <- toSHINY_LFS_UNDERCOUNTING
 decode_and_load_rda('./data/LFS_Undercounting_2.RDA')
 
 decode_and_load_rda('./data/LFS_Accuracy.RDA')
+
+decode_and_load_rda('./data/QuantMigEst.RDA')
+QuantMigEst$origin2[QuantMigEst$origin2=='GB']<-'UK'
+QuantMigEst$dest2[QuantMigEst$dest2=='GB']<-'UK'
+QuantMigEst<<-QuantMigEst[QuantMigEst$origin2%in%Countries,]
+QuantMigEst<<-QuantMigEst[QuantMigEst$dest2%in%Countries,]
+QuantMigEst<<-QuantMigEst[QuantMigEst$year%in%Data_input_80b$year,]
+all(Countries %in% QuantMigEst$dest2)
+all(Countries %in% QuantMigEst$origin2)
+
 
 LFS_ACCU_ADJ<-rsm.data$a_imm.s
 LFS_ACCU_ADJ[rsm.data$LUI.s==0]<-2
