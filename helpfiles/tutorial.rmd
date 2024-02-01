@@ -1,0 +1,446 @@
+---
+title: "HMigD I App Tutorial. V1.0"
+output:
+  bookdown::html_document2:
+    theme: united
+    toc: true
+    toc_depth: 4
+    number_sections: true
+---
+
+<style>
+    body { background-color: #FCFAF0; min-width:650px; text-align: justify;}
+</style>
+
+
+# Introduction
+
+Welcome to the HMigD I App tutorial! This guide will walk you through the various panels and sub-panels of the app, providing detailed explanations and instructions.
+
+# Data and assumptions
+## Input flows 
+![](./Img/MainMenuBar_InputFlows.png)
+
+
+### Migration flows 
+<!-- ![](./Img/MigrationFlows.png) -->
+![](./Img/AdmFlowsBar.png)
+
+The "Migration flows" sub-panels allow you to explore immigration and emigration data sources, as well as the immigration and emigration data itself. Use the "Year" slider to change the year slice of the displayed data sources and data. 
+
+![](./Img/YearSlider.png)
+
+You can download information about the sources and raw data as xlsx files using <img src="./Img/DownloadAsXlsx.png" alt="" width="120px" /> at the bottom of each sub-panel page.
+
+#### Data sources {#DataSrc}
+![](./Img/AdmFlowsSrcBar.png)
+
+Sub-panels "Immigration data sources" and "Emigration data sources" can be used to explore the data sources used in the project. The project relies on various sources, as depicted in the legend of the plot:
+
+<center><img src="./Img/AdmSourcesLegend.png" alt="" width="150px"/></center><br>
+
+Specificaly, QuantMig estimates were employed to ascertain bilateral flows between Greece (GR), Hungary (HR), Malta (MT), and Portugal (PT). The absence of specific bilateral data from these countries necessitated the use of QuantMig estimates to fill in entirely empty corridors.
+
+For more detailed information about migration data sources, including links, refer to the bottom of both sub-panels. Additionally, each panel features a <img src='./Img/ShowSummary.png' alt='Show Summary' width='120px' /> button that allows you to view a summary (distribution) of data sources in the form of a pie chart.
+
+#### Raw data
+![](./Img/AdmFlowsDataBar.png)
+
+The raw data can be inspected (visualized) and downloaded using the "Immigration data" and "Emigration data" sub-panels. Please note that the flows are classified according to a quasi-logarithmic scale, as shown in the legend:
+
+<center><img src="./Img/AdmRawLegend.png" alt="" width="135px"/></center><br>
+
+### Accuracy {#accuracy}
+
+![](./Img//AdmAccuBar.png)
+
+The "Accuracy" sub-panel provides insights into the accuracy of administrative immigration and emigration data. Accuracy issues are related to random errors rather than systematic errors made in the data collection process. The accuracy was classified using available metadata, taking into account the type of administrative data source (register, hybrid, survey, other, European Commission 2003; Mooyaart et al. 2021), and information on the quality of the register and hybrid sources. We also decrease accuracy for data available on the UN or used by IMEM but absent or removed from Eurostat, as well as for flows characterized by high undercounting (adjusted classification, see below).
+
+We consider three levels of accuracy: low, medium, and high, with some remarks shown on the legend of the plot:
+
+<center><img src="./Img/AdmAccuLegend.png" alt="" width="160px"/></center><br>
+
+"Low (QuantMig)" indicates that QuantMig estimates were utilized for bilateral flows between Greece (GR), Hungary (HR), Malta (MT), and Portugal (PT). These countries do not provide any bilateral data, necessitating the use of QuantMig estimates to fill completely empty corridors between them (see also \@ref(DataSrc)). "High (*)" for Germany (DE) implies that while Germany is generally classified as having high accuracy for most reported bilateral flows, for flows to/from Denmark (DK), we assume low accuracy due to the high probability of using mirror statistics by DE or DK for these flows.
+
+The user has the option to see adjusted or unadjusted (baseline) accuracy classification. Clicking on <img src="./Img/Question.png" alt="" width="15px"/> on the right side shows detailed information about the adjustment.
+
+At the bottom of the page, there are buttons that allow users to download the plot and underlying data:
+
+<center><img src="./Img/DownloadAdm.png" alt="" width="650px"/></center>
+
+### Undercounting {#undercounting}
+![](./Img//AdmUnderBar.png)
+
+Undercounting reflects a non-systematic bias in migration estimates. The classification to a specific level of undercounting is based on the bilateral flow ratio model (Dańko, 2021; Dańko et al., 2023), which evaluates undercounting according to the ratio of the flow from a country to a group of countries assumed to provide high-quality data (i.e., the Nordic countries, Belgium, the Netherlands, and Switzerland) reported by that country to the flow in the same direction but reported by the group of high-quality data countries. The bilateral flows ratio model takes into account variations in the definition of the duration of stay among countries (Del Fava et al. 2024).
+
+Specifically, we assume low undercounting for the QuantMig estimates used for a few corridors. Refer to \@ref(DataSrc) and \@ref(accuracy) for more details about why QuantMig estimates were used.
+
+Similar to the "Accuracy" sub-panel (section \@ref(accuracy)), the "Undercounting" sub-panel allows you to inspect a five-level undercounting classification for immigration and emigration data separately. You can also download the plot and underlying data using buttons at the bottom of the page.
+
+<center><img src="./Img/DownloadAdm.png" alt="" width="650px"/></center>
+
+### Coverage {#coverage}
+![](./Img//AdmCovBar.png)
+
+Coverage is a systematic bias due to the rules that govern the data collection process, which may exclude certain population segments, e.g., national return migrants or foreigners not being counted in the official immigration and emigration counts, respectively. Moreover, subpopulations such as asylum seekers, nomad populations, military personnel, homeless people, as well as some geographic areas may not be included in the migration data (Del Fava et al. 2024).
+
+The "Coverage" sub-panel displays a table with country classifications ("Low" or "High"). You can download this table as an xlsx file using the <img src="./Img/DownloadAsXlsxTab.png" alt="" width="120px"/> button.
+
+### Duration of stay {#duration-of-stay}
+![](./Img//AdmDurationBar.png)
+
+The definition of a migrant centers on the duration of stay. In 2008, a significant shift occurred with the introduction of the 12-month minimum duration-of-stay criterion as a standard (Reg (EC) 862/2007 by The European Parliament and the European Council). Challenges in understanding migration may arise when the minimum duration of stay deviates from international standards. Consequently, it is essential to include the duration of stay in migration models to address these challenges.
+
+The "Duration of Stay" sub-panel provides a plot showing the classification of duration of stay for different countries for immigration and emigration data separately. You can Download the plot and underlying data using buttons at the bottom of the plot similarly as in Accuracy sub-panel.
+
+<center><img src="./Img/DownloadAdm.png" alt="" width="650px"/></center>
+
+## Input transitions (LFS)
+![](./Img/MainMenuBar_Transitions.png)
+
+### Migration transitions
+![](./Img/TransCountBar.png)
+
+The "Migration Transitions" sub-panel allows you to explore classified transition counts. Click <img src="./Img/ShowSummary.png" alt="Show Summary" width="120px" /> button to display the summary.
+<!-- You can download the underlying transition data as an xlsx file by clicking <img src="./Img/DownloadAsXlsx.png" alt="" width="120px"/> button. -->
+
+### Accuracy
+![](./Img/TransAccuBar.png)
+
+The "Accuracy" sub-panel provides a table estimating the **non-adjusted** and **undercounting-adjusted** accuracy of LFS data. The undercounting-adjusted accuracy takes into account undercounting, ensuring that accuracy is set to low when undercounting is high. You can download the table using the top-left <img src="./Img/DownloadAsXlsxTab.png" alt="" width="120px"/> button.
+
+The method of calculating **non-adjusted** accuracy is shown below the table in the plot. **Non-adjusted** accuracy for LFS data is estimated as the year-averaged coefficient of variation (CV) calculated among the number of immigrants at the destination in a particular year. Countries are categorized into high and low classes using the median value as the threshold. Red rectangles indicate missing data, cases with no migration data reported, or situations where the CV could not be calculated.
+
+### Undercounting
+![](./Img/TransUnderBar.png)
+
+The undercounting of LFS data is based on two components. The table shows all component measures and the **Combined measure** along with its classification. The classification uses the first quartile of the combined measure as a threshold. You can download the table using the top-left <img src="./Img/DownloadAsXlsxTab.png" alt="" width="120px"/> button.
+
+The **Combined measure** of undercounting in LFS data, shown in the **first** plot, is calculated as (1 - (1 - **Fraction of non-responding**) $\times$ (1 - **Fraction of missing**)), where:
+
+- **Fraction of missing** is shown in the **second** plot and indicates the fraction of the population group with missing migration data in the total estimated population.
+
+- **Fraction of non-responding** shown in the **third** plot indicates the non-response fraction of the studied population. Clicking on <img src="./Img/Question.png" alt="" height="13px"/> in the **third** plot caption displays detailed information about the method of calculation of this measure.
+
+### Coverage
+![](./Img/TransCovBar.png)
+
+The classification of coverage is based on the type of households included. "Low" coverage includes only private households, while "high" coverage includes both private households and collective accommodations. In the "Coverage" sub-panel, there is a table with a download option available through the <img src="./Img/DownloadAsXlsxTab.png" alt="" width="120px"/> button.
+
+## Covariates
+
+![](./Img/MainMenuBar_Covariates.png)
+
+### Freedom of movement of workers
+![](./Img/CovFreeBar.png)
+
+The "Freedom of Movement of Workers" sub-panel features a year slider, plot, and information about sources shown in the bottom panel. Using the right part of that panel, you can also download both data and images in the selected format.
+
+<!-- ![](./Img/CovDownload.png) -->
+<center><img src="./Img/CovDownload.png" alt="" width="350px" /></center><br>
+
+On the plot, values other than zero or one represent cases where restrictions were intermediate or occurred during the year.
+
+<!-- ![](./Img/CovFreeLegend.png) -->
+<center><img src="./Img/CovFreeLegend.png" alt="" width="180px" /></center><br>
+
+
+### Population size
+![](./Img/CovPopBar.png)
+
+The "Population size" sub-panel displays classified population size counts. You can download both the data and image in the selected format from the right part of the bottom panel, where you can also find information about the data source.
+
+<center><img src="./Img/CovDownload.png" alt="" width="350px" /></center><br>
+
+Note that the population size is classified on a quasi-logarithmic scale, as depicted in the plot legend:
+
+<center><img src="./Img/PopLegend.png" alt="" width="135px"/></center><br>
+
+<!-- While there might be better estimates of population size (provided for example by HMD or FHD projects) we use Eurostat estimates for consistency with migration flows. -->
+
+# Results
+## Model estimates & comparison
+![](./Img/MainMenuBar_ModelEst.png)
+
+### Compare single flows
+![](./Img/SingleBar.png)
+
+The "Compare single flows" sub-panel allows you to (1) compare data and model fits by choosing from different models and countries; (2) customize the plot using graphical options and export the results; and (3) provide feedback in the survey frame at the bottom.
+
+#### General settings and plot {#singlemodels}
+
+There are six models available in the app, differing in how the freedom of movement of workers is modeled and whether LFS is included:
+<div style="color: #521292;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "(a) Freedom of movement of workers excluded, LFS included"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "(b) Freedom of movement of workers excluded, LFS excluded"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "(c) Freedom of movement of workers simple, LFS included"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "(d) Freedom of movement of workers simple, LFS excluded"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "(e) Freedom of movement of workers new EU -> old EU+, LFS included"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "(f) Freedom of movement of workers new EU -> old EU+, LFS excluded"<br>
+</div>
+
+Freedom of movement in models c-f is modeled as a single-parameter term. "Freedom of movement of workers simple" implies that freedom of movement is considered for entire bilateral flows, while "Freedom of movement of workers new EU -> old EU+" means that freedom of movement is only considered for flows from A8 countries, RO, BG, and HR to old EU (EU-15), Switzerland (CH), and Norway (NO).
+
+To select models, use the following frame:
+
+![](./Img/SingleModels.png) <br>
+
+By default, a recommended model is initially selected, but you can change it by using the drop-down lists and select one of the remaining models. The optional model #2 is available for comparison and can be selected in the same way.
+
+In the next frame below, you can use the drop-down lists to select the sending and receiving countries to be displayed in the bottom plot.
+
+<center><img src="./Img/SingleCountries.png" alt="" width="530px" /></center><br>
+
+You can swap the countries using the <img src="./Img/SingleSwapBtn.png" alt="" width="121px"/> button.
+
+#### Graphical options and saving the plot
+
+In the same frame, you can find three potentially useful graphical options.
+
+<center><img src="./Img/SingleOptions.png" alt="" width="500px" /></center><br>
+
+The "Show legend" option can hide some legends on the plot for better clarity, while the "Show IMEM/QuantMig estimates" displays results from past external projects (IMEM and QuantMig) for comparison. Click on <img src="./Img/Question.png" alt="" height="13px" /> for details. Finally, the "Fix maximum value on the Y-axis" option enables editing the "Max Y-axis value" field and sets it for all subsequent plots.
+
+<center><img src="./Img/SingleOptionsYlim.png" alt="" width="500px" /></center><br>
+
+At the bottom of the page, there is an additional option for the type of plotting: the "Plot style" with a drop-down list, offering "Linear interpolation" plot, "Stair steps" plot (default), and "Spline interpolation" plot.
+
+<center><img src="./Img/PlotStyle.png" alt="" width="180px" /></center><br>
+
+Using other options in this frame, you can also download estimates and save the plot in a specific format.
+
+<center><img src="./Img/SingleDownload.png" alt="" width="900px" /></center><br>
+
+#### Interpreting the plot
+
+The plot features a legend on the right side, unless the <img src="./Img/ShowLegend.png" alt="" height="16px" /> option is unmarked. The accuracy of the data used in the model is represented by three levels of transparency, where the highest transparency indicates the lowest accuracy. LFS data has only two levels: low and high, which correspond to the two highest levels of transparency. The color of data points denotes the data source: red for data provided by the sending country, blue for data provided by the receiving country, and green for LFS data provided by the receiving country.
+
+<center><img src="./Img/SingleLegAccu.png" alt="" width="240px" /></center><br>
+
+The size and shape of the data points indicate undercounting and duration of stay, respectively. We categorize undercounting and duration of stay into five classes. The smaller the data point, the greater the undercounting. Circles represent a duration of stay ranging from 8 to 12 months (12 months for the vast majority of countries), which is closest to the standard definition.
+
+<center><img src="./Img/SingleLegUndDur.png" alt="" width="300px" /></center><br>
+
+LFS data have only two levels of undercounting: "high" denoted by a smaller data point and "low" denoted by a larger data point. As transitions, they have a 12-month duration of stay by definition.
+<center><img src="./Img/SingleLegUndLFS.png" alt="" width="235px" /></center><br>
+
+Solid lines represent the predicted model fit, specifically the median of the posterior distribution. If the default and optional models are identical, only one black line is displayed.
+
+<center><img src="./Img/SingleLegModels.png" alt="" width="300px" /></center><br>
+
+The gray areas represent credibility intervals. The dark gray area represents the interquartile range of the posterior distribution, and the light gray area is determined by the 5th and 95th percentiles of the posterior distribution.
+
+<center><img src="./Img/SingleLegCI.png" alt="" width="200px" /></center><br>
+
+When you use the <img src="./Img/SingleOptIMEM.png" alt="" height="16px" /> option, additional predictions (lines) with credibility intervals appear for the IMEM and QuantMig models, along with a legend in the top-left corner of the plot.
+
+<center><img src="./Img/SingleLegIMEM.png" alt="" width="200px" /></center><br>
+
+#### Survey
+
+We encourage you to leave a comment about a flow you are investigating or just a general comment. To do so, please use the following frame below the plot.
+
+<center><img src="./Img/Survey.png" alt="" /></center><br>
+
+Once you fill in all the fields, you can submit your comment by clicking the <img src="./Img/SurveySubmitBtn.png" alt="" height="26px" /> button. Another button, <img src="./Img/SurveyShowBtn.png" alt="" height="26px" />, is reserved for our internal purposes. However, if you are interested in viewing or removing your feedback, please write to us at danko@demogr.mpg.de.
+
+
+### Compare aggregated flows {#aggregated}
+
+![](./Img/AggregatedBar.png)
+
+The app allows you to compare aggregated flows. At the top of the page, you can select the models you want to compare. 
+
+<center><img src="./Img/AggregatedModels.png" alt="" /></center><br>
+By default, the models are set to "(b) Freedom of movement of workers excluded, LFS excluded" and "(f) Freedom of movement of workers new EU -> old EU+, LFS excluded". See \@ref(singlemodels) for the entire list of models and their descriptions.
+
+In the next frame, you have the option to select a specific set of countries in the context of freedom of movement of workers.
+
+<center><img src="./Img/AggregatedCases.png" alt="" /></center><br>
+
+The first group of cases is related to granting freedom of movement of workers to A8 countries immediately after accession to the EU by IE, SE, and UK in 2004:
+
+<div style="color: #521292;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(1a) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by IE in 2004'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(1b) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by SE in 2004'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(1c) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by UK in 2004'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(1d) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by IE, SE, and UK in 2004'<br>
+</div>
+
+The second group of cases is related to granting freedom of movement of workers to A8 countries by FI, IS, and NO in 2006, However, it must be noted that in case of NO it was a gradual process (see Covariates / Freedom of movement panel):
+
+<div style="color: #521292;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(2a) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by FI in 2006'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(2b) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by IS in 2006'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(2c) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by NO in 2006'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(2d) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by FI, IS, and NO in 2006'<br>
+</div>
+
+The third group of cases is related to granting freedom of movement of workers to A8 countries by NL in 2007:
+
+<div style="color: #521292;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  '(3) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by NL in 2007'<br>
+</div>
+
+The fourth group of cases is related to granting freedom of movement of workers to A8 countries by FR in 2008:
+
+<div style="color: #521292;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  '(4) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by FR in 2008'<br>
+</div>
+
+The fifth group of cases is related to granting freedom of movement of workers to A8 countries by BE and DK in 2009:
+
+<div style="color: #521292;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(5a) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by BE in 2009'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(5b) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by DK in 2009'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(5c) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by BE and DK in 2009'<br>
+</div>
+
+The sixth group of cases is related to granting freedom of movement of workers to A8 countries by AT, CH, and DK in 2011. Note, however, that the freedom of movement for workers was suspended by CH for a few years (see Covariates / Freedom of movement panel):
+
+<div style="color: #521292;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(6a) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by AT in 2011'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(6b) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by CH in 2011(\*)'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(6c) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by DE in 2011'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(6d) Freedom of movement of CZ, EE, HU, LT, LV, PL, SI and SK workers granted by AT, CH(\*), and DE in 2011'<br>
+</div>
+
+The seventh group of cases is related to the accession of BG and RO to the EU in 2014:
+
+<div style="color: #521292;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(7a) Freedom of movement of BG and RO workers granted by AT in 2014'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(7b) Freedom of movement of BG and RO workers granted by BE in 2014'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(7c) Freedom of movement of BG and RO workers granted by DE in 2014'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(7d) Freedom of movement of BG and RO workers granted by FR in 2014'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(7e) Freedom of movement of BG and RO workers granted by NL in 2014'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(7f) Freedom of movement of BG and RO workers granted by UK in 2014'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(7g) Freedom of movement of BG and RO workers granted by AT, BE, DE, FR, NL, and UK in 2014'<br>
+</div>
+
+There are also other cases that partially relate to the cases shown above but include a bigger number of countries:
+
+<div style="color: #521292;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(1e) Freedom of movement of CH, CY, CZ, EE, HU, LT, LV, MT, PL, SI and SK workers granted by IE in 2004'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(1f) Freedom of movement of CH, CY, CZ, EE, HU, LT, LV, MT, PL, SI and SK workers granted by SE in 2004'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(1g) Freedom of movement of CH, CY, CZ, EE, HU, LT, LV, MT, PL, SI and SK workers granted by UK in 2004'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(1h) Freedom of movement of CH, CY, CZ, EE, HU, LT, LV, MT, PL, SI and SK workers granted by IE, SE, and UK in 2004'<br>
+</div>
+
+<div style="color: #521292;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  '(5d) Freedom of movement of BG, CZ, EE, HU, LT, LV, PL, RO, SI and SK workers granted by DK in 2009'<br>
+</div>
+
+<div style="color: #521292;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  '(7h) Freedom of movement of BG and RO workers granted by AT, BE, DE, FR, LU, MT, NL, and UK in 2014'<br>
+</div>
+
+In the same frame, instead of selecting specific cases, you can manually select sending and receiving countries:
+
+<center><img src="./Img/AggregatedCountries.png" alt="" /></center><br>
+
+To speed up the selection, you can use buttons that select specific groups of countries:
+
+<center><img src="./Img/AggregatedButtons.png" alt="" width="500px" /></center><br>
+
+Particularly, you can use "Same as..." to clone the selection from the counter source/destination or "Swap" selected countries between sending and receiving panels.
+
+The app also offers several aggregating and graphical options:
+
+<center><img src="./Img/AggregatedOptions.png" alt="" /></center><br>
+
+Displaying aggregated data via the option <img src="./Img/AggShowAggData.png" height="16px" alt="" /> is not set as a default option because it may not provide reliable values. Firstly, aggregated data points are calculated by summing incompatible data with different qualities and definitions of a migrant based on the minimum duration of stay (migration flows measured in different units). Secondly, many data points may be missing, and the sum may be simply undercounted, especially if you select the option <img src="./Img/AggIgnore.png" height="16px" alt="" />.
+
+The option frame gives you control over displaying credibility intervals for the predicted flows using <img src="./Img/AggShowCI.png" height="16px" alt="" />, a legend on the right side of the plot via <img src="./Img/ShowLegend.png" height="16px" alt="" />, and a title on the top of the plot using <img src="./Img/AggShowTitle.png" height="18px" alt="" />.
+
+You can show or hide the vertical line on the plot denoting the year of granting freedom of movement by the receiving country using <img src="./Img/AggMarkThreshold.png" height="16px" alt="" /> and adjust its value using arrows <img src="./Img/AggArrows.png" height="16px" alt="" />. When you select a case from the "Exemplary cases" list, the threshold year is automatically set to the value corresponding to the selected case.
+
+When you use the <img src="./Img/SingleOptIMEM.png" alt="" height="16px" /> option, additional predictions (lines) appear for the IMEM and QuantMig models, along with a legend in the top-left corner of the plot. There is no possibility to plot credibility intervals for the aggregated IMEM and QuantMig estimates.
+
+At the bottom of the page, there is an additional option for the type of plotting: the "Plot style" with a drop-down list, offering "Linear interpolation" plot, "Stair steps" plot (default), and "Spline interpolation" plot.
+
+<center><img src="./Img/PlotStyle.png" alt="" width="180px" /></center><br>
+
+Using other options in this frame, you can also download estimates and save the plot in a specific format.
+
+<center><img src="./Img/AggregatedDownload.png" alt="" width="800px" /></center><br>
+
+### Circular plots
+
+![](./Img/CircularBar.png)
+
+The Circular Plots panel helps visualize single and aggregated flows in the form of circular flow plots for the selected model. The model selection can be done through a dropdown list, similar to the "Compare Single Flows" and "Compare Aggregated Flows" subpanels (see sections \@ref(singlemodels) and \@ref(aggregated) respectively):
+
+<center><img src="./Img/CircularModels.png" alt="" width="700px" /></center><br>
+
+Similar to aggregated flows (section \@ref(aggregated)), users can select several receiving and sending countries.
+
+<center><img src="./Img/CircularCountries.png" alt="" width="800px" /></center><br>
+
+Fast selection of countries can be performed using the following buttons, as described in section \@ref(aggregated).
+
+<center><img src="./Img/CircularButtons.png" alt="" width="420px" /></center><br>
+
+You have the option to show or hide the scale on the plot:
+
+<center><img src="./Img/CircularOption.png" alt="" width="180px" /></center><br>
+
+To change the year, use the "Year Slider" on the right side of the plot:
+
+<center><img src="./Img/CircularYearSlider.png" alt="" width="130px" /></center><br>
+
+If you want to mask some flows, use the "Limit Visible Flows" slider next to the "Year" slider. The masking method uses the percentile method, so the higher the value on the slider, the more flows are masked.
+
+<center><img src="./Img/CircularLimitSlider.png" alt="" width="165px" /></center><br>
+
+The plot can be saved in a chosen format using the bottom frame:
+
+<center><img src="./Img/CircularDownload.png" alt="" width="330px" /></center><br>
+
+
+## Model mixing & download Panel
+![](./Img/MainMenuBar_ModelMix.png)
+
+### Fast download of estimated flows {#FastDwn}
+![](./Img/MixFastBar.png)
+
+This panel allows you to view and download entire estimates using the <img src="./Img/FastDownload.png" alt="" height="25px"  /> button. While model estimates shown in the table include only median values, the downloaded results also include credibility intervals.
+
+Use the <img src="./Img/TabSearch.png" alt="" height="30px" /> and <img src="./Img/TabPages.png" alt="" height="31px" /> fields to navigate through the table. 
+
+You can set the maximum displayed number of rows using the <img src="./Img/TabEntries.png" alt="" height="35px" /> field.
+
+### Alternative model selection
+![](./Img/MixAlternativeBar.png)
+
+Initially, the table displays the model recommended for specific flows, based on our informed arbitrary decisions.
+
+<center><img src="./Img/MixTab.png" alt="" width="400px" /></center><br>
+
+However, the user can change this selection by double-clicking on the specific field and selecting the appropriate model.
+
+<center><img src="./Img/MixSelect.png" alt="" width="55px" /></center><br>
+
+You can import and export your selection to/from your local storage as well as restore default settings using:
+
+<center><img src="./Img/MixImportExportRestoreBtn.png" alt="" width="600px" /></center><br>
+
+You can also fill the entire table with a single value using:
+
+<center><img src="./Img/MixFillBtn.png" alt="" width="230px" /></center><br>
+
+At the bottom, you will find a table similar to the one in the previous panel (section \@ref(FastDwn)). Use the <img src='./Img/FastDownload.png' alt='' height='25px'  /> button to download the entire database, which is based on the user selected models from the top table.
+
+### Visualiztion of the database
+![](./Img/MixVisualizationBar.png)
+
+This panel shows a simple summary of the database using user model selection. The flows are classified according to a quasi-logarithmic scale, as shown in the legend:
+
+<center><img src="./Img/VisFlowsLeg.png" alt="" width="130px" /></center><br>
+
+To navigate across years, use the "Year" slider:
+
+![](./Img/YearSlider.png)
+
+# Remarks
+
+<font size="4">Thank you for completing the tutorial. For any issues and questions, please contact Maciej Danko at <danko@demogr.mpg.de>.</font>

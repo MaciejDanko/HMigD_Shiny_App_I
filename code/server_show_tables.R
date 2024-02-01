@@ -1,20 +1,20 @@
 server_show_tables<-function(input, output){
   
-output$MixedModelDefaultTable <- renderDT({
-  
-  dbdata<-ModelMixedResultsDefault[, c('orig','dest','year','model','pred_q50')]#,'pred_alt_q50')]
-  colnames(dbdata)<-c('Origin','Destination','Year','Model','Median')#,'Median (alternative)')
-  datatable(
-    dbdata,
-    rownames = FALSE,
-    options = list(
-      searching = TRUE,
-      columnDefs = list(list(className = 'dt-center', targets = 0:4)),
-      pageLength = 50,
-      info = FALSE
-    )
-  )
-}, server = FALSE)
+# output$MixedModelDefaultTable <- renderDT({
+#   
+#   dbdata<-ModelMixedResultsDefault[, c('sending_country','receiving_country','year','model','pred_q50')]#,'pred_alt_q50')]
+#   colnames(dbdata)<-c('Origin','Destination','Year','Model','Median')#,'Median (alternative)')
+#   suppressWarnings(datatable(
+#     dbdata,
+#     rownames = FALSE,
+#     options = list(
+#       searching = TRUE,
+#       columnDefs = list(list(className = 'dt-center', targets = 0:4)),
+#       pageLength = 50,
+#       info = FALSE
+#     )
+#   ))
+# }, server = FALSE)
 
 output$CoverageTable <- renderDT({
   datatable(

@@ -1,14 +1,9 @@
-options(
-  # whenever there is one account token found, use the cached token
-  gargle_oauth_email = TRUE,
-  # specify auth tokens should be stored in a hidden directory ".secrets"
-  gargle_oauth_cache = "./.secrets"
-)
 
 DBNAME <<- "HMigD_Flows_Survey"
 suppressMessages(capture.output(ExistsDB <<- drive_get(DBNAME)$id))
 if(!length(ExistsDB)) suppressMessages(capture.output(googlesheets4::gs4_create(name = DBNAME, sheets = "Comments"))) else cat('It exists!')
 sheet_id <<- googledrive::drive_get(DBNAME)$id
+#save(file = './.secrets/test.rda',list = 'DBNAME')
 
 write_survey_to_google<-function(session, input){
   isolate({

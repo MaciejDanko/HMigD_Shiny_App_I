@@ -1,21 +1,21 @@
 server_plot_figures<-function(input, output){
   output$TRANSITIONSUNDERCOUNTPlot <- renderPlot({
     par(mar=c(4,4,0.5,0.5),oma=rep(0,4))
-    plot_lfs_undercounting(toSHINY_LFS_UNDERCOUNTING$combined_02_18[Countries,],toSHINY_LFS_UNDERCOUNTING$du_02_18[Countries,], toSHINY_LFS_UNDERCOUNTING$dm_02_18[Countries,])
+    plot_lfs_undercounting(toSHINY_LFS_UNDERCOUNTING$combined_02_20[Countries,],toSHINY_LFS_UNDERCOUNTING$du_02_20[Countries,], toSHINY_LFS_UNDERCOUNTING$dm_02_20[Countries,])
   }, height = 680, width = 1200, res=115)
  
   output$TRANSITIONSNRSPlot <- renderPlot({
     par(mar=c(4,4,0.5,0.5),oma=rep(0,4))
-    tmp<-toSHINY_LFS_UNDERCOUNTING$nrs_02_18[Countries,]
-    dmtmp<-toSHINY_LFS_UNDERCOUNTING$dm_02_18[Countries,]
-    dutmp<-toSHINY_LFS_UNDERCOUNTING$du_02_18[Countries,]
+    tmp<-toSHINY_LFS_UNDERCOUNTING$nrs_02_20[Countries,]
+    dmtmp<-toSHINY_LFS_UNDERCOUNTING$dm_02_20[Countries,]
+    dutmp<-toSHINY_LFS_UNDERCOUNTING$du_02_20[Countries,]
     tmp[is.na(dmtmp) | paste(dmtmp)=='0']<-NA
     plot_lfs_undercounting(tmp, dutmp, dmtmp)
   }, height = 680, width = 1200, res=115)
   
   output$TRANSITIONSMISSPlot <- renderPlot({
     par(mar=c(4,4,0.5,0.5),oma=rep(0,4))
-    plot_lfs_undercounting(toSHINY_LFS_UNDERCOUNTING$frac_miss_02_18[Countries,],toSHINY_LFS_UNDERCOUNTING$du_02_18[Countries,], toSHINY_LFS_UNDERCOUNTING$dm_02_18[Countries,])
+    plot_lfs_undercounting(toSHINY_LFS_UNDERCOUNTING$frac_miss_02_20[Countries,],toSHINY_LFS_UNDERCOUNTING$du_02_20[Countries,], toSHINY_LFS_UNDERCOUNTING$dm_02_20[Countries,])
   }, height = 680, width = 1200, res=115)
   
   output$TRANSITIONSACCURACYlot <- renderPlot({ #nonadjusted

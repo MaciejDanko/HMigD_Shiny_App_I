@@ -1,7 +1,7 @@
 server_save_figures <- function(input, output, server){
   output$SaveFREEDOMPlot<- downloadHandler(
     filename = function() {
-      paste('FreedomOfMovementOfWorkers.', input$SaveFREEDOMFormat, sep='') },
+      paste('FreedomOfMovementOfWorkers_',input$AcceuYear,'.', input$SaveFREEDOMFormat, sep='') },
     content = function(file) {
       #if (input$SendingCountry!=input$ReceivingCountry) {
       
